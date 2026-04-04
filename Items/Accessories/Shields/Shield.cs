@@ -7,8 +7,6 @@ namespace TranscendenceMod.Items.Accessories.Shields
     [AutoloadEquip(EquipType.Shield)]
     public class Shield : BaseShield
     {
-        public override int Leniency => 50;
-
         public override int Cooldown => 180;
 
         public override int DefenseAmount => 2;
@@ -19,7 +17,7 @@ namespace TranscendenceMod.Items.Accessories.Shields
             Item.rare = ItemRarityID.Blue;
             Item.width = 24;
             Item.height = 30;
-            Item.value = Item.buyPrice(silver: 65);
+            Item.value = Item.sellPrice(silver: 65);
         }
 
         public override void AddRecipes()

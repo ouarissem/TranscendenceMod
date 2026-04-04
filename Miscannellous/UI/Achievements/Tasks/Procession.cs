@@ -9,6 +9,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using TranscendenceMod.Items.Materials;
+using TranscendenceMod.Items.Tools;
 using TranscendenceMod.Items.Tools.Generic.Hardmetal;
 
 namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
@@ -25,7 +26,10 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
 
         public override string col => "927062";
 
-        public override CategoryIDs category => CategoryIDs.EaM;
+        public override CategoryIDs category => CategoryIDs.Prog;
+
+        public override int reward => ModContent.ItemType<ScavengerChisel>();
+        public override int amount => 2;
     }
 }
 

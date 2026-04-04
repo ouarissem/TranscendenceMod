@@ -38,9 +38,9 @@ namespace TranscendenceMod.Projectiles.NPCs
                 int dmg = Projectile.damage;
 
                 TranscendenceUtils.ProjectileRing(Projectile, 3, Projectile.GetSource_FromAI(), Projectile.Center,
-                    Type, dmg, 0, 1.5f, 0, 1f, 1f, -1, 0f);
+                    Type, dmg, 0, 1f, 0, 1f, 1f, -1, 0f);
                 TranscendenceUtils.ProjectileRing(Projectile, 3, Projectile.GetSource_FromAI(), Projectile.Center,
-                    Type, dmg, 0, 1.5f, 0, -1f, 1f, -1, 0f);
+                    Type, dmg, 0, 1f, 0, -1f, 1f, -1, 0f);
             }
             return base.OnTileCollide(oldVelocity);
         }

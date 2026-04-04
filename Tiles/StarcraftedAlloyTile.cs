@@ -21,7 +21,7 @@ namespace TranscendenceMod.Tiles
             Main.tileWaterDeath[Type] = true;
             Main.tileFrameImportant[Type] = true;
 
-            DustType = ModContent.DustType<HardmetalDust>();
+            DustType = ModContent.DustType<StarcraftedDust>();
             AddMapEntry(new Color(90, 108, 154), Language.GetText("MabObject.MetalBar"));
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.StyleHorizontal = true;

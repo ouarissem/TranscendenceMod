@@ -31,7 +31,7 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.FrostSerpent
             if (Projectile.timeLeft < 240)
                 Projectile.velocity.Y = MathHelper.Lerp(Projectile.velocity.Y, 15, 0.0125f);
 
-            if (Main.rand.NextBool(32))
+            if (Main.rand.NextBool(64))
                 Dust.NewDustPerfect(Projectile.Center, DustID.Snow, new Vector2(0, 2.5f), 0, default, Main.rand.NextFloat(0.85f, 1.15f) * Projectile.scale);
         }
         public override Color? GetAlpha(Color lightColor) => Color.White;

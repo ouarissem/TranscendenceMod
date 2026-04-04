@@ -14,7 +14,7 @@ namespace TranscendenceMod.Items.Consumables.Placeables.Decorations
         public override void SetDefaults()
         {
             Item.DefaultToPlaceableTile(ModContent.TileType<Cultist>());
-            Item.value = Item.buyPrice(silver: 10);
+            Item.value = Item.sellPrice(silver: 10);
             Item.maxStack = 9999;
         }
     }

@@ -19,6 +19,7 @@ namespace TranscendenceMod.Projectiles.Equipment
         public float rot;
         public Vector2 Center;
         public float Height;
+        private NPC npc;
         public override string Texture => "TranscendenceMod/Miscannellous/Assets/WaterBeam";
         public override void SetStaticDefaults()
         {
@@ -45,9 +46,15 @@ namespace TranscendenceMod.Projectiles.Equipment
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
-
-            if (player == null || !player.active)
+ 
+            if (player == null || !player.active || player.dead)
+            {
+                Projectile.Kill();
                 return;
+            }
+
+            if (Projectile.ai[0] > 0)
+                Projectile.ai[0]--;
 
 
             player.GetModPlayer<TranscendencePlayer>().CannotUseItems = true;
@@ -57,13 +64,10 @@ namespace TranscendenceMod.Projectiles.Equipment
             player.direction = Main.MouseWorld.X > player.Center.X ? 1 : -1;
             Center = player.Center;
 
-            if (player.GetModPlayer<TranscendencePlayer>().LacewingTrans)
-                Projectile.Kill();
-
             if (player.GetModPlayer<TranscendencePlayer>().InfectionAbility && player.GetModPlayer<TranscendencePlayer>().EverglowingCrownEquipped)
             {
                 Projectile.scale = 1f;
-                Projectile.timeLeft = 30;
+                Projectile.timeLeft = 20;
             }
             if (Projectile.timeLeft < 15)
                 Projectile.scale = MathHelper.Lerp(Projectile.scale, 0f, 1f / 15f);
@@ -90,11 +94,21 @@ namespace TranscendenceMod.Projectiles.Equipment
             Center = Projectile.Center;
             rot = Projectile.velocity.ToRotation() - MathHelper.PiOver4;
             Projectile.velocity = Vector2.Zero;
+            npc = null;
+
+            Main.player[Projectile.owner].UpdateMaxTurrets();
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float reference = float.NaN;
-            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Center, Projectile.Center + Vector2.One.RotatedBy(rot) * Height, (int)(15 * Projectile.ai[2] * Projectile.scale), ref reference))
+            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Center, Projectile.Center + Vector2.One.RotatedBy(rot) * Height, (int)((Lacewing() ? 7.5f : 15f) * Projectile.ai[2] * Projectile.scale), ref reference))
+                return true;
+            else return false;
+        }
+        public bool Lacewing()
+        {
+            Player player = Main.player[Projectile.owner];
+            if (player != null && player.active && player.GetModPlayer<TranscendencePlayer>().LacewingTrans)
                 return true;
             else return false;
         }
@@ -128,7 +142,7 @@ namespace TranscendenceMod.Projectiles.Equipment
             for (int i = 0; i < 3; i++)
             {
                 sb.Draw(sprite, new Rectangle(
-                    (int)(posB.X - Main.screenPosition.X), (int)(posB.Y - Main.screenPosition.Y), (int)(Projectile.scale * 40f), (int)(posB.Distance(pos2B) * 2f)), null,
+                    (int)(posB.X - Main.screenPosition.X), (int)(posB.Y - Main.screenPosition.Y), (int)(Projectile.scale * (Lacewing() ? 30f : 40f)), (int)(posB.Distance(pos2B) * 2f)), null,
                     Color.White * 0.66f, posB.DirectionTo(pos2B).ToRotation() + MathHelper.PiOver2, sprite.Size() * 0.5f, SpriteEffects.None, 0);
             }
 
@@ -138,7 +152,7 @@ namespace TranscendenceMod.Projectiles.Equipment
             for (int i = 0; i < 3; i++)
             {
                 sb.Draw(sprite, new Rectangle(
-                    (int)(posB.X - Main.screenPosition.X), (int)(posB.Y - Main.screenPosition.Y), (int)(Projectile.scale * 20f), (int)(posB.Distance(pos2B) * 2f)), null,
+                    (int)(posB.X - Main.screenPosition.X), (int)(posB.Y - Main.screenPosition.Y), (int)(Projectile.scale * (Lacewing() ? 10f : 20f)), (int)(posB.Distance(pos2B) * 2f)), null,
                     Color.White, posB.DirectionTo(pos2B).ToRotation() + MathHelper.PiOver2, sprite.Size() * 0.5f, SpriteEffects.None, 0);
 
                 TranscendenceUtils.DrawEntity(Projectile, Color.White, 0.5f, TranscendenceMod.ASSET_PATH + "/GlowBloom", 0f, Projectile.Center, null);

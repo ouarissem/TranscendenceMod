@@ -39,7 +39,7 @@ namespace TranscendenceMod.Projectiles.Weapons.Crean
             if (player != null && player.active && !player.dead && player.HeldItem.type == ModContent.ItemType<CreanStaff>() && !player.GetModPlayer<TranscendencePlayer>().CannotUseItems)
                 Projectile.timeLeft = 5;
 
-            Vector2 vec2 = Vector2.One.RotatedBy(player.DirectionTo(Main.MouseWorld).ToRotation() - MathHelper.PiOver4) * 425f;
+            Vector2 vec2 = Vector2.One.RotatedBy(player.DirectionTo(Main.MouseWorld).ToRotation() - MathHelper.PiOver4) * 575f;
 
             if (Main.MouseWorld.Distance(player.Center) > 75)
                 Projectile.ai[0] = Projectile.DirectionTo(player.Center + vec2).ToRotation();

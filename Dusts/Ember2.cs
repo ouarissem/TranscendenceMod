@@ -43,7 +43,7 @@ namespace TranscendenceMod.Dusts
             Vector2 origin = new Vector2(sprite.Width * 0.5f, sprite.Height * 0.5f);
 
             sb.Draw(sprite, dust.position - Main.screenPosition, null, Color.OrangeRed, dustrot, origin, dust.scale / 3f, SpriteEffects.None, 0);
-            sb.Draw(sprite, dust.position - Main.screenPosition, null, Color.Yellow, dustrot, origin, dust.scale / 8f, SpriteEffects.None, 0);
+            sb.Draw(sprite, dust.position - Main.screenPosition, null, Color.Yellow, dustrot, origin, dust.scale / 5f, SpriteEffects.None, 0);
 
             sb.End();
             sb.Begin(default, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.TransformationMatrix);

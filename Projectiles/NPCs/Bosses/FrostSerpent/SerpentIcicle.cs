@@ -42,7 +42,8 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.FrostSerpent
                         pos = player.Center + Vector2.One.RotatedBy(Projectile.DirectionTo(player.Center).ToRotation() - MathHelper.PiOver4) * 1500;
                     }
                     Vector2 targetVelocity = Projectile.DirectionTo(pos) * 16f;
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, targetVelocity, 0.0275f);
+                    
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, targetVelocity, 0.0375f);
                 }
             }
         }

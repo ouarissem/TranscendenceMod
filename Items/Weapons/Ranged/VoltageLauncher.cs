@@ -158,11 +158,6 @@ namespace TranscendenceMod.Items.Weapons.Ranged
                     else player.GetModPlayer<TranscendencePlayer>().VoltageBeamTimer = 15;
 
                     CD = 15;
-                    if (player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge > 0)
-                    {
-                        player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge -= 0.05f;
-                        player.HeldItem.GetGlobalItem<ModifiersItem>().ChargeCD = 90;
-                    }
                     Projectile.ai[1] = 0;
                 }
             }

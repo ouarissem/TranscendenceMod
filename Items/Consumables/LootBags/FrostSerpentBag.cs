@@ -41,7 +41,7 @@ namespace TranscendenceMod.Items.Consumables.LootBags
 
             itemLoot.Add(ItemDropRule.FewFromOptions(2, 1,
                 ModContent.ItemType<FrozenMaws>(),
-                ModContent.ItemType<Snowshot>(),
+                ModContent.ItemType<IceKunai>(),
                 ModContent.ItemType<MountaintopGlacier>()));
 
             itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<FaeMask>(), 7));

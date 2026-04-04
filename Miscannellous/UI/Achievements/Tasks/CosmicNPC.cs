@@ -7,7 +7,9 @@ using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using TranscendenceMod.Items.Accessories.Movement;
 using TranscendenceMod.Items.Accessories.Shields;
+using TranscendenceMod.Items.Consumables.LootBags;
 using TranscendenceMod.Items.Materials;
 using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Items.Tools.Generic.Hardmetal;
@@ -27,6 +29,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "941bbc";
 
         public override CategoryIDs category => CategoryIDs.Misc;
+
+        public override int reward => ModContent.ItemType<ExtraTerrestrialReward>();
+        public override int amount => 1;
     }
 }
 

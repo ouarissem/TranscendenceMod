@@ -50,7 +50,7 @@ namespace TranscendenceMod.Projectiles.Equipment
 
             target.AddBuff(BuffID.Frostburn2, 300);
 
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Dust.NewDustPerfect(target.Center, ModContent.DustType<SnowflakeDust>(), Main.rand.NextVector2Circular(2.5f, 5f));
             }

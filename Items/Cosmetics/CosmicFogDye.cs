@@ -45,7 +45,7 @@ namespace TranscendenceMod.Items.Cosmetics
         {
             Item.width = 19;
             Item.height = 24;
-            Item.value = Item.buyPrice(gold: 25);
+            Item.value = Item.sellPrice(gold: 25);
             Item.rare = ModContent.RarityType<CosmicRarity>();
         }
         public override Color? GetAlpha(Color lightColor) => Color.White;

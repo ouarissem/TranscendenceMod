@@ -32,7 +32,7 @@ namespace TranscendenceMod.NPCs.SpaceBiome
 
         public override void SetDefaults()
         {
-            NPC.lifeMax = NPC.downedMoonlord ? 1750 : 90;
+            NPC.lifeMax = NPC.downedMoonlord ? 1250 : 90;
             NPC.damage = NPC.downedMoonlord ? 115 : 45;
             NPC.knockBackResist = 0f;
 
@@ -46,8 +46,6 @@ namespace TranscendenceMod.NPCs.SpaceBiome
 
             NPC.friendly = false;
             NPC.value = Item.buyPrice(silver: NPC.downedMoonlord ? 30 : 4);
-            SpawnModBiomes = new int[1] { ModContent.GetInstance<CosmicDimensions>().Type };
-            SpawnModBiomes = new int[1] { ModContent.GetInstance<Limbo>().Type };
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Heaven>().Type };
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
@@ -83,7 +81,7 @@ namespace TranscendenceMod.NPCs.SpaceBiome
             }
 
             if (AttackDelay < dashCD)
-                desiredPos = NPC.DirectionTo(player.Center) * (NPC.downedMoonlord ? 55f : 15f);
+                desiredPos = NPC.DirectionTo(player.Center) * (NPC.downedMoonlord ? 55f : 35f);
 
 
             if (AttackDelay > dashCD)

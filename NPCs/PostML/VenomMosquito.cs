@@ -44,8 +44,10 @@ namespace TranscendenceMod.NPCs.PostML
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MosquitoLeg>(), 2, 1, 2));
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MosquitoVenom>(), 2, 1, 2));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MosquitoVenom>(), 1, 1, 2));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Stinger, 2, 1, 2));
+            npcLoot.Add(ItemDropRule.NormalvsExpert(ItemID.Bezoar, 100, 50));
+            npcLoot.Add(ItemDropRule.NormalvsExpert(ItemID.AdhesiveBandage, 100, 50));
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {

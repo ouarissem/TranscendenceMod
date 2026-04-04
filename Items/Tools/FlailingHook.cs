@@ -21,7 +21,7 @@ namespace TranscendenceMod.Items.Tools
             Item.knockBack = 0;
             Item.shoot = proj;
             Item.shootSpeed = 0;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 1);
             Item.width = 15;
             Item.height = 15;
         }

@@ -17,9 +17,8 @@ namespace TranscendenceMod.Miscannellous.UI.Resources
         public override void PostDrawResource(ResourceOverlayDrawContext context)
         {
             Asset<Texture2D> asset = context.texture;
-
-            if (!Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().ConsumedManaInferno)
-                return;
+            
+            return;
 
             if (asset == TextureAssets.Mana)
                 DrawHeart(context);

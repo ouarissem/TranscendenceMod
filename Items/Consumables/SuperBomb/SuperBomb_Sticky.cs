@@ -32,7 +32,7 @@ namespace TranscendenceMod.Items.Consumables.SuperBomb
             Item.consumable = true;
             Item.maxStack = 9999;
             Item.autoReuse = true;
-            Item.value = Item.buyPrice(gold: 3);
+            Item.value = Item.sellPrice(gold: 3);
         }
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {

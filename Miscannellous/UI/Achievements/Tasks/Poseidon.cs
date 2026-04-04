@@ -12,6 +12,7 @@ using TranscendenceMod.Items.Consumables.Boss;
 using TranscendenceMod.Items.Consumables.Placeables;
 using TranscendenceMod.Items.Materials;
 using TranscendenceMod.Items.Materials.MobDrops;
+using TranscendenceMod.Items.Tools;
 using TranscendenceMod.Items.Weapons.Melee;
 
 namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
@@ -29,6 +30,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "0074ff";
 
         public override CategoryIDs category => CategoryIDs.EaM;
+
+        public override int reward => ItemID.BottomlessBucket;
+        public override int amount => 1;
     }
 }
 

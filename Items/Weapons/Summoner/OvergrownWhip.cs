@@ -34,7 +34,7 @@ namespace TranscendenceMod.Items.Weapons.Summoner
             Item.noUseGraphic = true;
             Item.autoReuse = true;
 
-            Item.value = Item.buyPrice(gold: 15);
+            Item.value = Item.sellPrice(gold: 15);
             Item.rare = ModContent.RarityType<ModdedPurple>();
             Item.shoot = ModContent.ProjectileType<OvergrownWhipProj>();
             Item.shootSpeed = 8f;
@@ -45,7 +45,7 @@ namespace TranscendenceMod.Items.Weapons.Summoner
             CreateRecipe()
             .AddIngredient(ItemID.ThornWhip)
             .AddIngredient(ModContent.ItemType<LivingOrganicMatter>(), 2)
-            .AddIngredient(ModContent.ItemType<MosquitoLeg>(), 6)
+            .AddIngredient(ModContent.ItemType<MosquitoVenom>(), 6)
             .AddTile(TileID.LunarCraftingStation)
             .Register();
         }

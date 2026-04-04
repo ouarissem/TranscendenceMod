@@ -40,7 +40,8 @@ namespace TranscendenceMod.Projectiles.Weapons.Ranged.Ammo
         }
         public override void AI()
         {
-           Dust.NewDustPerfect(Projectile.Center, ModContent.DustType<HolyDust>(), Vector2.Zero);
+            if (++Projectile.ai[2] % 2 == 0)
+                Dust.NewDustPerfect(Projectile.Center, ModContent.DustType<HolyDust>(), Vector2.Zero);
 
             if (npc == null || !npc.active)
                 Projectile.active = false;

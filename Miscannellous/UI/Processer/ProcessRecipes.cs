@@ -26,115 +26,130 @@ namespace TranscendenceMod.Miscannellous.UI.Processer
         public static int[] TinOre()
         {
             int c = ItemID.CopperOre;
-            int f = ItemID.Shimmerfly;
+            int f = ModContent.ItemType<ShimmerBlossom>();
 
             return new int[] {
-                0, f, 0, 0,
-                0, c, c, f,
-                f, c, c, 0,
-                0, 0, f, 0,
-                2
+                0, 0, 0, 0,
+                0, c, c, 0,
+                0, c, c, 0,
+                0, f, f, 0,
+                4
             };
         }
         public static int[] CopperOre()
         {
             int t = ItemID.TinOre;
-            int f = ItemID.Shimmerfly;
+            int f = ModContent.ItemType<ShimmerBlossom>();
 
             return new int[] {
-                0, 0, f, 0,
-                f, t, t, 0,
-                0, t, t, f,
-                0, f, 0, 0,
-                2
+                0, 0, 0, 0,
+                0, t, t, 0,
+                0, t, t, 0,
+                0, f, f, 0,
+                4
             };
         }
 
         public static int[] LeadOre()
         {
             int i = ItemID.IronOre;
-            int f = ItemID.Shimmerfly;
+            int f = ModContent.ItemType<ShimmerBlossom>();
 
             return new int[] {
-                0, f, 0, 0,
-                0, i, i, f,
-                f, i, i, 0,
-                0, 0, f, 0,
-                2
+                0, 0, 0, 0,
+                0, i, i, 0,
+                0, i, i, 0,
+                0, f, f, 0,
+                4
             };
         }
         public static int[] IronOre()
         {
             int l = ItemID.LeadOre;
-            int f = ItemID.Shimmerfly;
+            int f = ModContent.ItemType<ShimmerBlossom>();
 
             return new int[] {
-                0, 0, f, 0,
-                f, l, l, 0,
-                0, l, l, f,
-                0, f, 0, 0,
-                2
+                0, 0, 0, 0,
+                0, l, l, 0,
+                0, l, l, 0,
+                0, f, f, 0,
+                4
             };
         }
 
         public static int[] TungstenOre()
         {
             int s = ItemID.SilverOre;
-            int f = ItemID.Shimmerfly;
+            int f = ModContent.ItemType<ShimmerBlossom>();
 
             return new int[] {
-                0, f, 0, 0,
-                0, s, s, f,
-                f, s, s, 0,
-                0, 0, f, 0,
-                2
+                0, 0, 0, 0,
+                0, s, s, 0,
+                0, s, s, 0,
+                0, f, f, 0,
+                4
             };
         }
         public static int[] SilverOre()
         {
             int t = ItemID.TungstenOre;
-            int f = ItemID.Shimmerfly;
+            int f = ModContent.ItemType<ShimmerBlossom>();
 
             return new int[] {
-                0, 0, f, 0,
-                f, t, t, 0,
-                0, t, t, f,
-                0, f, 0, 0,
-                2
+                0, 0, 0, 0,
+                0, t, t, 0,
+                0, t, t, 0,
+                0, f, f, 0,
+                4
             };
         }
 
         public static int[] PlatinumOre()
         {
             int g = ItemID.GoldOre;
-            int f = ItemID.Shimmerfly;
+            int f = ModContent.ItemType<ShimmerBlossom>();
 
             return new int[] {
-                0, f, 0, 0,
-                0, g, g, f,
-                f, g, g, 0,
-                0, 0, f, 0,
-                2
+                0, 0, 0, 0,
+                0, g, g, 0,
+                0, g, g, 0,
+                0, f, f, 0,
+                4
             };
         }
         public static int[] GoldOre()
         {
             int p = ItemID.PlatinumOre;
-            int f = ItemID.Shimmerfly;
+            int f = ModContent.ItemType<ShimmerBlossom>();
 
             return new int[] {
-                0, 0, f, 0,
-                f, p, p, 0,
-                0, p, p, f,
-                0, f, 0, 0,
-                2
+                0, 0, 0, 0,
+                0, p, p, 0,
+                0, p, p, 0,
+                0, f, f, 0,
+                4
+            };
+        }
+
+        public static int[] CarbonOre()
+        {
+            int o = ItemID.Obsidian;
+            int c = ItemID.CopperOre;
+            int t = ItemID.TinOre;
+
+            return new int[] {
+                0, 0, 0, 0,
+                0, o, o, 0,
+                0, o, o, 0,
+                c, c, t, t,
+                6
             };
         }
 
         public static int[] SunburntAlloy()
         {
             int h = ItemID.HellstoneBar;
-            int c = ModContent.ItemType<CarbonBar>();
+            int c = ModContent.ItemType<CarbonOre>();
 
             int s = ItemID.SunplateBlock;
             int f = ItemID.SoulofFlight;
@@ -172,13 +187,13 @@ namespace TranscendenceMod.Miscannellous.UI.Processer
             int v = ItemID.FragmentVortex;
             int n = ItemID.FragmentNebula;
             int st = ItemID.FragmentStardust;
-            int r = ModContent.ItemType<PulverizedPlanet>();
+            int r = ModContent.ItemType<ShimmerBlossom>();
 
             return new int[] {
                 l, l, l, l,
                 l, l, l, l,
                 s, v, n, st,
-                sb, r, r, sb,
+                sb, sb, sb, sb,
                 1
             };
         }
@@ -193,8 +208,8 @@ namespace TranscendenceMod.Miscannellous.UI.Processer
             return new int[] {
                 0, 0, 0, 0,
                 o, o, o, o,
-                o, g, g, o,
-                h, h, h, h,
+                h, g, g, h,
+                h, sb, sb, h,
                 1
             };
         }

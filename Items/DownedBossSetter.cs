@@ -57,10 +57,11 @@ namespace TranscendenceMod.Items
             int item = 0;
             switch (CurSelection)
             {
-                case 0: item = ModContent.ItemType<FrozenMaw>(); break;
-                case 1: item = ModContent.ItemType<WindDragonsClaw>(); break;
-                case 2: item = ModContent.ItemType<ElectricalComponent>(); break;
-                case 3: item = ModContent.ItemType<CosmicArtifact>(); break;
+                case 0: item = ModContent.ItemType<VolcanicRemains>(); break;
+                case 1: item = ModContent.ItemType<FrozenMaw>(); break;
+                case 2: item = ModContent.ItemType<WindDragonsClaw>(); break;
+                case 3: item = ModContent.ItemType<ElectricalComponent>(); break;
+                case 4: item = ModContent.ItemType<CosmicArtifact>(); break;
             }
             sprite = TextureAssets.Item[item].Value;
             spriteBatch.Draw(sprite, position, null, Color.White);
@@ -76,11 +77,12 @@ namespace TranscendenceMod.Items
 
                     switch (CurSelection)
                     {
-                        case 0: text = "Frost Serpent"; break;
-                        case 1: text = "Atmospheron"; break;
-                        case 2: text = "Project Nucleus"; break;
-                        case 3: text = "Celestial Seraph"; break;
-                        case 4: CurSelection = 0; goto case 0;
+                        case 0: text = "Flame Guardian"; break;
+                        case 1: text = "Frost Serpent"; break;
+                        case 2: text = "Atmospheron"; break;
+                        case 3: text = "Project Nucleus"; break;
+                        case 4: text = "Celestial Seraph"; break;
+                        case 5: CurSelection = 0; goto case 0;
                     }
 
                     Main.NewText("Selected: " + text);
@@ -90,12 +92,14 @@ namespace TranscendenceMod.Items
                     switch (CurSelection)
                     {
                         case 0:
-                            SetClearStatus(Bosses.FrostSerpent); break;
+                            SetClearStatus(Bosses.FlameGuardian); break;
                         case 1:
-                            SetClearStatus(Bosses.Atmospheron); break;
+                            SetClearStatus(Bosses.FrostSerpent); break;
                         case 2:
-                            SetClearStatus(Bosses.ProjectNucleus); break;
+                            SetClearStatus(Bosses.Atmospheron); break;
                         case 3:
+                            SetClearStatus(Bosses.ProjectNucleus); break;
+                        case 4:
                             SetClearStatus(Bosses.CelestialSeraph); break;
                     }
 

@@ -31,6 +31,7 @@ namespace TranscendenceMod.Projectiles.Equipment
             Projectile.DamageType = DamageClass.Generic;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 8;
+            Projectile.ownerHitCheck = true;
 
             Projectile.tileCollide = false;
             Projectile.timeLeft = 120;
@@ -50,7 +51,7 @@ namespace TranscendenceMod.Projectiles.Equipment
                 Projectile.Kill();
 
             if (player.velocity.Length() > 1f) rot = player.velocity.ToRotation() - MathHelper.PiOver4 + MathHelper.Pi;
-            Center = player.Center - new Vector2(0, player.height);
+            Center = player.Center - new Vector2(20 * player.direction, player.height * 0.5f);
             Projectile.Center = Center + Vector2.One.RotatedBy(rot) * 100;
         }
         public override void OnSpawn(IEntitySource source)

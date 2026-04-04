@@ -29,7 +29,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
             Item.useAnimation = 14;
             Item.useStyle = ItemUseStyleID.Swing;
 
-            Item.value = Item.buyPrice(gold: 20);
+            Item.value = Item.sellPrice(gold: 20);
             Item.rare = ItemRarityID.Yellow;
             Item.UseSound = SoundID.Item60;
 

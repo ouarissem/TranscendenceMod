@@ -10,6 +10,8 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using TranscendenceMod.Items.Consumables.Boss;
 using TranscendenceMod.Items.Consumables.Placeables;
+using TranscendenceMod.Items.Materials;
+using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Items.Weapons.Melee;
 
 namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
@@ -27,6 +29,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "4fdfff";
 
         public override CategoryIDs category => CategoryIDs.EaM;
+
+        public override int reward => ModContent.ItemType<Lightning>();
+        public override int amount => 4;
     }
 }
 

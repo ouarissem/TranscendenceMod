@@ -41,13 +41,14 @@ namespace TranscendenceMod.NPCs.Hard
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MosquitoLeg>(), 3, 1, 2));
+            npcLoot.Add(ItemDropRule.Common(ItemID.Stinger, 2, 1, 2));
+            npcLoot.Add(ItemDropRule.NormalvsExpert(ItemID.AdhesiveBandage, 100, 50));
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (!Main.hardMode)
                 return 0f;
-            return SpawnCondition.SurfaceJungle.Chance;
+            return SpawnCondition.SurfaceJungle.Chance * 0.9f;
         }
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
         {

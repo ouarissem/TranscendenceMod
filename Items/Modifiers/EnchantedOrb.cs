@@ -16,7 +16,7 @@ namespace TranscendenceMod.Items.Modifiers
             base.SetDefaults();
             Item.width = 16;
             Item.height = 16;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 2);
             Item.rare = ItemRarityID.Orange;
         }
     }

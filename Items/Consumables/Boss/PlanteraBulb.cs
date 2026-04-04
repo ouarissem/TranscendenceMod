@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TranscendenceMod.Items.Farming;
 
 namespace TranscendenceMod.Items.Consumables.Boss
 {
@@ -41,7 +42,7 @@ namespace TranscendenceMod.Items.Consumables.Boss
             CreateRecipe()
             .AddIngredient(ItemID.ChlorophyteBar, 8)
             .AddIngredient(ItemID.JungleSpores, 4)
-            .AddIngredient(ItemID.Vine, 2)
+            .AddIngredient(ModContent.ItemType<CocoaBean>(), 2)
             .AddCondition(Condition.NearWater)
             .Register();
         }

@@ -21,6 +21,8 @@ namespace TranscendenceMod.Items.Armor.Sets.Hardmetal
             Item.height = 22;
             Item.rare = ItemRarityID.Green;
             Item.defense = 5;
+
+            Item.value = Item.sellPrice(silver: 40);
         }
         public override void UpdateEquip(Player player)
         {

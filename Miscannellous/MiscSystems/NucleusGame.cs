@@ -54,11 +54,11 @@ namespace TranscendenceMod.Miscanellous.MiscSystems
 
         public override void PreUpdate()
         {
-            MaxTime = 55 * 60;
+            MaxTime = 60 * 60;
             if (Main.expertMode)
-                MaxTime = 45 * 60;
+                MaxTime = 50 * 60;
             if (Main.masterMode)
-                MaxTime = 35 * 60;
+                MaxTime = 40 * 60;
 
             if (!NPC.AnyNPCs(ModContent.NPCType<ProjectNucleus>()))
                 BossEdition = false;
@@ -201,13 +201,6 @@ namespace TranscendenceMod.Miscanellous.MiscSystems
             {
                 Player.KillMe(PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Mods.TranscendenceMod.Messages.Death.NucleusGame", Player.name)), 9999, 1);
                 Active = false;
-            }
-            else if (!Player.dead)
-            {
-                SoundEngine.PlaySound(ModSoundstyles.SeraphBomb, Player.Center);
-                Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Vector2.Zero, ModContent.ProjectileType<NucleusLaserBoom>(), 0, 0, -1, 0, Player.whoAmI);
-
-                Player.Hurt(PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Mods.TranscendenceMod.Messages.Death.Explosion", Player.name)), Player.statLifeMax2 / 3, -Player.direction, false, false, -1, false, 9999f, 999f, 6f);
             }
             Active = false;
         }

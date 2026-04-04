@@ -25,7 +25,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
             Item.knockBack = 6.7174804f;
             //Item.shoot = 1;
             //Item.shootSpeed = 3;
-            Item.value = Item.buyPrice(gold: 11, copper: 28);
+            Item.value = Item.sellPrice(gold: 11, copper: 28);
             Item.rare = ItemRarityID.Red;
             Item.UseSound = SoundID.Item1;
             Item.useTurn = true;

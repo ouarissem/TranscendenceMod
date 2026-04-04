@@ -3,7 +3,6 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TranscendenceMod.Items.Materials.MobDrops;
-using TranscendenceMod.Items.NPCShops;
 using TranscendenceMod.Miscannellous.Rarities;
 using TranscendenceMod.Tiles.BigTiles;
 
@@ -25,16 +24,16 @@ namespace TranscendenceMod.Items.Tools
             Item.width = 42;
             Item.height = 42;
 
-            Item.useTime = 3;
-            Item.useAnimation = 12;
+            Item.useTime = 6;
+            Item.useAnimation = 16;
 
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.value = Item.sellPrice(gold: 17, silver: 50);
+            Item.value = Item.sellPrice(gold: 7, silver: 50);
             Item.rare = ModContent.RarityType<Brown>();
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
 
-            Item.pick = 220;
+            Item.pick = 240;
             Item.useTurn = true;
             Item.tileBoost += 3;
         }

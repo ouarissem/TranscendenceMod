@@ -17,11 +17,7 @@ Mods: {
 
 			PumpkinYoyo: {
 				DisplayName: Fresh Harvest
-				Tooltip:
-					'''
-					Feeds you for 7 seconds after swinging
-					Sticks to enemies
-					'''
+				Tooltip: ""
 			}
 
 			HardmodeAnvil: Hardmode Ore Anvil
@@ -63,7 +59,7 @@ Mods: {
 			}
 
 			AncientCultist: {
-				Tooltip: "'Green Bill. - 2022'"
+				Tooltip: "'Bell Green. - 2022'"
 				DisplayName: Ancient Cultist
 			}
 
@@ -87,13 +83,9 @@ Mods: {
 				Tooltip: ""
 			}
 
-			DivineBow: {
+			SpiritBow: {
 				DisplayName: Paranormal Bow
-				Tooltip:
-					'''
-					Converts arrows into spirits that home in on nearby enemies
-					Can be used in the Spiritual Realm
-					'''
+				Tooltip: Converts arrows into spirits that home in on nearby enemies
 			}
 
 			AetherRootItem: {
@@ -116,19 +108,25 @@ Mods: {
 				Tooltip: "[c/6d09a7:The remains of celestial beings]"
 			}
 
-			eoltransform: {
+			EverglowingTiara: {
 				Tooltip:
 					'''
 					Transforms you into the Princess of Light
-					Releases gravity affected aimed suns when an enemy is near
-					Hold (Unbound Key) outside of lacewing form to fire a laser
+					Maxium Focus reduced by 25
+					Releases prismatic energy that orbits you and chases nearby enemies
+					Hold (Unbound Key) to fire a laser
 					You cannot use items while firing the laser
+					The laser deals (Slots) base damage and disables summon damage
+					[c/586475:(Damage scales based on max minions and sentries)]
 					Press the mount button and (Unbound Key) at the same time to transform into a lacewing
+					Hold LSHIFT while transformed to move slower
 					As a lacewing:
-					* [C/5c915d:Deal 35% more damage]
 					* [C/5c915d:Have a tiny hitbox and infinite flight]
+					* [C/5c915d:Prismatic energy spawns more often]
+					* [C/5c915d:Can phase through tiles]
+					* [C/5c915d:Doubled Focus regeneration and no movement penalty]
 					* [C/fe7c7c:Cannot use items (Can still use summons and passives)]
-					* [C/fe7c7c:You will die in a single hit]
+					* [C/fe7c7c:Are not protected by Defense]
 					'''
 				DisplayName: Everglowing Tiara
 			}
@@ -207,8 +205,11 @@ Mods: {
 				Tooltip:
 					'''
 					Hitting enemies increases the [c/FF0000:Blood Gauge],
-					When the blood gauge is full, press (Unbound Key) to heal for [c/FF0000:(Healed Amount)] life [c/586475:(Max Life * 0.25 - Defense / 2)]
-					Getting hit decreases the meter by 33%
+					When the blood gauge is full, press (Unbound Key) to heal for [c/FF0000:(Healed Amount)] life [c/586475:(Max Life * 0.2 - Defense / 2)]
+
+					Killing enemies will transform them into friendly Crimeras
+					The Crimeras will get stronger the more defense you have
+					Crimeras will steal health from enemies for you
 					'''
 			}
 
@@ -230,11 +231,12 @@ Mods: {
 			JungleShield2: {
 				Tooltip:
 					'''
-					Pressing the Parry key and UP at the same time will make you hide inside the shell, making you take 90% less damage, increased knockback and inability to use items
+					Pressing the Parry key and UP at the same time will make you hide inside the shell, making you take 80% less damage, increased knockback and inability to use items
 					Being hit in this form will damage the shell, increasing taken damage by 15%, this effect stacks infinitely
 					The shell will repair itself after 45 seconds of not being getting hit on the shell
 					You can view the repair status in the inventory
 					Movement speed and jump height reduced by 33%
+					Player size reduced by 20%
 					Great for taking high damage hits every once in a while
 					'Not to be confused with Beetle Shell'
 					'''
@@ -315,11 +317,6 @@ Mods: {
 
 			LivingOrganicMatter: {
 				DisplayName: Living Organic Matter
-				Tooltip: ""
-			}
-
-			MosquitoLeg: {
-				DisplayName: Mosquito Leg
 				Tooltip: ""
 			}
 
@@ -419,7 +416,7 @@ Mods: {
 				Tooltip:
 					'''
 					Fires a firework rocket upon attacking
-					Has a 4 second cooldown
+					Has a 3 second cooldown
 					'''
 			}
 
@@ -469,7 +466,7 @@ Mods: {
 
 			StellarSpear: {
 				DisplayName: Astralius Divina
-				Tooltip: "[c/6d09a7:A popular weapon used by angels]"
+				Tooltip: ""
 			}
 
 			StarcraftedNecklace: {
@@ -511,11 +508,12 @@ Mods: {
 					'''
 					Killing enemies has a chance to drop helpful items
 					Possible Items:
-					[i:TranscendenceMod/Meat]
-					[i:TranscendenceMod/ScavengerChisel]
-					[i:TranscendenceMod/SturdyPlate]
-					3 [i:Dynamite]
-					[i:TranscendenceMod/VineGun] + 10 [i:VineRopeCoil]
+					[i:TranscendenceMod/Meat] Meat
+					[i:TranscendenceMod/ScavengerChisel] Scavenger's Chisel
+					[i:TranscendenceMod/SturdyPlate] Sturdy Plate
+					[i:TranscendenceMod/SeedBox] Box of Seeds
+					3 [i:Dynamite] Dynamite
+					2 [i:SpelunkerPotion] Spelunker Potion
 					'''
 				DisplayName: Survivor's Knife
 			}
@@ -555,7 +553,7 @@ Mods: {
 			}
 
 			SpaceRockItem: {
-				DisplayName: Ascendant Rock
+				DisplayName: Ascendant Stone
 				Tooltip: ""
 			}
 
@@ -929,16 +927,15 @@ Mods: {
 				Tooltip:
 					'''
 					Grants the wearer insane mobility and transformation powers
-					Works as a pair of Wings and Terraspark Boots
+					Works as a pair of Wings
 					Press Down to toggle hover
 					Press Up to deactivate hover
 					Hold Down and (Unbound Key) to fall extremely quickly
 					Hold Up to boost faster!
-					Killing enemies will leave their body in place, allowing you to transform into them by pressing (Unbound Key) near them
+					Killing enemies will leave their body in place, allowing you to transform them into by pressing (Unbound Key) near them
 					Possessed enemies can be moved by pressing the movement buttons, or the Jump button if it's a flying enemy
 					You can stop possessing the enemy by pressing (Unbound Key) again
 					You can only possess enemies that are after you and you cannot possess for more than 3 seconds during a boss battle
-					'I ain't reading allat'
 					'''
 			}
 
@@ -967,7 +964,7 @@ Mods: {
 			}
 
 			Eclipse: {
-				DisplayName: Eclipse
+				DisplayName: Planetary Texts
 				Tooltip: ""
 			}
 
@@ -1123,11 +1120,6 @@ Mods: {
 					'''
 			}
 
-			CarbonBar: {
-				DisplayName: Carbon Bar
-				Tooltip: ""
-			}
-
 			CarbonOre: {
 				DisplayName: Carbon Ore
 				Tooltip: ""
@@ -1163,18 +1155,14 @@ Mods: {
 
 			StardustShieldGenerator: {
 				DisplayName: Cosmic Forcefield Generator
-				Tooltip:
-					'''
-					You will take 50% less damage when you are raising your shield
-					You will lose 50% more focus upon being hit
-					'''
+				Tooltip: You will take 50% less damage when you are raising your shield
 			}
 
 			MarbleCompass: {
 				DisplayName: Marble Compass
 				Tooltip:
 					'''
-					Finds the nearest marble biome in your direction
+					Points towards the nearest marble biome in your direction
 					Left-Click to find a location
 					'''
 			}
@@ -1206,7 +1194,7 @@ Mods: {
 				DisplayName: Lihzard Compass
 				Tooltip:
 					'''
-					Finds the Lihzard Temple
+					Points towards the Lihzard Temple
 					Left-Click to find a location
 					'''
 			}
@@ -1227,16 +1215,12 @@ Mods: {
 
 			SturdyPlate: {
 				DisplayName: Sturdy Plate
-				Tooltip:
-					'''
-					Improves your equipment's defense by 6 for 5 minutes
-					The duration can be stacked up to 30 minutes
-					'''
+				Tooltip: Increases the defense of all your armor pieces by 4 for 8 minutes
 			}
 
 			Compass: {
 				DisplayName: Compass
-				Tooltip: Points towards your Spawn Point
+				Tooltip: Points towards a specific location
 			}
 
 			BladeOfReflection: {
@@ -1310,21 +1294,26 @@ Mods: {
 
 			LegendarySword: {
 				DisplayName: Legendary Sword
-				Tooltip: Getting hit by an enemy within 10 frames of swinging the sword will parry the attack
+				Tooltip:
+					'''
+					Getting hit by an enemy or projectile within 10 frames of swinging the sword will parry the attack
+					The parry will consume 50% less Focus than usual
+					'''
 			}
 
 			LingeringInferno: {
 				DisplayName: Lingering Inferno
 				Tooltip:
 					'''
-					{$CommonItemTooltip.PermanentlyIncreasesMaxManaBy}
+					Permanently increases maxium Focus by {0}
 					May only be used once
+					'We carry the flame'
 					'''
 			}
 
 			ForgottenInferno: {
-				DisplayName: Forgotten Inferno
-				Tooltip: "[c/902442:An empty chalice formed from the flawless defeat of a gigantic flesh barrier]"
+				DisplayName: Empty Chalice
+				Tooltip: "[c/902442:A large chalice said to hold even the most intense of flames]"
 			}
 
 			StarPowder: {
@@ -1348,11 +1337,7 @@ Mods: {
 
 			ForcefieldOfTheImpendingDoom: {
 				DisplayName: Forcefield of the Impending Doom
-				Tooltip:
-					'''
-					You will take 62,5% less damage when you are raising your shield
-					You will lose 50% more focus upon being hit
-					'''
+				Tooltip: You will take 62,5% less damage when you are raising your shield
 			}
 
 			GiantShellOrange: {
@@ -1407,7 +1392,7 @@ Mods: {
 
 			LightningRod: {
 				DisplayName: Lightning Rod
-				Tooltip: The chains zap enemies, dealing noticeable damage
+				Tooltip: The chains zap enemies, dealing minor amounts of damage
 			}
 
 			CatacombExplorerPowder: {
@@ -1603,7 +1588,7 @@ Mods: {
 				DisplayName: Orb of Flow
 				Tooltip:
 					'''
-					You will regain focus 50% faster
+					You will regain Focus 30% faster
 					Raising your shield will slow you down for the duration of the parry
 					'''
 			}
@@ -1660,7 +1645,7 @@ Mods: {
 				DisplayName: Corrupt Compass
 				Tooltip:
 					'''
-					Finds the nearest corrupted tile in your direction
+					Points towards the nearest corrupted tile in your direction
 					Left-Click to find a location
 					'''
 			}
@@ -1669,7 +1654,7 @@ Mods: {
 				DisplayName: Crimson Compass
 				Tooltip:
 					'''
-					Finds the nearest crimson-tainted tile in your direction
+					Points towards the nearest crimson-tainted tile in your direction
 					Left-Click to find a location
 					'''
 			}
@@ -1678,7 +1663,7 @@ Mods: {
 				DisplayName: Granite Compass
 				Tooltip:
 					'''
-					Finds the nearest granite biome in your direction
+					Points towards the nearest granite biome in your direction
 					Left-Click to find a location
 					'''
 			}
@@ -1774,7 +1759,7 @@ Mods: {
 				DisplayName: Lihzardian Bulwark
 				Tooltip:
 					'''
-					Pressing the Parry key and UP at the same time will make you mount a golem, making you take 66% less damage and unable to use items
+					Pressing the Parry key and UP at the same time will make you mount a golem, making you take 66,6% less damage and unable to use items
 					The golem can jump around and crush enemies
 					Hold DOWN to slam downwards at extreme speeds
 					This ability has a 10 second cooldown
@@ -1796,7 +1781,7 @@ Mods: {
 				DisplayName: Meteor Compass
 				Tooltip:
 					'''
-					Finds the nearest meteorite in your direction
+					Points towards the nearest meteorite in your direction
 					Left-Click to find a location
 					'''
 			}
@@ -1841,7 +1826,7 @@ Mods: {
 				Tooltip:
 					'''
 					Grants immunity to the effects of Cosmic Radiation
-					Movement speed multiplied by 1.2x when inflicted with Cosmic Radiation
+					Movement speed increased by 25% when inflicted with Cosmic Radiation
 					'''
 			}
 
@@ -1879,8 +1864,8 @@ Mods: {
 			}
 
 			VoidFragment: {
-				DisplayName: Void Fragment
-				Tooltip: "[C/185d57:A vile chunk of void responsible for spreading the infection]"
+				DisplayName: Void Remains
+				Tooltip: "[C/185d57:Remains of what once was.]"
 			}
 
 			DarkMetalClaymore: {
@@ -1901,7 +1886,7 @@ Mods: {
 					[c/586475:Homing Molten Lasers]
 					[c/1d7fcb:Whips]:
 					[c/586475:Molten Whip that inflicts Oiled, making enemies take increased damage over time from fire debuffs]
-					You will be unable to dash or parry
+					You will be unable to dash or parry and you will take 25% more damage
 					'''
 			}
 
@@ -1923,6 +1908,7 @@ Mods: {
 					Right Click to create a boundary that warp the talismans around its corners
 					You will replenish mana and gain 20 defense while inside the boundary
 					Exiting the boundary's first ring makes it disappear
+					Bad things will happen if you have mana sickness
 					'''
 			}
 
@@ -1931,7 +1917,7 @@ Mods: {
 				Tooltip:
 					'''
 					It has a note attached to it;
-					[c/6d09a7:Congrats and thx for finishing the current content of the mod !!] :)
+					[c/6d09a7:Congrats and thanks for finishing the current content of the mod !!] :)
 					[c/6d09a7:Make sure to look out for upcoming updates !!] [i:Heart]
 					[c/6d09a7:-Creanbl★]
 					[C/526377:You're in the halfway point of Post-Moonlord now.]
@@ -1969,7 +1955,7 @@ Mods: {
 
 			ExtraTerrestrialAnvilItem: {
 				DisplayName: Extra Terrestrial Anvil
-				Tooltip: ""
+				Tooltip: Functions as a Hardmode Ore Anvil
 			}
 
 			EarthHairdye: {
@@ -2155,14 +2141,14 @@ Mods: {
 				Tooltip: ""
 			}
 
-			RedSpiderLilyItem: {
+			RedSpiderLily: {
 				DisplayName: Red Spider Lily
 				Tooltip: ""
 			}
 
 			SeedBox: {
-				DisplayName: Seed Box
-				Tooltip: ""
+				DisplayName: Box of Seeds
+				Tooltip: Contains a wild assortment of seeds
 			}
 
 			RedSpiderLilySeeds: {
@@ -2189,8 +2175,8 @@ Mods: {
 				DisplayName: Apollo Helmet
 				Tooltip:
 					'''
-					Damage increased by 17,5%
-					Grants immunity to Cosmic Suffocation
+					Damage increased by 10%
+					Grants immunity to Cosmic Suffocation and Cosmic Radiation
 					'''
 			}
 
@@ -2347,19 +2333,19 @@ Mods: {
 					'''
 					Instantly kills the user upon taking damage
 					This only happens if the item is favorited
-
-					MNL:
+					-
+					Recommended MNL:
 					Frost Serpent: 2min
-					Atmospheron: 2min
-					Project Nucleus: 2min30s (Pre-Desperation)
-					Celestial Seraph: 4min40s
+					Atmospheron: 1min45s
+					Project Nucleus: 2min20s (Pre-Desperation)
+					Celestial Seraph: 4min
 					'''
 			}
 
 			ScavengerChisel: {
 				Tooltip:
 					'''
-					A tool that can scavenge Silt, Slush and Fossils for important resources underground
+					A tool that can scavenge Silt, Slush, Fossils and Hive for important resources underground
 					Lasts for {0} uses
 					'''
 				DisplayName: Scavenger's Chisel
@@ -2389,8 +2375,7 @@ Mods: {
 				Tooltip:
 					'''
 					Allows you to play an extended version of the Heart Labyrinth game from the Project Nucleus fight!
-					Costs 2 gold [i:GoldCoin] to play
-					[C/ff0000:Might have some harsh consequences for losing...]
+					Costs 10 gold [i:GoldCoin] to play
 					'''
 			}
 
@@ -2415,7 +2400,7 @@ Mods: {
 					'''
 					Can be drinked an endless amount of times
 					Right Click in inventory to change potion type
-					The buff lasts for 8 minutes and takes another 8 minutes to fully recharge
+					The buff lasts for 5 minutes and takes another 5 minutes to fully recharge
 					'''
 			}
 
@@ -2462,7 +2447,7 @@ Mods: {
 			}
 
 			WetPickaxe: {
-				DisplayName: Wet Pickaxe
+				DisplayName: Deep Blue Pickaxe
 				Tooltip: ""
 			}
 
@@ -2473,7 +2458,7 @@ Mods: {
 
 			FuckThisBoss: {
 				DisplayName: Phantasmal Guard
-				Tooltip: Prevents Phantasmal Spheres and Phantasmal Deathrays from hurting you
+				Tooltip: Reduces damage done by Moon Lord by 50%
 			}
 
 			AetherRootBeer: {
@@ -2482,13 +2467,61 @@ Mods: {
 			}
 
 			PerfectHorseshoe: {
-				DisplayName: Perfect Horseshoes
+				DisplayName: Starstruck Horseshoes
 				Tooltip:
 					'''
 					Greatly increases movement speed while on ground
 					Negates fall damage
 					Brings good fortune to the wearer
 					'Why ride a horse when you can become one yourself?'
+					'''
+			}
+
+			IceKunai: {
+				DisplayName: Winter Frostbite
+				Tooltip: Throws icy kunais that stick to enemies
+			}
+
+			SnowCompass: {
+				DisplayName: Snow Compass
+				Tooltip:
+					'''
+					Points towards inhabited areas in the underground ice biome
+					Left-Click to find a location
+					'''
+			}
+
+			Starfray: {
+				DisplayName: Starfray
+				Tooltip: Rains down stars upon striking enemies
+			}
+
+			UnbreakableBlock: {
+				DisplayName: Unbreakable Block
+				Tooltip:
+					'''
+					Cannot be destroyed by mining and explosives
+					Right Click to remove
+					'''
+			}
+
+			WaterShield: {
+				DisplayName: Water Shield
+				Tooltip: ""
+			}
+
+			PalladiumBadge: {
+				DisplayName: Palladium Badge
+				Tooltip: ""
+			}
+
+			ArenaCompass: {
+				DisplayName: Chalice Compass
+				Tooltip:
+					'''
+					Points towards a valuable object within the fiery caverns
+					If the object has already been found, points towards the nearest Shadow Chest instead
+					Left-Click to find a location
 					'''
 			}
 		}
@@ -2816,10 +2849,16 @@ Mods: {
 			FrozenMawsProj.DisplayName: Frozen Maws
 			CoolBow.DisplayName: Cool Bow
 			SummitSpear.DisplayName: Summit Spear
-			CreanCog.DisplayName: Crean Cog
 			FrostMist.DisplayName: Frost Mist
 			DragonSlash.DisplayName: Dragon Slash
 			MeleeTornado.DisplayName: Melee Tornado
+			SoulEater.DisplayName: Soul Eater
+			IceKunaiProj.DisplayName: Ice Kunai Proj
+			Starfray_Proj.DisplayName: Starfray_ Proj
+			CrystalRadiationCloud.DisplayName: Crystal Radiation Cloud
+			DragonFlame.DisplayName: Dragon Flame
+			FlameLaser.DisplayName: Flame Laser
+			FlameSummon.DisplayName: Flame Summon
 		}
 
 		SeraphAttackNames: {
@@ -2849,6 +2888,7 @@ Mods: {
 		Achievement: {
 			Title: Transcendence Achievements
 			Notification: Achievement Get!
+			Rewards: Rewards: {0}x [i:{1}] [c/586475:(Right Click to Claim)]
 
 			Markers: {
 				Start: Start
@@ -2908,9 +2948,14 @@ Mods: {
 					Tooltip: Brave the volcanic layer and obtain [i:TranscendenceMod/VolcanicRemains] [C/f6a84b:Volcanic Remains]
 				}
 
+				Chalice: {
+					DisplayName: Chalice
+					Tooltip: Retrieve the [i:TranscendenceMod/ForgottenInferno] [C/db7a1a:Forgotten Inferno] from the volcanic caverns
+				}
+
 				Procession: {
-					DisplayName: Procession
-					Tooltip: Craft the [i:TranscendenceMod/VolcanicRemains] [C/f6a84b:Item Processer]
+					DisplayName: Processed Goods
+					Tooltip: Craft the [i:Hellforge] [C/e54a56:Item Processer]
 				}
 
 				sans: {
@@ -2925,12 +2970,12 @@ Mods: {
 
 				Wall: {
 					DisplayName: Seal Breaker
-					Tooltip: Throw a [i:GuideVoodooDoll] [C/9dd159:Guide Voodoo Doll] into the lava and defeat Wall of Flesh, the torture of the Underworld
+					Tooltip: Throw a [i:GuideVoodooDoll] [C/9dd159:Guide Voodoo Doll] into the lava and defeat the Wall of Flesh
 				}
 
 				Empress: {
 					DisplayName: Like a Moth to the Flame
-					Tooltip: Kill a [i:EmpressButterfly] [C/e5badc:Prismatic Lacewing] and defeat Empress of Light, the false angel
+					Tooltip: Kill a [i:EmpressButterfly] [C/e5badc:Prismatic Lacewing] and defeat the Empress of Light
 				}
 
 				Moonlord: {
@@ -2979,25 +3024,32 @@ Mods: {
 				}
 
 				EmpressChallenge: {
-					DisplayName: Endurance Flight
+					DisplayName: Mystic Flight
 					Tooltip:
 						'''
 						Defeat the Empress of Light under the following conditions:
 						> [C/526377:You will have to use the Everglowing Tiara's lacewing transformation for the WHOLE fight]
-						> [C/526377:All of the damage must come from the sun passive attacks]
+						The following effects will apply during the fight:
+						> [C/526377:Any projectiles except for the prismatic energy passive will be disabled]
+						> [C/526377:You will die in a single hit]
+						Notes:
+						[C/526377:You must be transformed before the boss starts attacking]
 						[C/526377:Time of the day and stage of progression doesn't matter]
-						Difficulty: [i:ManaCrystal][i:ManaCrystal][i:ManaCrystal][i:ManaCrystal][i:ManaCrystal] (5/5)
+						Difficulty:  [C/eaad25:Moderate]
 						'''
 				}
 
-				AtmospheronChallenge: {
+				DragonChallenge: {
 					DisplayName: Blind Nightbird
 					Tooltip:
 						'''
 						Defeat Atmospheron under the following conditions:
 						> [C/526377:You have to be under the effects of Perpetual Blindness Stew for the WHOLE fight]
+						> [C/526377:It must be nighttime]
+						Notes:
+						[C/526377:You must have the buff before the boss starts attacking]
 						[C/526377:Stage of progression doesn't matter]
-						Difficulty: [i:ManaCrystal][i:ManaCrystal][i:ManaCrystal][i:StarStatue][i:StarStatue] (3/5)
+						Difficulty:  [C/eaad25:Moderate]
 						'''
 				}
 
@@ -3007,8 +3059,19 @@ Mods: {
 						'''
 						Defeat Project Nucleus under the following conditions:
 						> [C/526377:You will have to have the Rez 125S-T Model Laser Lens sight active for the WHOLE fight]
+						Notes:
+						[C/526377:You must have the effect active before the boss starts attacking]
 						[C/526377:Stage of progression doesn't matter]
-						Difficulty: [i:ManaCrystal][i:ManaCrystal][i:StarStatue][i:StarStatue][i:StarStatue] (2/5)
+						Difficulty:  [C/eaad25:Moderate]
+						'''
+				}
+
+				TwentyTwoChallenge: {
+					DisplayName: Just How Many Birds is This?
+					Tooltip:
+						'''
+						Split a bullet into 110 pieces or more in a single shot
+						Difficulty:  [C/88ef45:Easy]
 						'''
 				}
 
@@ -3019,7 +3082,7 @@ Mods: {
 						Defeat Celestial Seraph under the following conditions:
 						> [C/526377:90% of the damage in the last phase must be done with Nail Gun]
 						[C/526377:Stage of progression doesn't matter]
-						Difficulty: [i:ManaCrystal][i:ManaCrystal][i:ManaCrystal][i:StarStatue][i:StarStatue] (3/5)
+						Difficulty:  [C/eaad25:Moderate]
 						'''
 				}
 			}
@@ -3038,7 +3101,6 @@ Mods: {
 			SeraphLifeBonusFail: Life Bonus Failed!
 			Timedials: Time: [c/6cb7e6:{0}]
 			Parry.1: PARRY!
-			ParryUI: Parry Meter
 			FocusUI: Focus
 			ParryLeniency: "[C/5c915d:{0} Delay]"
 			ParryCD: "[C/5c915d:{0} Cooldown]"
@@ -3090,7 +3152,6 @@ Mods: {
 
 			HardmetalOreUnlock: A new sturdy metal is shining deep underground...
 			MoonlordDeath: The primordial essence spreads across the atmosphere...
-			DragonDeath: The halls of the dungeon are howling with horror...
 
 			SeraphEncounters: {
 				Post-WoF: {
@@ -3193,6 +3254,7 @@ Mods: {
 				CosmicGazer: A more refined variant of the Starsighter. Capable of shooting condensed rays of nebula.
 				Snowman: A friendly snowman residing in the depths of the Tundra. Not a part of the snowman mafia.
 				VolcanicBat: A reanimated corpse of a bat that was buried under the volcanic rocks.
+				FlameGuardian: Ancient construct created to protect the undying flame.
 			}
 
 			Tooltips: {
@@ -3214,7 +3276,7 @@ Mods: {
 						[c/586475:Damage and Critical strike chance increased by 20%]
 						[c/586475:Max number of minions increased by 2]
 						[c/586475:Press (Unbound Key) to open an interface that allows you to teleport in eight directions]
-						[c/586475:Teleporting horizontally will launch you at high speeds if a boss isn't currently alive]
+						[c/586475:Teleporting horizontally or upwards will launch you at high speeds if a boss isn't currently alive]
 						[c/586475:Grants immunity to low gravity environments]
 						'''
 					Shark:
@@ -3228,10 +3290,11 @@ Mods: {
 
 				Shields:
 					'''
-					[c/586475:Pressing (Unbound Key) will make you raise your shield for a few frames.]
-					[c/586475:Getting hit by an enemy or a projectile within the last 5 frames will parry the attack, dealing damage to the foe and ignoring damage taken.]
-					[c/586475:You will lose {0} focus upon parrying]
-					[c/586475:Not having enough focus will prevent you from parrying]
+					[c/586475:Pressing (Unbound Key) will make you raise your shield for a few frames]
+					[c/586475:Getting hit by an enemy or a projectile within 15 frames of raising the shield will parry the attack]
+					[c/586475:You will lose Focus upon parrying]
+					[c/586475:If you're at max Focus, you can parry attacks no matter the timing]
+					[c/586475:Not having enough Focus will prevent you from parrying]
 					'''
 
 				Modifiers: {
@@ -3240,19 +3303,14 @@ Mods: {
 						1: Luminous
 						2: Spazzy
 						3: Danger-Detecting
-						4: Bottomless
-						5: Giant Slaying
-						6: Charged
-						7: Lunatic
-						8: Magnetic
-						9: Enchanted
-						10: Extended
-						11: Gigantic
-						12: Hooked
-						13: Silky
-						14: Draconic
-						15: Jolly
-						16: Mystic
+						4: Giant Slaying
+						5: Lunatic
+						6: Magnetic
+						7: Enchanted
+						8: Hooked
+						9: Silky
+						10: Draconic
+						11: Jolly
 					}
 
 					RequiredPlural: Required items: {0}x [i:{1}]
@@ -3274,11 +3332,11 @@ Mods: {
 						'''
 						-[C/ff6d00:Luminous] [C/A8714D:Modifier]-
 						* [C/5c915d:Upgrades the Sunshade Egg's babies, making them larger and faster]
-						* [C/5c915d:+5% critical strike damage]
+						* [C/5c915d:+8% critical strike damage]
 						* [C/5c915d:+20% luminosity]
 						* [C/d8ab49:Makes you more heavy, making you fall down faster]
-						[C/586475:These effects stack with each accessory]
-						Can be applied to Accessories
+						[C/586475:Crit damage and luminosity scales with each armor piece]
+						Can be applied to Armor
 						'''
 					Spazzy:
 						'''
@@ -3289,14 +3347,8 @@ Mods: {
 					DangerDetecting:
 						'''
 						-[C/95b669:Danger Detecting Modifier]-
-						* [C/5c915d:Reveals enemies inside walls]
+						* [C/5c915d:Reveals dangerouns objects]
 						Can be applied to Helmets
-						'''
-					Blackhole:
-						'''
-						-[C/FF9A00:Bottomless Modifier]-
-						* [C/d8ab49:Sentries suck in items and deal tiny amounts of melee damage to enemies]
-						Can be applied to Sentries
 						'''
 					GiantSlayer:
 						'''
@@ -3306,20 +3358,13 @@ Mods: {
 						[C/586475:These effects stack with each armor piece]
 						Can be applied to Armor
 						'''
-					Charger:
-						'''
-						-[C/31bde6:Charged Modifier]-
-						* [C/5c915d:Not attacking will charge your weapon, making it stronger. Attacking removes charge by 15%]
-						* [C/fe7c7c:Low Charge makes your weapon deal less damage than usual]
-						Can be applied to all weapons except minion staves and yoyos
-						'''
 					CultistScroll:
 						'''
 						-[C/0b77e8:In][C/efce20:sa][C/0b77e8:ne Mo][C/efce20:difi][C/0b77e8:er]-
 						* [C/5c915d:Damage against normal enemies increased by 15%]
 						* [C/fe7c7c:Non-Critical strikes deal 10% reduced damage against bosses]
-						[C/586475:These effects stack with each accessory]
-						Can be applied to Accessories
+						[C/586475:These effects stack with each armor piece]
+						Can be applied to Armor
 						'''
 					CrateMagnet:
 						'''
@@ -3332,20 +3377,6 @@ Mods: {
 						-[C/1f8de1:Fortunate] [C/44ddf6:Modifier]-
 						* [C/5c915d:You have a 33% chance to upgrade your] [C/2954ae:rare] [C/5c915d:fishing attempt to] [C/faa422:legendary]
 						Can be applied to Fishing Rods
-						'''
-					LongPickHead:
-						'''
-						-[C/6e7892:Extended Modifier]-
-						* [C/5c915d:Pickaxe range increased by 4 tiles]
-						* [C/fe7c7c:Mining Speed multiplied by 0,66x]
-						Can be applied to Pickaxes
-						'''
-					GiantHandle:
-						'''
-						-[C/bf2433:Gigantic Modifier]-
-						* [C/5c915d:Weapon Size multiplied by 1,75x]
-						* [C/fe7c7c:Melee Speed multiplied by 0,33x]
-						Can be applied to Swords
 						'''
 					Hooked:
 						'''
@@ -3365,11 +3396,9 @@ Mods: {
 					Draconic:
 						'''
 						-[C/c82412:Draconic Modifier]-
-						* [C/5c915d:Blocks a hit every 60 seconds]
-						[C/5c915d:You will gain Draconic Fury for 10 seconds upon blocking]
-						[C/5c915d:Draconic Fury increases movement stats and melee speed]
-						* [C/fe7c7c:You will take 33,3% more damage at the last quarter of the cooldown]
-						[C/586475:The stats and taken damage scale with each armor piece]
+						* [C/5c915d:You will leave a trail of defense reducing flames]
+						* [C/fe7c7c:-5 defense]
+						[C/586475:The lifetime, damage and speed of flames scale with every armor piece]
 						Can be applied to Armor
 						'''
 					Jolly:
@@ -3380,16 +3409,6 @@ Mods: {
 						[C/586475:Life Boost caps at 20 000 points]
 						[C/586475:These effects scale with each armor piece]
 						Can be applied to Armor
-						'''
-					Mystic:
-						'''
-						-[C/953079:Mystic] [C/1d98b9:Modifier]-
-						* [C/5c915d:Magic damage has a chance to spawn Mystic Flames]
-						* [C/5c915d:Mystic Flames follow your cursor and create a friendly mystic blast]
-						* [C/5c915d:Picking up Mystic Flames before they explode will restore mana]
-						* [C/5c915d:+10% increased summon & magic damage]
-						[C/586475:The damage boost and the size of the explosion scales with each armor piece]
-						Can be applied to Dark Artist armor
 						'''
 					MuramasaUpgrade:
 						'''
@@ -3599,9 +3618,11 @@ Mods: {
 			CosmicGazer.DisplayName: Cosmic Gazer
 			HealHeart.DisplayName: Nucleus Healer
 			VolcanicBat.DisplayName: Volcanic Bat
-			BloodWorm_Body.DisplayName: Wound Burrower
-			BloodWorm_Head.DisplayName: Wound Burrower
-			BloodWorm_Tail.DisplayName: Wound Burrower
+			BloodWorm_Body.DisplayName: Shadeworm
+			BloodWorm_Head.DisplayName: Shadeworm
+			BloodWorm_Tail.DisplayName: Shadeworm
+			VoidSlime.DisplayName: Moon Diver
+			FlameGuardian.DisplayName: Flame Guardian
 		}
 
 		Buffs: {
@@ -3621,7 +3642,7 @@ Mods: {
 			}
 
 			SpaceDebuff: {
-				Description: Melting from radiation
+				Description: Melting from the radiation
 				DisplayName: Cosmic Radiation
 			}
 
@@ -3800,8 +3821,8 @@ Mods: {
 			}
 
 			Blind: {
-				DisplayName: Blind
-				Description: The harshest punishment
+				DisplayName: Blind for 24 Hours
+				Description: The correct way to punish your daughter
 			}
 
 			DraconicFury: {
@@ -3857,6 +3878,8 @@ Mods: {
 			NucleusSummoner.MapEntry: Nucleus Caller
 			ArcadeCabinet.MapEntry: Arcade Cabinet
 			MaterialProcesser.MapEntry: Metal Processer
+			UnbreakableBlockTile: Unbreakable Block
+			InfernoChaliceTile.MapEntry: Inferno Chalice
 		}
 
 		Keybinds: {
@@ -3882,21 +3905,6 @@ Mods: {
 			Heaven: {
 				DisplayName: Heaven
 				TownNPCDialogueName: lower Heaven
-			}
-
-			SunkenCatacombs: {
-				DisplayName: Sunken Catacombs
-				TownNPCDialogueName: the Sunken Catacombs
-			}
-
-			CosmicDimensions: {
-				DisplayName: The Cosmos
-				TownNPCDialogueName: the cosmos
-			}
-
-			Limbo: {
-				DisplayName: Limbo
-				TownNPCDialogueName: Limbo
 			}
 		}
 

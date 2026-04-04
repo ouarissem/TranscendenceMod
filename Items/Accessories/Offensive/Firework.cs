@@ -17,8 +17,8 @@ namespace TranscendenceMod.Items.Accessories.Offensive
             Item.width = 24;
 
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 2, silver: 50);
-            Item.rare = ItemRarityID.LightRed;
+            Item.value = Item.sellPrice(gold: 1, silver: 25);
+            Item.rare = ItemRarityID.Green;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
@@ -27,9 +27,8 @@ namespace TranscendenceMod.Items.Accessories.Offensive
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.Dynamite, 3)
-            .AddIngredient(ItemID.ExplosivePowder, 17)
-            .AddIngredient(ItemID.BambooBlock, 5)
+            .AddIngredient(ItemID.Dynamite, 10)
+            .AddIngredient(ItemID.BambooBlock, 20)
             .AddIngredient(ItemID.RedHusk)
             .AddTile(TileID.TinkerersWorkbench)
             .Register();

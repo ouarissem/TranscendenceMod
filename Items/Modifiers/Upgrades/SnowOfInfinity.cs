@@ -26,7 +26,7 @@ namespace TranscendenceMod.Items.Modifiers.Upgrades
             Item.width = 18;
             Item.height = 24;
 
-            Item.value = Item.buyPrice(gold: 25);
+            Item.value = Item.sellPrice(gold: 5);
             Item.rare = ItemRarityID.Cyan;
         }
         public override Color? GetAlpha(Color lightColor) => Color.White;
@@ -34,7 +34,7 @@ namespace TranscendenceMod.Items.Modifiers.Upgrades
         {
             CreateRecipe()
             .AddIngredient(ItemID.Glass, 22)
-            .AddIngredient(ItemID.SoulofMight, 17)
+            .AddIngredient(ItemID.SoulofMight, 18)
             .AddIngredient(ItemID.FrostCore, 2)
             .AddTile(TileID.MythrilAnvil)
             .Register();

@@ -24,7 +24,7 @@ namespace TranscendenceMod.Items.Weapons.Ranged.Ammo
             Item.maxStack = 9999;
             Item.width = 20;
             Item.height = 20;
-            Item.value = Item.buyPrice(silver: 10);
+            Item.value = Item.sellPrice(silver: 10);
             Item.rare = ItemRarityID.Red;
         }
         public override void AddRecipes()

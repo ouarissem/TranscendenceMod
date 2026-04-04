@@ -36,7 +36,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
             Item.shoot = projectile;
             Item.shootSpeed = 4;
 
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 5);
             Item.rare = ItemRarityID.Lime;
 
             Item.noUseGraphic = true;

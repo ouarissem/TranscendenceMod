@@ -65,7 +65,7 @@ namespace TranscendenceMod.NPCs.PreHard.BloodWorm
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.ZoneCrimson && NPC.CountNPCS(Type) < 3)
-                return 0.25f;
+                return 0.185f;
             else return 0;
         }
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)

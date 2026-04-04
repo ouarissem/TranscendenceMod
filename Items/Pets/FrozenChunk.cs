@@ -21,7 +21,7 @@ namespace TranscendenceMod.Items.Pets
             Item.width = 16;
             Item.height = 16;
 
-            Item.value = Item.buyPrice(gold: 25);
+            Item.value = Item.sellPrice(gold: 5);
             Item.rare = ItemRarityID.Master;
             Item.master = true;
         }

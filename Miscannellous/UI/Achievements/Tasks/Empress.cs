@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -25,6 +26,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "fed059";
 
         public override CategoryIDs category => CategoryIDs.Prog;
+
+        public override int reward => ItemID.SoulofLight;
+        public override int amount => 25;
     }
 }
 

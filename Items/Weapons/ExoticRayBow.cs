@@ -47,7 +47,6 @@ namespace TranscendenceMod.Items.Weapons
             Item.shootSpeed = 10;
             Item.crit = 25;
             Item.useAmmo = AmmoID.Arrow;
-            Item.GetGlobalItem<ModifiersItem>().DoesUseCharge = false;
 
         }
         public override void ModifyManaCost(Player player, ref float reduce, ref float mult) => mult *= 0;
@@ -69,7 +68,7 @@ namespace TranscendenceMod.Items.Weapons
             .AddIngredient(ItemID.FairyQueenMagicItem)
             .AddIngredient(ModContent.ItemType<CrystalItem>(), 10)
             .AddIngredient(ModContent.ItemType<Lightning>(), 10)
-            .AddIngredient(ModContent.ItemType<AtmospheragonScale>(), 5)
+            .AddIngredient(ModContent.ItemType<PoseidonsTide>(), 5)
             .AddTile(TileID.LunarCraftingStation)
             .Register();
         }
@@ -214,7 +213,6 @@ namespace TranscendenceMod.Items.Weapons
                         ModContent.ProjectileType<ExoticRayBowShot>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Projectile.DirectionTo(Main.MouseWorld).RotatedBy(0.1f) * player.HeldItem.shootSpeed,
                         ModContent.ProjectileType<ExoticRayBowShot>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
-                    if (player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge > 0) player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge -= 1f;
                     Projectile.ai[1] = 0;
                 }
             }

@@ -14,22 +14,23 @@ namespace TranscendenceMod.Items.Weapons.Ranged.Ammo
         }
         public override void SetDefaults()
         {
-            Item.damage = 28;
+            Item.damage = 44;
             Item.DamageType = DamageClass.Ranged;
-            Item.crit = 35;
+            Item.crit = 10;
             Item.ammo = AmmoID.Stake;
             Item.shoot = ModContent.ProjectileType<LuminiteStakeProj>();
             Item.consumable = true;
             Item.maxStack = 9999;
             Item.width = 20;
             Item.height = 8;
-            Item.value = Item.buyPrice(copper: 3);
+            Item.value = Item.sellPrice(copper: 3);
             Item.rare = ItemRarityID.Cyan;
         }
         public override void AddRecipes()
         {
             CreateRecipe(333)
-            .AddIngredient(ItemID.LunarBar, 1)
+            .AddIngredient(ItemID.Stake, 111)
+            .AddIngredient(ItemID.LunarOre, 3)
             .AddTile(TileID.LunarCraftingStation)
             .Register();
         }

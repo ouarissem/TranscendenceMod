@@ -245,16 +245,25 @@ namespace TranscendenceMod
             Rectangle rec = new Rectangle(0, player.GetModPlayer<TranscendencePlayer>().LacewingFrame, 24, 24);
             SpriteEffects se = player.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
+            bool fish = player.GetModPlayer<TranscendencePlayer>().FishNeck && player.wet;
             float sin = (float)(3f + Math.Sin(TranscendenceWorld.UniversalRotation * 4f) * 2f);
             for (int i = 0; i < 8; i++)
             {
                 Color col = Main.hslToRgb(i / 8f, 1f, 0.5f);
                 if (Main.dayTime)
                     col = Color.Lerp(Color.Gold, Color.OrangeRed, i / 8f);
+                if (fish)
+                    col = Color.DeepSkyBlue;
+                if (player.GetModPlayer<TranscendencePlayer>().Focus < 25f)
+                    col = Color.Gray;
+
                 col.A = 0;
                 DrawData drawData2 = new DrawData(Fly, drawPos + Vector2.One.RotatedBy(MathHelper.TwoPi * i / 8f + TranscendenceWorld.UniversalRotation * 2f) * sin, rec, col * 0.5f, player.velocity.X * 0.075f, rec.Size() * 0.5f, 1f, se);
                 drawInfo.DrawDataCache.Add(drawData2);
             }
+
+            Color col2 = (player.GetModPlayer<TranscendencePlayer>().Focus < 25f ? Color.Gray : fish ? Color.DeepSkyBlue : Main.dayTime ? Color.Gold : Color.White) * 0.75f;
+            Lighting.AddLight(player.Center, col2.R / 255f, col2.G / 255f, col2.B / 255f);
 
             DrawData drawData = new DrawData(Fly, drawPos, rec, new Color(1f, 1f, 1f, 0f), player.velocity.X * 0.075f, rec.Size() * 0.5f, 1f, se);
             drawInfo.DrawDataCache.Add(drawData);

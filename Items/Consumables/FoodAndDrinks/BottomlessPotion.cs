@@ -72,25 +72,27 @@ namespace TranscendenceMod.Items.Consumables.FoodAndDrinks
         public override bool CanUseItem(Player player) => !player.HasBuff(cd);
         public override bool? UseItem(Player player)
         {
-            int duration = 8 * 60 * 60;
+            int duration = 5 * 60 * 60;
 
             if (player.ItemAnimationJustStarted)
             {
-                if (SelectedBuff == BuffTypes.Wrath)
-                    player.AddBuff(BuffID.Wrath, duration);
+                switch (SelectedBuff)
+                {
+                    case BuffTypes.Inferno:
+                        player.AddBuff(BuffID.Inferno, duration); break;
 
-                if (SelectedBuff == BuffTypes.Rage)
-                    player.AddBuff(BuffID.Rage, duration);
+                    case BuffTypes.Summoning:
+                        player.AddBuff(BuffID.Summoning, duration); break;
 
-                if (SelectedBuff == BuffTypes.Endurance)
-                    player.AddBuff(BuffID.Endurance, duration);
+                    case BuffTypes.Endurance:
+                        player.AddBuff(BuffID.Endurance, duration); break;
 
-                if (SelectedBuff == BuffTypes.Summoning)
-                    player.AddBuff(BuffID.Summoning, duration);
+                    case BuffTypes.Rage:
+                        player.AddBuff(BuffID.Rage, duration); break;
 
-                if (SelectedBuff == BuffTypes.Inferno)
-                    player.AddBuff(BuffID.Inferno, duration);
-
+                    case BuffTypes.Wrath:
+                        player.AddBuff(BuffID.Wrath, duration); break;
+                }
 
                 player.AddBuff(cd, duration * 2);
             }

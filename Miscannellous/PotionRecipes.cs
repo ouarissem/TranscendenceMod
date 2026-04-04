@@ -1,6 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TranscendenceMod.Items.Consumables.Placeables.SpaceBiome;
 using TranscendenceMod.Items.Farming;
 using TranscendenceMod.Items.Materials;
 using TranscendenceMod.Items.Materials.MobDrops;
@@ -40,7 +41,7 @@ namespace TranscendenceMod
             CraftRecipe(ItemID.SummoningPotion, ItemID.BeeWax, 9);
             CraftRecipe(ItemID.HeartreachPotion, ItemID.Vine, 3);
             CraftRecipe(ItemID.FlipperPotion, ItemID.Starfish, 6);
-            CraftRecipe(ItemID.MiningPotion, ModContent.ItemType<CarbonBar>(), 3);
+            CraftRecipe(ItemID.MiningPotion, ModContent.ItemType<CarbonOre>(), 12);
             CraftRecipe(ItemID.SonarPotion, ItemID.VariegatedLardfish, 3);
             CraftRecipe(ItemID.TrapsightPotion, ItemID.Stinger, 3);
             CraftRecipe(ItemID.InfernoPotion, ItemID.FlarefinKoi, 3);
@@ -55,7 +56,7 @@ namespace TranscendenceMod
 
             CraftRecipe(ItemID.RecallPotion, ItemID.SpecularFish, 3);
             CraftRecipe(ItemID.PotionOfReturn, ItemID.HellstoneBar, 6);
-            CraftRecipe(ItemID.TeleportationPotion, ModContent.ItemType<PulverizedPlanet>(), 9);
+            CraftRecipe(ItemID.TeleportationPotion, ModContent.ItemType<CrystalItem>(), 12);
 
 
             // Uses special recipe, so it will not use the CraftRecipe() method

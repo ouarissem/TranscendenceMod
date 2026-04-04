@@ -20,7 +20,7 @@ namespace TranscendenceMod.Items.Accessories.Vanity
             Item.accessory = true;
             Item.vanity = true;
 
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 5);
             Item.rare = ItemRarityID.Green;
         }
         public override void UpdateVanity(Player player)

@@ -50,6 +50,7 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.SpaceBoss
         public override void OnKill(int timeLeft)
         {
         }
+        
         public override void AI()
         {
             if (Projectile.ai[2] != 1 && Projectile.scale < (10 * (1 + Projectile.GetGlobalProjectile<TranscendenceProjectiles>().SpaceBossPortalProjectile)))

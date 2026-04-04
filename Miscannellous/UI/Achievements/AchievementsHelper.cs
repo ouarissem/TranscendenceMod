@@ -37,12 +37,12 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public bool HardmetalUnlock;
         public bool ProcessUnlock;
         public bool VolcanicUnlock;
+        public bool ChaliceUnlock;
         public bool sansUnlock;
         public bool MuramasaUnlock;
         public bool WallUnlock;
         public bool EmpressUnlock;
         public bool MoonlordUnlock;
-        public bool VoidBiomeUnlock;
         public bool FrostSerpentUnlock;
         public bool AtmospheronUnlock;
         public bool PoseidonUnlock;
@@ -53,6 +53,8 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public bool SeraphForgeUnlock;
         public bool EoLChallengeUnlock;
         public bool NucleusChallengeUnlock;
+        public bool TwentyTwoUnlock;
+        public bool DragonChalUnlock;
 
         public override void PostUpdate()
         {
@@ -112,6 +114,12 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
                 CompleteAchievement(TaskIDs.Volcanic);
             }
 
+            if (Downed.Contains(Bosses.FlameGuardian) && !ChaliceUnlock)
+            {
+                ChaliceUnlock = true;
+                CompleteAchievement(TaskIDs.Chalice);
+            }
+
             if (NPC.downedBoss3 && !sansUnlock)
             {
                 sansUnlock = true;
@@ -140,12 +148,6 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
             {
                 MoonlordUnlock = true;
                 CompleteAchievement(TaskIDs.Moonlord);
-            }
-
-            if (VoidTilesCount > 0 && !VoidBiomeUnlock)
-            {
-                VoidBiomeUnlock = true;
-                CompleteAchievement(TaskIDs.VoidBiome);
             }
 
             if (Downed.Contains(Bosses.FrostSerpent) && !FrostSerpentUnlock)
@@ -224,6 +226,10 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
                      player.GetModPlayer<ModAchievementsHelper>().EoLChallengeUnlock = true;
                 if (task == TaskIDs.NucleusChallenge)
                     player.GetModPlayer<ModAchievementsHelper>().NucleusChallengeUnlock = true;
+                if (task == TaskIDs.TwentyTwoChallenge)
+                    player.GetModPlayer<ModAchievementsHelper>().TwentyTwoUnlock = true;
+                if (task == TaskIDs.DragonChallenge)
+                    player.GetModPlayer<ModAchievementsHelper>().DragonChalUnlock = true;
 
                 string typeString = task.ToString();
 
@@ -273,8 +279,6 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
 
             if (MoonlordUnlock) tag["MoonlordUnlock"] = true;
 
-            if (VoidBiomeUnlock) tag["VoidBiomeUnlock"] = true;
-
             if (FrostSerpentUnlock) tag["FrostSerpentUnlock"] = true;
 
             if (AtmospheronUnlock) tag["AtmospheronUnlock"] = true;
@@ -295,6 +299,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
 
             if (NucleusChallengeUnlock) tag["NucleusChallengeUnlock"] = true;
 
+            if (TwentyTwoUnlock) tag["TwentyTwoUnlock"] = true;
+
+            if (DragonChalUnlock) tag["DragonChalUnlock"] = true;
         }
 
         public override void LoadData(TagCompound tag)
@@ -331,8 +338,6 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
 
             MoonlordUnlock = tag.ContainsKey("MoonlordUnlock");
 
-            VoidBiomeUnlock = tag.ContainsKey("VoidBiomeUnlock");
-
             FrostSerpentUnlock = tag.ContainsKey("FrostSerpentUnlock");
 
             AtmospheronUnlock = tag.ContainsKey("AtmospheronUnlock");
@@ -352,6 +357,10 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
             EoLChallengeUnlock = tag.ContainsKey("EoLChallengeUnlock");
 
             NucleusChallengeUnlock = tag.ContainsKey("NucleusChallengeUnlock");
+
+            TwentyTwoUnlock = tag.ContainsKey("TwentyTwoUnlock");
+
+            DragonChalUnlock = tag.ContainsKey("DragonChalUnlock");
         }
     }
 }

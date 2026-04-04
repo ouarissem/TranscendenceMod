@@ -7,7 +7,9 @@ using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using TranscendenceMod.Items.Farming;
 using TranscendenceMod.Items.Materials.MobDrops;
+using TranscendenceMod.Items.Tools;
 using TranscendenceMod.Items.Tools.Generic.Hardmetal;
 
 namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
@@ -25,6 +27,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "d5b78a";
 
         public override CategoryIDs category => CategoryIDs.Prog;
+
+        public override int reward => ModContent.ItemType<SeedBox>();
+        public override int amount => 3;
     }
 }
 

@@ -36,7 +36,7 @@ namespace TranscendenceMod.Items.Weapons.Ranged
             Item.height = 8;
             Item.noMelee = true;
 
-            Item.value = Item.buyPrice(silver: 75);
+            Item.value = Item.sellPrice(silver: 75);
             Item.rare = ItemRarityID.Green;
 
         }

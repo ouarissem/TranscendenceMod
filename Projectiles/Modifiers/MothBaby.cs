@@ -31,10 +31,11 @@ namespace TranscendenceMod.Projectiles.Modifiers
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Generic;
 
-            Projectile.scale = 0.5f;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 20;
 
             Projectile.penetrate = -1;
-            Projectile.timeLeft = 800;
+            Projectile.timeLeft = 900;
         }
         public override void OnKill(int timeLeft)
         {
@@ -109,39 +110,37 @@ namespace TranscendenceMod.Projectiles.Modifiers
             }
 
             //Tilt a bit while moving
-            Projectile.rotation = MathHelper.Lerp(Projectile.rotation, Projectile.velocity.X * 0.075f, 0.1f);
+            Projectile.rotation = MathHelper.Lerp(Projectile.rotation, Projectile.velocity.X * 0.025f, 0.1f);
 
-            NPC npc = Projectile.FindTargetWithinRange(1250, false);
+            float distance = 1250f;
+            NPC npc = null;
+
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                NPC n = Main.npc[i];
+                if (n != null && n.active && n.Distance(player.Center) < distance && n.chaseable && !n.friendly && !n.dontTakeDamage)
+                {
+                    distance = Projectile.Distance(n.Center);
+                    npc = n;
+                }
+            }
+
             if (npc != null && npc.active)
             {
-                float speed = 16f * (1f + (Projectile.scale - 0.5f));
-                int cd = Main.rand.Next(45, 65);
+                float speed = 8f;
 
                 if (Projectile.ai[0] == 1f)
-                    speed = 30f;
+                    speed = 32f;
 
-                if (++Projectile.ai[2] < cd)
+                if (++Projectile.ai[2] < 120)
                 {
-                    if (Projectile.ai[2] < (cd - 20))
-                    {
-                        vel = Projectile.DirectionTo(npc.Center).RotatedByRandom(0.05f);
-                        Projectile.velocity *= 0.95f;
-                    }
-                    else Projectile.velocity = vel * -12f;
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(npc.Center).RotatedByRandom(0.0125f) * speed, 1f / 30f);
                 }
                 else
                 {
-                    Projectile.velocity = vel * speed;
-
-                    //Slow down after 15 frames
-                    if (Projectile.ai[2] > (cd + 20))
-                    {
-                        Projectile.velocity *= 0.9f;
-
-                        //Stop dash after stopping, making the babies chase again
-                        if (Projectile.ai[2] > (cd + 30))
-                            Projectile.ai[2] = 0f;
-                    }
+                    Projectile.velocity *= 0.8f;
+                    if (Projectile.ai[2] > 150)
+                        Projectile.ai[2] = 0f;
                 }
             }
             else
@@ -149,7 +148,6 @@ namespace TranscendenceMod.Projectiles.Modifiers
                 if (Projectile.Distance(player.Center) > 375f)
                     Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(player.Center) * 24f, 1f / 60f);
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Main.rand.NextVector2CircularEdge(16f, 16f), 0.025f);
-                Projectile.ai[2] = 0f;
             }
         }
         public override bool PreDraw(ref Color lightColor)
@@ -184,8 +182,6 @@ namespace TranscendenceMod.Projectiles.Modifiers
                         Main.EntitySpriteDraw(sprite, pos, rec, new Color(100, 100, 100) * 0.375f * Fade, Projectile.rotation, rec.Size() * 0.5f, Projectile.scale, se);
                     }
                 }
-
-                TranscendenceUtils.VeryBasicProjOutline(Projectile, Sprite, 2f, 1f, 0.25f, 0f, 0.25f, false, rec, se, Projectile.Center);
 
                 TranscendenceUtils.DrawEntity(Projectile, lightColor, Projectile.scale, ModContent.Request<Texture2D>(Sprite).Value, Projectile.rotation,
                     Projectile.Center, rec, rec.Size() * 0.5f, se);

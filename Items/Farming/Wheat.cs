@@ -15,7 +15,7 @@ namespace TranscendenceMod.Items.Farming
         {
             Item.width = 16;
             Item.height = 24;
-            Item.value = Item.buyPrice(silver: 25);
+            Item.value = Item.sellPrice(silver: 10);
             Item.rare = ItemRarityID.Blue;
             Item.maxStack = 9999;
         }

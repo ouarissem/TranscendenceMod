@@ -32,7 +32,7 @@ namespace TranscendenceMod.Items.Tools.Hooks
             Item.shootSpeed = 26f;
 
             Item.useStyle = ItemUseStyleID.None;
-            Item.value = Item.buyPrice(gold: 10);
+            Item.value = Item.sellPrice(gold: 4);
             Item.rare = ModContent.RarityType<Brown>();
         }
     }

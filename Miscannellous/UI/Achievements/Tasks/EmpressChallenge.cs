@@ -21,11 +21,14 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
 
         public override float x => -175f;
 
-        public override float y => -50f;
+        public override float y => -70f;
 
         public override string col => "ee60c1";
 
         public override CategoryIDs category => CategoryIDs.Challenge;
+
+        public override int reward => ItemID.PlatinumCoin;
+        public override int amount => 1;
     }
 }
 

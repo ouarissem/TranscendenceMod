@@ -20,6 +20,7 @@ namespace TranscendenceMod.Projectiles.Weapons.Ranged.Ammo
             Projectile.usesLocalNPCImmunity = true;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 600;
+            Projectile.extraUpdates = 1;
 
             Projectile.friendly = true;
             Projectile.hostile = false;

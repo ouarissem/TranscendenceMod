@@ -34,9 +34,8 @@ namespace TranscendenceMod.Items.Weapons.Melee
             Item.knockBack = 4;
 
             Item.shoot = projectile;
-            Item.GetGlobalItem<ModifiersItem>().DoesUseCharge = false;
 
-            Item.value = Item.sellPrice(gold: 10);
+            Item.value = Item.sellPrice(gold: 25);
             Item.rare = ModContent.RarityType<ModdedPurple>();
 
             Item.noUseGraphic = true;
@@ -192,7 +191,6 @@ namespace TranscendenceMod.Items.Weapons.Melee
         public override void OnKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
-            if (player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge > 0) player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge -= 1f;
 
             if (ChargeTimer < 2 || HasHitNPC)
                 return;

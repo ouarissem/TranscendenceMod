@@ -32,7 +32,7 @@ namespace TranscendenceMod.Items.Modifiers.Upgrades
             Item.width = 16;
             Item.height = 22;
 
-            Item.value = Item.buyPrice(gold: 20);
+            Item.value = Item.sellPrice(gold: 20);
             Item.rare = ModContent.RarityType<Brown>();
         }
         public override Color? GetAlpha(Color lightColor) => Color.White;

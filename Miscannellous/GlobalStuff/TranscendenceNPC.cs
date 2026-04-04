@@ -43,6 +43,7 @@ using TranscendenceMod.NPCs.SpaceBiome.Worm;
 using TranscendenceMod.Projectiles.Equipment;
 using TranscendenceMod.Projectiles.NPCs.Bosses.Nucleus;
 using TranscendenceMod.Projectiles.NPCs.Bosses.SpaceBoss;
+using TranscendenceMod.Projectiles.Weapons.Ranged;
 using TranscendenceMod.Tiles.TilesheetHell.Nature;
 using static TranscendenceMod.TranscendenceWorld;
 using Conditions = Terraria.GameContent.ItemDropRules.Conditions;
@@ -176,10 +177,8 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
             {
                 normalMode.OnSuccess(ItemDropRule.Common(ModContent.ItemType<EasternTalismans>(), 3));
                 normalMode.OnSuccess(ItemDropRule.Common(ModContent.ItemType<ChromaticAegis>(), 4));
+                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<HeartOfTheQueen>()));
             }
-
-            if (npc.type == NPCID.BloodZombie || npc.type == NPCID.Drippler)
-                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TomatoSeeds>(), 20));
 
             if (npc.type == NPCID.SnowmanGangsta)
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<GangstaShotgun>(), 50));
@@ -190,9 +189,6 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
             if (npc.type == NPCID.DD2Betsy)
                 normalMode.OnSuccess(ItemDropRule.Common(ModContent.ItemType<DragonScale>(), 1, 2, 3));
 
-            if (npc.type == NPCID.HallowBoss)
-                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<HeartOfTheQueen>()));
-
             if (npc.type == NPCID.MoonLordCore)
             {
                 normalMode.OnSuccess(ItemDropRule.Common(ItemID.LongRainbowTrailWings, 3));
@@ -200,29 +196,24 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                 normalMode.OnSuccess(ItemDropRule.Common(ModContent.ItemType<LunarShield>(), 2));
             }
 
-            if (npc.type == NPCID.WallofFlesh) npcLoot.Add(ItemDropRule.ByCondition(new BossNoHit(), ModContent.ItemType<ForgottenInferno>()));
+            if (npc.type == NPCID.Mothron)
+                npcLoot.Add(ItemDropRule.OneFromOptions(2, ModContent.ItemType<MothronLamp>(), ModContent.ItemType<SunshadeEgg>()));
 
-            if (npc.type == NPCID.Mothron) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MothronLamp>(), 3));
+            if (npc.type == NPCID.Pumpking)
+                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SkullMasterSickle>(), 8));
 
-            if (npc.type == NPCID.Pumpking) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SkullMasterSickle>(), 8));
-
-            if (npc.type == NPCID.Deerclops) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ConstantDial>()));
+            if (npc.type == NPCID.Deerclops)
+                npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ConstantDial>()));
 
             if (DungSkeleton(npc))
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<LegCutter>(), 66));
                 npcLoot.Add(ItemDropRule.ByCondition(new DragonDropRule(), ModContent.ItemType<PoseidonsTide>(), 6));
             }
-
-            if (PostPlantDungGenericSkeleton(npc) && (npc.type == NPCID.BlueArmoredBones || npc.type == NPCID.BlueArmoredBonesMace || npc.type == NPCID.BlueArmoredBonesNoPants || npc.type == NPCID.BlueArmoredBonesSword))
-                npcLoot.Add(ItemDropRule.ByCondition(new DragonDropRule(), ModContent.ItemType<PoseidonsTide>(), 3));
-
-            if (PostPlantDungSkeleton(npc))
-                npcLoot.Add(ItemDropRule.ByCondition(new DragonDropRule(), ModContent.ItemType<PoseidonsTide>(), 1, 1, 3));
         }
         public override bool CheckDead(NPC npc)
         {
-            /*if (npc.target != -1 && !Main.player[npc.target].GetModPlayer<TranscendencePlayer>().Possessing && Main.player[npc.target].GetModPlayer<TranscendencePlayer>().CorruptWanderingKit && !PossessionAvaivable
+            if (npc != null && npc.active && !npc.HasNPCTarget && npc.target != -1 && !Main.player[npc.target].GetModPlayer<TranscendencePlayer>().Possessing && Main.player[npc.target].GetModPlayer<TranscendencePlayer>().CorruptWanderingKit && !PossessionAvaivable
                 && Main.player[npc.target].Distance(npc.Center) < 1000 && !npc.boss && npc.realLife == -1 && !Possessed
                 && npc.type != NPCID.PirateShip && npc.type != NPCID.PirateShipCannon && npc.type != NPCID.GolemHead && npc.type != NPCID.EaterofWorldsHead && !(npc.ModNPC is HeadSegment))
             {
@@ -232,8 +223,9 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                 npc.dontTakeDamage = true;
                 npc.life = npc.lifeMax;
                 npc.velocity = Vector2.Zero;
+
                 return false;
-            }*/
+            }
 
             return base.CheckDead(npc);
         }
@@ -282,29 +274,27 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                     for (int j = 0 + (int)(Main.maxTilesY / 2f); j < (Main.maxTilesY - 400); j++)
                     {
                         Tile tile = Main.tile[i, j];
-                        if ((tile.TileType == TileID.Stone && Main.rand.NextBool(1825)) && tile.HasTile)
+                        if ((tile.TileType == TileID.Stone && Main.rand.NextBool(2725)) && tile.HasTile)
                         {
-                            WorldGen.OreRunner(i, j, 6, 42, (ushort)ModContent.TileType<HardmetalOreTile>());
+                            WorldGen.OreRunner(i, j, 4, 16, (ushort)ModContent.TileType<HardmetalOreTile>());
                         }
                     }
                 }
             }
-
-            if (npc.type == NPCID.WallofFlesh && Nohit)
-                Item.NewItem(npc.GetSource_Death(), npc.getRect(), ModContent.ItemType<ForgottenInferno>());
 
             if (!npc.boss && !npc.friendly && npc.lifeMax > 5 && Main.rand.NextBool(50) && Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().HasSurvivorKnife > 0)
             {
                 int item = ModContent.ItemType<Meat>();
                 int amount = 1;
 
-                switch (Main.rand.Next(0, 4))
+                switch (Main.rand.Next(0, 5))
                 {
                     case 0: item = ModContent.ItemType<Meat>(); break;
                     case 1: item = ModContent.ItemType<ScavengerChisel>(); break;
                     case 2: item = ModContent.ItemType<SturdyPlate>(); break;
                     case 3: item = ItemID.Dynamite; amount = 3; break;
-                    case 4: Item.NewItem(npc.GetSource_Death(), npc.getRect(), ModContent.ItemType<VineGun>()); item = ItemID.VineRopeCoil; amount = 10; break;
+                    case 4: item = ItemID.SpelunkerPotion; amount = 2; break;
+                    case 5: item = ModContent.ItemType<SeedBox>(); amount = 1; break;
                 }
                 Item.NewItem(npc.GetSource_Death(), npc.getRect(), item, amount);
             }
@@ -356,6 +346,9 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
             if (npc.type == NPCID.MoonLordFreeEye || npc.type == NPCID.MoonLordHand || npc.type == NPCID.MoonLordHead)
                 return false;
 
+            if (PossessionAvaivable)
+                return false;
+
             // Parrying
             if (npc.active && base.CanHitPlayer(npc, target, ref cooldownSlot) && npc.Hitbox.Intersects(target.Hitbox) && !npc.dontTakeDamage && npc != null && TranscendenceUtils.GeneralParryConditions(target))
             {
@@ -364,7 +357,6 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                     return base.CanHitPlayer(npc, target, ref cooldownSlot);
 
                 DialogUI.SpawnDialogCutscene(Language.GetTextValue("Mods.TranscendenceMod.Messages.Parry"), DialogBoxes.Generic, 1, 1, target, new Vector2(0, -target.height - 40), 90, Color.Gold);
-                Projectile.NewProjectile(target.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<ParryVisual>(), 0, 0, target.whoAmI, target.GetModPlayer<TranscendencePlayer>().ShieldID);
 
                 if (modPlayer.PalladiumShieldEquipped)
                     target.AddBuff(BuffID.RapidHealing, 240);
@@ -377,7 +369,10 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
 
                 modPlayer.ParryTimer = 0;
                 modPlayer.ParryTimerCD = 0;
-                modPlayer.Focus -= modPlayer.ParryFocusCost;
+                float pfc = modPlayer.ParryFocusCost;
+                if (modPlayer.LegendarySwordTimer > 0)
+                    pfc /= 2f;
+                modPlayer.Focus -= pfc;
 
                 return false;
             }
@@ -395,9 +390,10 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                     Nohit = false;
                 }
 
-                if ((npc.lavaWet || Collision.SolidCollision(npc.position, npc.width, npc.height)) && player.TryGetModPlayer(out TranscendencePlayer modplayer2) && modplayer2 != null && modplayer2.DangerDetection)
+                if ((npc.lavaWet || Collision.SolidCollision(npc.Center - (npc.Size / 4f), npc.width / 2, npc.height / 2)) && Main.rand.NextBool(2))
                 {
-                    Dust.NewDust(npc.Top, npc.width, npc.height, DustID.TreasureSparkle);
+                    int d = Dust.NewDust(npc.position, npc.width, npc.height, ModContent.DustType<PlayerCosmicBlood>(), 0f, 0f, 0, Color.Red);
+                    Main.dust[d].alpha = 50;
                 }
             }
 
@@ -456,16 +452,29 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
 
         public override bool PreKill(NPC npc)
         {
+            if (!npc.HasNPCTarget && npc.target != -1 && npc.target < Main.player.Length)
+                TargetPlayer = Main.player[npc.target];
+
             if (npc.type == NPCID.HallowBoss && EmpressChallenge && npc.target != -1)
-                ModAchievementsHelper.CompleteChallenge(Main.player[npc.target], TaskIDs.EmpressChallenge);
+                ModAchievementsHelper.CompleteChallenge(TargetPlayer, TaskIDs.EmpressChallenge);
+
+            if (npc.target != -1 && TargetPlayer != null && TargetPlayer.GetModPlayer<TranscendencePlayer>().Vampire && TargetPlayer.Distance(npc.Center) < 1000 && !npc.boss)
+            {
+                Projectile.NewProjectile(npc.GetSource_Death(), npc.Center, Main.rand.NextVector2CircularEdge(6f, 6f),
+                    ModContent.ProjectileType<SoulEater>(), 5 + (TargetPlayer.statDefense * 2), 4f, TargetPlayer.whoAmI);
+            }
 
             return base.PreKill(npc);
         }
 
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
         {
-            if (spawnInfo.Player.InModBiome<Heaven>() || spawnInfo.Player.InModBiome<Limbo>())
-                pool.Remove(0);
+            if (spawnInfo.Player.InModBiome<Heaven>())
+            {
+                if (Main.dayTime && Main.time <= Main.dayLength / 3)
+                    pool.Clear();
+                else pool.Remove(0);
+            }
 
             if (spawnInfo.Player.GetModPlayer<TranscendencePlayer>().ZoneLandSite || spawnInfo.Player.ZoneShimmer ||
                 TranscendenceUtils.BossAlive() && !NPC.AnyNPCs(NPCID.LunarTowerSolar) && !NPC.AnyNPCs(NPCID.LunarTowerVortex)
@@ -505,6 +514,10 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                         EmpressChallenge = false;
                     else
                     {
+                        if (player.statLife > 5)
+                            player.statLife = 5;
+                        player.statLifeMax2 = 5;
+
                         for (int i = 0; i < Main.maxProjectiles; i++)
                         {
                             Projectile p = Main.projectile[i];
@@ -529,12 +542,13 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
 
             if (PossessionAvaivable && npc.active && TargetPlayer != null && npc.life > 0 && !TargetPlayer.dead)
             {
-                if (TargetPlayer.Distance(npc.Center) < 250 && TargetPlayer.GetModPlayer<TranscendencePlayer>().InfectionAbility && !TargetPlayer.GetModPlayer<TranscendencePlayer>().Possessing)
+                if (TargetPlayer.Distance(npc.Center) < 750 && TargetPlayer.GetModPlayer<TranscendencePlayer>().InfectionAbility && !TargetPlayer.GetModPlayer<TranscendencePlayer>().Possessing)
                 {
-                    Dust.QuickDustLine(TargetPlayer.Center, npc.Center, 20, Color.Purple);
-                    Dust.QuickDustLine(TargetPlayer.Center, npc.Center, 30, Color.Green);
-
-                    Possessed = true;
+                    if (TargetPlayer.GetModPlayer<TranscendencePlayer>().CorruptWanderingKit && TargetPlayer.Distance(npc.Center) < 250)
+                    {
+                        Dust.QuickDustLine(TargetPlayer.Center, npc.Center, 30, Color.Green);
+                        Possessed = true;
+                    }
                 }
                 if (Possessed)
                 {
@@ -544,6 +558,9 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                     npc.dontTakeDamage = true;
                     npc.friendly = true;
 
+                    npc.noGravity = false;
+                    npc.noTileCollide = false;
+                    npc.alpha = 0;
                     NPCID.Sets.ImmuneToAllBuffs[npc.type] = true;
 
                     TargetPlayer.GetModPlayer<TranscendencePlayer>().cameraPos = npc.Center;
@@ -552,6 +569,9 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                     TargetPlayer.GetModPlayer<TranscendencePlayer>().Possessing = true;
                     TargetPlayer.GetModPlayer<TranscendencePlayer>().PossessingTimer = 0;
                     TargetPlayer.GetModPlayer<TranscendencePlayer>().PossessedNPC = npc;
+                    TargetPlayer.GetModPlayer<TranscendencePlayer>().CannotUseItems = true;
+                    TargetPlayer.GetModPlayer<TranscendencePlayer>().CannotUseItemsTimer = 5;
+                    TargetPlayer.breath = TargetPlayer.breathMax;
                     TargetPlayer.direction = npc.direction;
 
                     //Set player defense to npc defense
@@ -560,61 +580,26 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
 
                     npc.velocity *= 0.95f;
 
-                    if (npc.type == NPCID.MourningWood || npc.type == NPCID.Everscream || npc.type == NPCID.SantaNK1 || npc.type == NPCID.IceGolem)
-                    {
-                        npc.noGravity = false;
-                        npc.noTileCollide = false;
-                    }
-
                     PossessedTimer++;
 
-                    if (npc.noGravity || npc.type == NPCID.SandElemental)
-                    {
-                        if (npc.aiStyle == NPCAIStyleID.Spider || npc.aiStyle == NPCAIStyleID.Flying || npc.aiStyle == NPCAIStyleID.DemonEye || npc.aiStyle == NPCAIStyleID.EnchantedSword || npc.type == NPCID.ServantofCthulhu ||
-                            npc.type == ModContent.NPCType<Scorpio>() || npc.type == ModContent.NPCType<SpaceJelly>() || npc.type == ModContent.NPCType<StormEel>())
-                        {
-                            float extraRot = 0;
-                            if (npc.type == NPCID.ServantofCthulhu || npc.aiStyle == NPCAIStyleID.Flying) extraRot = MathHelper.Pi;
-                            if (npc.aiStyle == NPCAIStyleID.EnchantedSword) extraRot = MathHelper.PiOver4 * npc.direction ;
-                            if (npc.type == ModContent.NPCType<StormEel>()) extraRot = MathHelper.PiOver2;
-                            if (npc.aiStyle == NPCAIStyleID.Spider) extraRot = MathHelper.PiOver2 * npc.direction;
-                            npc.rotation = npc.DirectionTo(Main.MouseWorld).ToRotation()
-                                + MathHelper.PiOver2 + extraRot;
-                        }
-                        else npc.rotation = 0;
-                        if (npc.Center.X > Main.MouseWorld.X)
-                        {
-                            npc.direction = -1;
-                            npc.spriteDirection = -1;
-                        }
-                        else
-                        {
-                            npc.direction = 1;
-                            npc.spriteDirection = 1;
-                        }
-                        if (TargetPlayer.controlJump && npc.Distance(Main.MouseWorld) > 50)
-                            npc.velocity = npc.DirectionTo(Main.MouseWorld) * 10;
-                    }
-                    else
-                    {
-                        npc.rotation = 0;
-                        npc.spriteDirection = npc.direction;
-                        float speed = npc.aiStyle == NPCAIStyleID.Unicorn ? 20 : 10;
 
-                        if (TargetPlayer.controlLeft)
-                        {
-                            npc.direction = -1;
-                            npc.velocity.X -= speed / 20f;
-                        }
-                        if (TargetPlayer.controlRight)
-                        {
-                            npc.direction = 1;
-                            npc.velocity.X += speed / 20f;
-                        }
-                        if (Collision.SolidCollision(npc.BottomLeft, npc.width, 1, true) && TargetPlayer.controlJump)
-                        {
-                            npc.velocity.Y = -25;
-                        }
+                    npc.rotation = 0;
+                    npc.spriteDirection = npc.direction;
+                    float speed = npc.aiStyle == NPCAIStyleID.Unicorn ? 20 : 10;
+
+                    if (TargetPlayer.controlLeft)
+                    {
+                        npc.direction = -1;
+                        npc.velocity.X -= speed / 20f;
+                    }
+                    if (TargetPlayer.controlRight)
+                    {
+                        npc.direction = 1;
+                        npc.velocity.X += speed / 20f;
+                    }
+                    if (Collision.SolidCollision(npc.BottomLeft, npc.width, 1, true) && TargetPlayer.controlJump)
+                    {
+                        npc.velocity.Y = -25;
                     }
 
                     if (TranscendenceWorld.InfectionAccessoryKeyBind.JustPressed && PossessedTimer > 5 && !Collision.SolidCollision(TargetPlayer.position, TargetPlayer.width, TargetPlayer.height) || TargetPlayer.dead)
@@ -684,7 +669,10 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
         public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
         {
             if (player.GetModPlayer<TranscendencePlayer>().ZoneStar)
-                spawnRate = (int)(spawnRate * 0.75f);
+            {
+                spawnRate = (int)(spawnRate * 0.2f);
+                maxSpawns = (int)(maxSpawns * 0.4f);
+            }
 
             if (player.GetModPlayer<TranscendencePlayer>().ZoneVolcano)
             {
@@ -719,13 +707,6 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
         {
             if (npc.type == NPCID.EaterofWorldsHead || npc.type == NPCID.EaterofWorldsBody || npc.type == NPCID.EaterofWorldsTail || npc.type == NPCID.TargetDummy)
                 Unmovable = true;
-
-            if (!NPC.downedBoss1 && npc.type == NPCID.Ghost)
-            {
-                npc.lifeMax = 30;
-                npc.knockBackResist = 1.25f;
-                npc.scale = 0.75f;
-            }
 
             if (npc.type == NPCID.WaterSphere && Downed.Contains(Bosses.Atmospheron))
             {
@@ -773,10 +754,7 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
         public override void ModifyShop(NPCShop shop)
         {
             if (shop.NpcType == NPCID.Merchant)
-            {
                 shop.Add(ModContent.ItemType<SurvivorKnife>());
-                shop.Add(ModContent.ItemType<Compass>());
-            }
 
             if (shop.NpcType == NPCID.Mechanic)
                 TranscendenceUtils.sell(shop, ModContent.ItemType<NohitMode>());

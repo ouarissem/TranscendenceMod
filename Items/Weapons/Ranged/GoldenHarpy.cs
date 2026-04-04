@@ -34,7 +34,7 @@ namespace TranscendenceMod.Items.Weapons.Ranged
             Item.noMelee = true;
 
             Item.rare = ItemRarityID.LightRed;
-            Item.value = Item.buyPrice(gold: 2, silver: 21, copper: 3);
+            Item.value = Item.sellPrice(gold: 2, silver: 21, copper: 3);
 
         }
         public override Vector2? HoldoutOffset()

@@ -30,7 +30,7 @@ namespace TranscendenceMod.Items.Consumables.FoodAndDrinks
             Item.height = 16;
             ItemID.Sets.IsFood[Type] = true;
             Item.healMana = 200;
-            Item.value = Item.buyPrice(gold: 1, silver: 25);
+            Item.value = Item.sellPrice(gold: 1, silver: 25);
             Item.rare = ModContent.RarityType<ModdedPurple>();
         }
         public override void AddRecipes()

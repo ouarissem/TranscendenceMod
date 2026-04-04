@@ -16,7 +16,7 @@ namespace TranscendenceMod.Items.Accessories.Movement
             Item.width = 8;
             Item.height = 8;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(silver: 20);
             Item.rare = ItemRarityID.Blue;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
@@ -30,10 +30,9 @@ namespace TranscendenceMod.Items.Accessories.Movement
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.Leather, 8)
-                .AddRecipeGroup(RecipeGroupID.IronBar, 4)
+                .AddIngredient(ItemID.Leather, 4)
                 .AddIngredient(ItemID.SwiftnessPotion, 2)
-                .AddTile(TileID.Anvils)
+                .AddTile(TileID.WorkBenches)
                 .Register();
         }
     }

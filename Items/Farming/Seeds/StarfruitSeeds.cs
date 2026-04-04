@@ -17,16 +17,20 @@ namespace TranscendenceMod.Items.Farming.Seeds
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Item.value = Item.buyPrice(gold: 2);
+            Item.value = Item.sellPrice(gold: 2);
             Item.rare = ModContent.RarityType<CosmicRarity>();
         }
         public override void AddRecipes()
         {
             CreateRecipe(2)
             .AddIngredient(ModContent.ItemType<Starfruit>())
-            .AddIngredient(ModContent.ItemType<PulverizedPlanet>(), 4)
-            .AddIngredient(ItemID.FallenStar, 3)
+            .AddIngredient(ModContent.ItemType<PulverizedPlanet>(), 6)
+            .AddIngredient(ItemID.FallenStar, 6)
+            .AddIngredient(ModContent.ItemType<RedSpiderLily>(), 1)
+            .AddIngredient(ModContent.ItemType<CocoaBean>(), 1)
+            .AddIngredient(ModContent.ItemType<Tomato>(), 1)
             .AddTile(TileID.Blendomatic)
+            .DisableDecraft()
             .Register();
         }
     }

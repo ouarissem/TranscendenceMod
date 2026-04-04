@@ -27,12 +27,28 @@ namespace TranscendenceMod.Miscannellous.UI
                 int y = (int)(player.Center.Y - 100 - Main.screenPosition.Y);
 
                 int width = (int)MathHelper.Lerp(0f, 32f, modplayer.VampireBlood / (float)modplayer.CrimsonNecklaceMaxBlood);
+                int width2 = (int)MathHelper.Lerp(0f, 32f, modplayer.VampireMinTimer / (float)modplayer.VampireMinTime);
                 Rectangle rec = new Rectangle(x - (sprite.Width / 2), y + 59, sprite.Width, sprite.Height);
                 Rectangle rec2 = new Rectangle(x - 16, y + 65, width, 6);
+                Rectangle rec3 = new Rectangle(x - 16, y + 65, width2, 6);
+
+                Color col = modplayer.VampireBlood >= modplayer.CrimsonNecklaceMaxBlood ? (modplayer.VampireMinTimer >= modplayer.VampireMinTime ? Color.Lime : Color.Gray) : Color.Red;
 
                 spriteBatch.Draw(sprite2, rec, Color.White);
-                spriteBatch.Draw(TextureAssets.BlackTile.Value, rec2, modplayer.VampireBlood >= modplayer.CrimsonNecklaceMaxBlood ? Color.White : Color.Red);
+                spriteBatch.Draw(TextureAssets.BlackTile.Value, rec2, col);
+                if (modplayer.VampireMinTimer < modplayer.VampireMinTime && modplayer.VampireBlood >= modplayer.CrimsonNecklaceMaxBlood)
+                    spriteBatch.Draw(TextureAssets.BlackTile.Value, rec3, Color.White);
+
                 spriteBatch.Draw(sprite, rec, Color.White);
+
+                if (modplayer.VampireBlood > 0 && modplayer.VampireBlood < modplayer.CrimsonNecklaceMaxBlood)
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        spriteBatch.Draw(TextureAssets.BlackTile.Value, new Vector2(x - 16 + width, y + 68) + Main.rand.NextVector2Circular(3f, 6f),
+                            null, col, 0f, TextureAssets.BlackTile.Value.Size() * 0.5f, 0.125f, SpriteEffects.None, 0f);
+                    }
+                }
 
                 bool Hover = Main.MouseWorld.Between(new Vector2(x - (sprite.Width / 2), y + 59) + Main.screenPosition, new Vector2(x - (sprite.Width / 2), y + 59) + Main.screenPosition + new Vector2(sprite.Width, sprite.Height));
                 if (Hover)

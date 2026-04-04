@@ -54,7 +54,7 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.SpaceBoss
             {
                 Vector2 pos = Projectile.oldPos[i] - Main.screenPosition + origin + new Vector2(0, Projectile.gfxOffY);
 
-                Main.EntitySpriteDraw(sprite, pos, null, Color.Red * 0.75f, Projectile.oldRot[i] + MathHelper.PiOver2, sprite.Size() * 0.5f, Projectile.scale * 1.75f, SpriteEffects.None);
+                Main.EntitySpriteDraw(sprite, pos, null, Color.Red, Projectile.oldRot[i] + MathHelper.PiOver2, sprite.Size() * 0.5f, Projectile.scale * 1.5f, SpriteEffects.None);
                 Main.EntitySpriteDraw(sprite, pos, null, Color.White, Projectile.oldRot[i] + MathHelper.PiOver2, sprite.Size() * 0.5f, Projectile.scale * 1.25f, SpriteEffects.None);
 
             }

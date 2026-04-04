@@ -5,8 +5,6 @@ namespace TranscendenceMod.Items.Accessories.Shields
 {
     public class CancerBarrier : BaseShield
     {
-        public override int Leniency => 40;
-
         public override int Cooldown => 60;
 
         public override int DefenseAmount => -4;
@@ -17,7 +15,7 @@ namespace TranscendenceMod.Items.Accessories.Shields
             Item.rare = ItemRarityID.Green;
             Item.width = 24;
             Item.height = 24;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 5);
         }
         public override void AddRecipes()
         {

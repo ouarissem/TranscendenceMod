@@ -23,7 +23,7 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.Dragon
             Projectile.aiStyle = -1;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 5;
-            Projectile.scale = 6f;
+            Projectile.scale = 5f;
 
             Projectile.hostile = true;
             Projectile.ignoreWater = true;

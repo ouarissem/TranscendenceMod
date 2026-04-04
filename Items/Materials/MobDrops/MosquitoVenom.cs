@@ -8,8 +8,8 @@ namespace TranscendenceMod.Items.Materials.MobDrops
     {
         public override void SetDefaults()
         {
-            Item.width = 7;
-            Item.height = 23;
+            Item.width = 8;
+            Item.height = 14;
             Item.value = Item.sellPrice(silver: 50);
             Item.rare = ItemRarityID.Red;
             Item.maxStack = 9999;

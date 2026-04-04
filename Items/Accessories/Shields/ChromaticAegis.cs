@@ -8,8 +8,6 @@ namespace TranscendenceMod.Items.Accessories.Shields
 {
     public class ChromaticAegis : BaseShield
     {
-        public override int Leniency => 25;
-
         public override int Cooldown => 120;
 
         public override int DefenseAmount => 6;
@@ -20,7 +18,7 @@ namespace TranscendenceMod.Items.Accessories.Shields
             Item.rare = ItemRarityID.Pink;
             Item.width = 32;
             Item.height = 24;
-            Item.value = Item.buyPrice(gold: 20);
+            Item.value = Item.sellPrice(gold: 20);
         }
 
         public override void UpdateEquip(Player player)

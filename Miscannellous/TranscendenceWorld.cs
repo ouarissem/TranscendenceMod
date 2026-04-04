@@ -31,6 +31,7 @@ using TranscendenceMod.NPCs.Boss.Nucleus;
 using TranscendenceMod.Miscanellous.MiscSystems;
 using TranscendenceMod.Items;
 using TranscendenceMod.Items.Materials.MobDrops;
+using TranscendenceMod.NPCs.Passive;
 
 namespace TranscendenceMod
 {
@@ -47,7 +48,8 @@ namespace TranscendenceMod
 
         public enum Bosses : byte
         {
-            /*Just in case*/ _, 
+            /*Just in case*/ _,
+            FlameGuardian,
             Muramasa,
             FrostSerpent,
             Atmospheron,
@@ -66,19 +68,18 @@ namespace TranscendenceMod
         public static int sy = 135;
         public static int spy = 300;
 
-        public static bool BoulderRain;
-        public static int BoulderRainTime;
-
         public static float UniversalRotation;
         public static int Timer;
 
         public static int SpaceTempleX;
         public static Vector2[] seraphStarsPos = new Vector2[151];
 
-        public static int VoidTilesCount;
-
         public static double PreTime;
         public static bool PreDay;
+
+        public static Vector2 snowNPCpos;
+
+        public static int AmountCrops;
 
         public static bool AnyProjectiles(int Type)
         {
@@ -118,13 +119,6 @@ namespace TranscendenceMod
             return amount;
         }
 
-        public static void IntiateBoulderRain()
-        {
-            Main.NewText(Language.GetTextValue("Mods.TranscendenceMod.Messages.BoulderRainStart"), 175, 75, 255);
-            BoulderRain = true;
-            BoulderRainTime = (int)Main.dayLength / 4;
-        }
-
         public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
         {
             for (int i = 0; i < Main.maxNPCs; i++)
@@ -148,24 +142,8 @@ namespace TranscendenceMod
             if (TranscendenceUtils.BossAlive() && !Main.dayTime && !NPC.AnyNPCs(ModContent.NPCType<ProjectNucleus>()))
                 backgroundColor *= 1.5f;
 
-            float fade = Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().NullFade;
-            Color col = new Color(0, 255, 155);
-
-            if (Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().ZoneStar && !Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().ZoneLimbo)
-            {
-                fade = Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().StarFade;
-                col = Color.Magenta * 0.66f;
-            }
-
-            if (fade > 0)
-            {
-                float mult = 0.5f;
-                if (Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().HasJellyBuff)
-                    mult = 0.75f;
-
-                tileColor = Color.Lerp(tileColor, col * mult, fade);
-                backgroundColor = Color.Lerp(tileColor, col * mult, fade);
-            }
+            if (Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().ZoneStar)
+                tileColor = Color.DarkMagenta;
         }
 
         public override void PostUpdateTime()
@@ -193,52 +171,27 @@ namespace TranscendenceMod
                     if (mp.FrostMoonHS < NPC.totalInvasionPoints)
                         mp.FrostMoonHS = (int)NPC.totalInvasionPoints;
                 }
-
-                bool Legendary = Main.getGoodWorld || Main.zenithWorld;
-                if (Main.rand.NextBool(4) && Legendary)
-                    IntiateBoulderRain();
             }
         }
 
-        public void UpdateVoidTilesCount()
+        public override void PreUpdateWorld()
         {
-            int a = 0;
-            for (int i = 0; i < Main.maxTilesX; i++)
-            {
-                for (int j = 0; j < Main.maxTilesY; j++)
-                {
-                    Tile tile = Main.tile[i, j];
-                    if (tile != null && tile.HasTile && tile.TileType == (ushort)ModContent.TileType<VoidTile>())
-                        a++;
-                }
-            }
-            
-            VoidTilesCount = a;
+            base.PreUpdateWorld();
+
+            Main.NewText(AmountCrops);
+            AmountCrops = 0;
         }
 
         public override void PostUpdateWorld()
         {
+            if (!NPC.AnyNPCs(ModContent.NPCType<SnowmanNPC>()))
+            {
+                NPC.NewNPC(NPC.GetSource_None(), (int)snowNPCpos.X, (int)snowNPCpos.Y, ModContent.NPCType<SnowmanNPC>());
+            }
+
             SpaceTempleX = (int)(Main.maxTilesX / 3.75f) * 16;
             UniversalRotation += MathHelper.ToRadians(1);
             Timer++;
-
-            if (Timer % 900 == 0)
-                UpdateVoidTilesCount();
-
-            if (BoulderRain)
-            {
-                BoulderRainTime--;
-                if (Main.rand.NextBool(10))
-                {
-                    int type = Main.rand.NextBool(2) ? ProjectileID.MiniBoulder : ProjectileID.Boulder;
-                    Projectile.NewProjectile(Main.LocalPlayer.GetSource_FromAI(), new Vector2(Main.LocalPlayer.Center.X + Main.rand.Next(-1000, 1000), 705), new Vector2(0, 10), type, 40, 2);
-                }
-            }
-            if ((BoulderRainTime < 1 || Main.CurrentFrameFlags.AnyActiveBossNPC) && BoulderRain)
-            {
-                Main.NewText(Language.GetTextValue("Mods.TranscendenceMod.Messages.BoulderRainEnd"), 175, 75, 255);
-                BoulderRain = false;
-            }
 
             CosmosColorFadeTimer += CosmosColorFade;
             if (CosmosColorFadeTimer > 1 || CosmosColorFadeTimer < 0) CosmosColorFade = -CosmosColorFade;
@@ -274,38 +227,19 @@ namespace TranscendenceMod
         }
         public override void AddRecipes()
         {
+            Recipe fwings = Recipe.Create(ItemID.Fries);
+            fwings.AddIngredient(ItemID.Feather, 24);
+            fwings.AddIngredient(ModContent.ItemType<CarbonOre>(), 8);
+            fwings.AddTile(TileID.SkyMill);
+            fwings.DisableDecraft();
+            fwings.Register();
+
             Recipe leather = Recipe.Create(ItemID.Leather);
-            leather.AddIngredient(ItemID.Vertebrae, 5);
-            leather.AddTile(TileID.WorkBenches);
+            leather.AddIngredient(ItemID.Vertebrae, 3);
+            leather.AddIngredient(ItemID.Silk, 3);
+            leather.AddIngredient(ItemID.Stinger, 3);
+            leather.AddTile(TileID.Loom);
             leather.Register();
-
-            Recipe america = Recipe.Create(ItemID.Fries);
-            america.AddIngredient(ModContent.ItemType<Potato>(), 8);
-            america.AddTile(TileID.Furnaces);
-            america.Register();
-
-            Recipe chips = Recipe.Create(ItemID.PotatoChips);
-            chips.AddIngredient(ModContent.ItemType<Potato>(), 12);
-            chips.AddTile(TileID.Furnaces);
-            chips.Register();
-
-            Recipe pizza = Recipe.Create(ItemID.Pizza);
-            pizza.AddIngredient(ModContent.ItemType<Flour>(), 8);
-            pizza.AddIngredient(ModContent.ItemType<Tomato>(), 8);
-            pizza.AddTile(TileID.Furnaces);
-            pizza.Register();
-
-            Recipe cookies = Recipe.Create(ItemID.ChocolateChipCookie, 2);
-            cookies.AddIngredient(ModContent.ItemType<Flour>(), 4);
-            cookies.AddIngredient(ModContent.ItemType<CocoaBean>(), 6);
-            cookies.AddTile(TileID.Furnaces);
-            cookies.Register();
-
-            Recipe spaghetti = Recipe.Create(ItemID.Spaghetti);
-            spaghetti.AddIngredient(ModContent.ItemType<Flour>(), 8);
-            spaghetti.AddIngredient(ModContent.ItemType<Tomato>(), 8);
-            spaghetti.AddTile(TileID.Furnaces);
-            spaghetti.Register();
 
             Recipe spike = Recipe.Create(ItemID.Spike, 5);
             spike.AddRecipeGroup(RecipeGroupID.IronBar, 8);
@@ -391,6 +325,29 @@ namespace TranscendenceMod
             {
                 Recipe recipe = Main.recipe[r];
 
+                if (recipe.createItem.type == ItemID.WingsSolar || recipe.createItem.type == ItemID.WingsVortex||
+                    recipe.createItem.type == ItemID.WingsNebula || recipe.createItem.type == ItemID.WingsStardust)
+                {
+                    recipe.RemoveIngredient(ItemID.LunarBar);
+                    recipe.AddIngredient(ItemID.SoulofFlight, 20);
+                }
+
+                if (recipe.createItem.type == ItemID.DrillContainmentUnit)
+                {
+                    recipe.RemoveIngredient(ItemID.LunarBar);
+                    recipe.AddIngredient(ItemID.LunarOre, 160);
+                }
+
+                if (recipe.createItem.type == ItemID.Leather)
+                {
+                    recipe.RemoveIngredient(ItemID.RottenChunk);
+                    recipe.RemoveTile(TileID.WorkBenches);
+                    recipe.AddIngredient(ItemID.RottenChunk, 3);
+                    recipe.AddIngredient(ItemID.Silk, 3);
+                    recipe.AddIngredient(ItemID.Stinger, 3);
+                    recipe.AddTile(TileID.Loom);
+                }
+
                 if (recipe.createItem.type == ItemID.Fertilizer)
                     recipe.RemoveIngredient(ItemID.Bone);
 
@@ -433,19 +390,20 @@ namespace TranscendenceMod
             RecipeGroup AdamForge = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37") + " " + Language.GetTextValue("Mods.TranscendenceMod.Items.HardmodeForge")}", ItemID.AdamantiteForge, ItemID.TitaniumForge);
             RecipeGroup.RegisterGroup(nameof(ItemID.AdamantiteForge), AdamForge);
 
-            RecipeGroup HollowHelms = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} Hallowed Helmet",
+            RecipeGroup HallowHelms = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} Hallowed Helmet",
             ItemID.HallowedMask, ItemID.HallowedHelmet, ItemID.HallowedHeadgear, ItemID.HallowedHood,
             ItemID.AncientHallowedMask, ItemID.AncientHallowedHelmet, ItemID.AncientHallowedHeadgear, ItemID.AncientHallowedHood);
-            RecipeGroup.RegisterGroup(nameof(ItemID.HallowedMask), HollowHelms);
+            RecipeGroup.RegisterGroup(nameof(ItemID.HallowedMask), HallowHelms);
 
-            RecipeGroup WhyIsntCopperAGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.CopperBar)}", ItemID.CopperBar, ItemID.TinBar);
-            RecipeGroup.RegisterGroup(nameof(ItemID.CopperBar), WhyIsntCopperAGroup);
+            RecipeGroup CopperBar = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.CopperBar)}", ItemID.CopperBar, ItemID.TinBar);
+            RecipeGroup.RegisterGroup(nameof(ItemID.CopperBar), CopperBar);
 
-            RecipeGroup WhyIsntSilverAGroup = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.SilverBar)}", ItemID.SilverBar, ItemID.TungstenBar);
-            RecipeGroup.RegisterGroup(nameof(ItemID.SilverBar), WhyIsntSilverAGroup);
+            RecipeGroup SilverBar = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.SilverBar)}", ItemID.SilverBar, ItemID.TungstenBar);
+            RecipeGroup.RegisterGroup(nameof(ItemID.SilverBar), SilverBar);
 
-            RecipeGroup WhatAboutTitanium = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.TitaniumBar)}", ItemID.TitaniumBar, ItemID.AdamantiteBar);
-            RecipeGroup.RegisterGroup(nameof(ItemID.TitaniumBar), WhatAboutTitanium);
+            // Haha
+            RecipeGroup TitBar = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.TitaniumBar)}", ItemID.TitaniumBar, ItemID.AdamantiteBar);
+            RecipeGroup.RegisterGroup(nameof(ItemID.TitaniumBar), TitBar);
 
             RecipeGroup Shadowscale = new RecipeGroup(() => $"{Language.GetTextValue("LegacyMisc.37")} {Lang.GetItemNameValue(ItemID.ShadowScale)}", ItemID.ShadowScale, ItemID.TissueSample);
             RecipeGroup.RegisterGroup(nameof(ItemID.ShadowScale), Shadowscale);
@@ -455,7 +413,6 @@ namespace TranscendenceMod
             int SpaceLand = tasks.FindIndex(genpass => genpass.Name.Equals("Surface Caves"));
             int SpaceBiome = tasks.FindIndex(genpass => genpass.Name.Equals("Spawn Point"));
             int Magnet = tasks.FindIndex(genpass => genpass.Name.Equals("Stalac"));
-            int Caves = tasks.FindIndex(genpass => genpass.Name.Equals("Surface Caves"));
             int Structures = tasks.FindIndex(genpass => genpass.Name.Equals("Final Cleanup"));
             int Shinies2 = tasks.FindIndex(genpass => genpass.Name.Equals("Larva"));
             int SunkenCata = tasks.FindIndex(genpass => genpass.Name.Equals("Larva"));
@@ -469,17 +426,11 @@ namespace TranscendenceMod
             if (Magnet != -1)
                 tasks.Insert(Magnet + 1, new CrateMagnets("Magnet", 550f));
 
-            if (Caves != -1)
-                tasks.Insert(Caves + 1, new CavinatorEX("Caves", 550f));
-
             if (Structures != -1)
                 tasks.Insert(Structures + 1, new Structures("Structures", 550f));
 
             if (Shinies2 != -1)
                 tasks.Insert(Shinies2 + 1, new Ores("Shinies2", 550f));
-
-            if (SunkenCata != -1)
-                tasks.Insert(SunkenCata + 1, new SunkenCatacombGen("SunkenCatacombs", 550f));
         }
         public override void ModifyLightingBrightness(ref float scale)
         {
@@ -681,7 +632,7 @@ namespace TranscendenceMod
         private Color On_Projectile_GetFairyQueenWeaponsColor(On_Projectile.orig_GetFairyQueenWeaponsColor orig, Projectile self, float alphaChannelMultiplier, float lerpToWhite, float? rawHueOverride)
         {
             Color col = orig(self, alphaChannelMultiplier, lerpToWhite, rawHueOverride);
-            if (Main.player[self.owner].name.Contains("CreanBL"))
+            if (Main.player[self.owner].name.Contains("Creanbl"))
                 return Color.Lerp(Color.Blue, Color.Aqua, (float)Math.Cos(Main.GlobalTimeWrappedHourly) * lerpToWhite);
             return col;
         }
@@ -702,9 +653,6 @@ namespace TranscendenceMod
 
             if (self.GetModPlayer<TranscendencePlayer>().UsingLunarGauntlet && (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed))
                 scale *= 1.25f;
-
-            if (self.GetModPlayer<TranscendencePlayer>().BigHandle)
-                scale *= 1.75f;
 
             return scale;
         }
@@ -750,7 +698,7 @@ namespace TranscendenceMod
             //tag.Add("Downed", Downed);
             if (ObtainedTimeDial) tag["ObtainedTimeDial"] = true;
             if (EncouteredSeraph) tag["EncouteredSeraph"] = true;
-            if (VoidTilesCount > 0) tag["VoidTilesCount"] = VoidTilesCount;
+            tag["snowNPCpos"] = snowNPCpos;
         }
         public override void LoadWorldData(TagCompound tag)
         {
@@ -758,7 +706,7 @@ namespace TranscendenceMod
             ObtainedTimeDial = tag.ContainsKey("ObtainedTimeDial");
             EncouteredAtmospheron = tag.ContainsKey("EncouteredAtmospheron");
             EncouteredSeraph = tag.ContainsKey("EncouteredSeraph");
-            VoidTilesCount = tag.GetInt("VoidTilesCount");
+            snowNPCpos = tag.Get<Vector2>("snowNPCpos");
 
         }
     }

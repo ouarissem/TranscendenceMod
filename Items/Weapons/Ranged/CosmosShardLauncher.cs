@@ -23,7 +23,7 @@ namespace TranscendenceMod.Items.Weapons.Ranged
         public override void SetDefaults()
         {
             Item.DamageType = DamageClass.Ranged;
-            Item.damage = 1025;
+            Item.damage = 875;
             Item.knockBack = 4.5f;
             Item.crit = 15;
             Item.channel = true;
@@ -39,7 +39,7 @@ namespace TranscendenceMod.Items.Weapons.Ranged
             Item.height = 28;
             Item.noMelee = true;
 
-            Item.value = Item.buyPrice(gold: 50);
+            Item.value = Item.sellPrice(gold: 50);
             Item.rare = ModContent.RarityType<Brown>();
 
         }
@@ -128,7 +128,6 @@ namespace TranscendenceMod.Items.Weapons.Ranged
 
             if (Projectile.ai[1] == (CD - 1) && !FlamethrowerState)
             {
-                player.GetModPlayer<TranscendencePlayer>().CannotUseItemsTimer = 15;
                 SoundEngine.PlaySound(SoundID.MaxMana, player.Center);
             }
 
@@ -164,18 +163,26 @@ namespace TranscendenceMod.Items.Weapons.Ranged
                     }
                 }
 
-                while (!FlamethrowerState && ++Projectile.ai[1] > CD && player.HasAmmo(VanillaIsSoPicky) && player.controlUseItem && player.GetModPlayer<TranscendencePlayer>().CannotUseItemsTimer < 1 && player.altFunctionUse == 0)
+
+                player.PickAmmo(VanillaIsSoPicky, out int projToShoot, out float speed, out int damage, out float knockBack, out int usedAmmoItemId, true);
+                int useCD = VanillaIsSoPicky.useAnimation;
+                CD = useCD;
+
+                if (CD < 1 || player.GetModPlayer<TranscendencePlayer>().CannotUseItemsTimer > 0)
+                    return;
+
+                if (!FlamethrowerState && ++Projectile.ai[1] > CD && player.HasAmmo(VanillaIsSoPicky) && player.controlUseItem && player.altFunctionUse == 0)
                 {
                     SoundEngine.PlaySound(new SoundStyle("TranscendenceMod/Miscannellous/Assets/Sounds/Weapons/Cosmoshard"), Projectile.Center);
 
-                    player.PickAmmo(VanillaIsSoPicky, out int projToShoot, out float speed, out int damage, out float knockBack, out int usedAmmoItemId, false);
+                    player.PickAmmo(VanillaIsSoPicky, out projToShoot, out speed, out damage, out knockBack, out usedAmmoItemId, false);
 
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), vec, vel * 12, ModContent.ProjectileType<CosmosShard>(), damage, knockBack, player.whoAmI);
 
                     //Rocket Jumping :D
                     if (Main.MouseWorld.Between(player.Center - new Vector2(200, 150), player.Center + new Vector2(200, Main.screenHeight)) && player.controlUp)
                     {
-                        player.velocity += player.DirectionTo(Main.MouseWorld) * -30;
+                        player.velocity += player.DirectionTo(Main.MouseWorld) * -20f;
                         Vector2 dpos = player.Center + Vector2.One.RotatedBy(player.DirectionTo(Main.MouseWorld).ToRotation() - MathHelper.PiOver4) * 35;
                         for (int i = 0; i < 30; i++)
                         {
@@ -188,21 +195,19 @@ namespace TranscendenceMod.Items.Weapons.Ranged
                     }
                     else player.velocity += player.DirectionTo(Main.MouseWorld) * -4.75f;
 
-                    int useCD = VanillaIsSoPicky.useAnimation;
                     player.GetModPlayer<TranscendencePlayer>().CosmoShardTimer = useCD;
-                    CD = useCD;
                     Projectile.ai[1] = 0;
                 }
-                while (FlamethrowerState && player.HasAmmo(VanillaIsSoPicky) && ++Projectile.ai[1] > 4 && player.controlUseItem && player.GetModPlayer<TranscendencePlayer>().CannotUseItemsTimer < 1)
+                if (FlamethrowerState && player.HasAmmo(VanillaIsSoPicky) && ++Projectile.ai[1] > CD && player.controlUseItem)
                 {
                     string stringer = Main.rand.NextBool(4) ? "TranscendenceMod/Miscannellous/Assets/Sounds/NPCs/Attack/SeraphSun02" : "TranscendenceMod/Miscannellous/Assets/Sounds/NPCs/Attack/SeraphSun01";
                     if (Main.rand.NextBool(5))
                         SoundEngine.PlaySound(new SoundStyle(stringer) with { Volume = 0.5f, MaxInstances = 0, PitchRange = (-1.5f, 0.1f) }, Projectile.Center);
+                    
+                    player.PickAmmo(VanillaIsSoPicky, out projToShoot, out speed, out damage, out knockBack, out usedAmmoItemId, false);
 
-                    if (Main.rand.NextFloat() >= 0.8f)
-                        player.PickAmmo(VanillaIsSoPicky, out int projToShoot, out float speed, out int damage, out float knockBack, out int usedAmmoItemId, false);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), vec2, vel * 10, ModContent.ProjectileType<CosmosFlames>(), Projectile.damage, 0, player.whoAmI);
 
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), vec2, vel * 10, ModContent.ProjectileType<CosmosFlames>(), (int)(Projectile.damage * 0.2f), 0, player.whoAmI);
                     Projectile.ai[1] = 0;
                 }
             }

@@ -1,5 +1,6 @@
 using Terraria;
 using Terraria.GameContent.Creative;
+using Terraria.ID;
 using Terraria.ModLoader;
 using TranscendenceMod.Miscannellous.Rarities;
 
@@ -13,14 +14,14 @@ namespace TranscendenceMod.Items.Accessories.Offensive
         }
         public override void SetDefaults()
         {
-            Item.damage = 150;
+            Item.damage = 85;
             Item.DamageType = DamageClass.Generic;
 
             Item.height = 26;
             Item.width = 24;
             Item.accessory = true;
-            Item.value = Item.sellPrice(gold: 5);
-            Item.rare = ModContent.RarityType<ModdedPurple>();
+            Item.value = Item.sellPrice(gold: 3, silver: 75);
+            Item.rare = ItemRarityID.Green;
         }
         public override bool WeaponPrefix() => false;
         public override bool MagicPrefix() => false;

@@ -20,7 +20,7 @@ namespace TranscendenceMod.Items.Tools
         {
             Item.width = 28;
             Item.height = 28;
-            Item.value = Item.buyPrice(gold: 10);
+            Item.value = Item.sellPrice(gold: 10);
             Item.rare = ItemRarityID.LightRed;
 
             Item.UseSound = SoundID.Item4;

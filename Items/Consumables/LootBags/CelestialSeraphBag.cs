@@ -41,16 +41,16 @@ namespace TranscendenceMod.Items.Consumables.LootBags
         public override void ModifyItemLoot(ItemLoot itemLoot)
         {
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<VoidNecklace>()));
-            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ShimmerChunk>(), 1, 36, 48));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ShimmerChunk>(), 1, 40, 52));
 
-            itemLoot.Add(ItemDropRule.FewFromOptions(4, 1,
+            itemLoot.Add(ItemDropRule.FewFromOptions(3, 1,
                 ModContent.ItemType<LunaticFlail>(),
                 ModContent.ItemType<SpaceBow>(),
                 ModContent.ItemType<CelestialSeraphStaff>(),
                 ModContent.ItemType<Constellations>(),
                 ModContent.ItemType<Starfield>()));
 
-            itemLoot.Add(ItemDropRule.FewFromOptions(2, 1, ModContent.ItemType<AngelicHairdye>(),
+            itemLoot.Add(ItemDropRule.FewFromOptions(1, 2, ModContent.ItemType<AngelicHairdye>(),
                 ModContent.ItemType<EarthHairdye>(), ModContent.ItemType<CosmicFogDye>()));
 
             itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<FaeMask>(), 3));

@@ -8,6 +8,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using TranscendenceMod.Items.Accessories.Shields;
+using TranscendenceMod.Items.Materials;
 using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Items.Modifiers;
 using TranscendenceMod.Items.Tools;
@@ -28,6 +29,10 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "7e3f33";
 
         public override CategoryIDs category => CategoryIDs.EaM;
+
+
+        public override int reward => ModContent.ItemType<CarbonOre>();
+        public override int amount => 20;
     }
 }
 

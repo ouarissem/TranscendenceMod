@@ -11,6 +11,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.UI.ModBrowser;
 using TranscendenceMod.Items.Accessories.Offensive;
 using TranscendenceMod.Items.Accessories.Other;
+using TranscendenceMod.Items.Consumables;
 using TranscendenceMod.Items.Materials;
 using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Items.Weapons.Magic;
@@ -41,12 +42,12 @@ namespace TranscendenceMod.NPCs.Miniboss
         public override void SetDefaults()
         {
             /*Stats*/
-            NPC.lifeMax = Downed.Contains(Bosses.Atmospheron) ? 25000 : NPC.downedPlantBoss ? 8750 : 1275;
-            NPC.defense = Downed.Contains(Bosses.Atmospheron) ? 120 : NPC.downedPlantBoss ? 65 : 25;
-            NPC.damage = Downed.Contains(Bosses.Atmospheron) ? 80 : NPC.downedPlantBoss ? 60 : 40;
-            NPC.value = Downed.Contains(Bosses.Atmospheron) ? Item.sellPrice(gold: 12, silver: 50) : NPC.downedPlantBoss ? Item.sellPrice(gold: 7, silver: 50) : Item.sellPrice(gold: 2, silver: 50);
-            NPC.width = Downed.Contains(Bosses.Atmospheron) ? 58 : 64;
-            NPC.height = Downed.Contains(Bosses.Atmospheron) ? 58 : 64;
+            NPC.lifeMax = Downed.Contains(Bosses.Atmospheron) ? 75000 : 1275;
+            NPC.defense = Downed.Contains(Bosses.Atmospheron) ? 120 : 25;
+            NPC.damage = Downed.Contains(Bosses.Atmospheron) ? 80 : 40;
+            NPC.value = Downed.Contains(Bosses.Atmospheron) ? Item.sellPrice(gold: 17, silver: 50) : Item.sellPrice(gold: 2, silver: 50);
+            NPC.width = Downed.Contains(Bosses.Atmospheron) ? 74 : 64;
+            NPC.height = Downed.Contains(Bosses.Atmospheron) ? 74 : 64;
             NPC.aiStyle = 0;
             NPC.rarity = 3;
 
@@ -71,7 +72,8 @@ namespace TranscendenceMod.NPCs.Miniboss
                 ModContent.ItemType<LeatherGlove>()));
 
             npcLoot.Add(ItemDropRule.Common(ItemID.GoldenKey, 1, 2, 4));
-            npcLoot.Add(ItemDropRule.ByCondition(new DragonDropRule(), ModContent.ItemType<PoseidonsTide>(), 1, 4, 8));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SturdyPlate>(), 1, 1, 3));
+            npcLoot.Add(ItemDropRule.ByCondition(new DragonDropRule(), ModContent.ItemType<PoseidonsTide>(), 1, 8, 12));
         }
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
@@ -85,16 +87,20 @@ namespace TranscendenceMod.NPCs.Miniboss
             if (NPC.life > (int)(NPC.lifeMax * 0.925f))
             {
                 NPC.rotation = MathHelper.PiOver2 + MathHelper.PiOver4;
+                NPC.chaseable = false;
+
                 return;
             }
             else
             {
+                NPC.chaseable = true;
+
                 if (NPC.ai[2] == 5)
                     SoundEngine.PlaySound(ModSoundstyles.SeraphSwords_Draw, NPC.Center);
 
                 NPC.ai[2]++;
 
-                NPC.npcSlots = 10f;
+                NPC.npcSlots = 12f;
 
                 if (NPC.ai[2] < 180)
                 {
@@ -164,7 +170,7 @@ namespace TranscendenceMod.NPCs.Miniboss
                         if (Collision.SolidCollision(NPC.Center - new Vector2(8), 16, 16) && Timer > 115)
                         {
                             SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, NPC.Center);
-                            TranscendenceUtils.ProjectileRing(NPC, 12, NPC.GetSource_FromAI(), NPC.Center, ModContent.ProjectileType<MuramasaDeathLaser>(), 30, 2f, 1f, 1f, 0f, 0.75f, -1, Main.rand.NextFloat(MathHelper.TwoPi));
+                            TranscendenceUtils.ProjectileRing(NPC, 12, NPC.GetSource_FromAI(), NPC.Center, ModContent.ProjectileType<MuramasaDeathLaser>(), Downed.Contains(Bosses.Atmospheron) ? 100 : 30, 2f, 1f, 1f, 0f, 0.75f, -1, Main.rand.NextFloat(MathHelper.TwoPi));
 
                             NPC.velocity = Vector2.Zero;
                             NPC.ai[3] = 1;
@@ -191,10 +197,10 @@ namespace TranscendenceMod.NPCs.Miniboss
                         SoundEngine.PlaySound(SoundID.Item71 with { MaxInstances = 0 }, Main.rand.NextBool(2) ? pos : pos2);
 
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, -NPC.DirectionTo(pos) * 12,
-                        ModContent.ProjectileType<MuramasaShred>(), 30, 1, -1, 1, 1, 1);
+                        ModContent.ProjectileType<MuramasaShred>(), Downed.Contains(Bosses.Atmospheron) ? 100 : 30, 1, -1, 1, 1, 1);
 
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), pos2, -NPC.DirectionTo(pos2) * 7,
-                        ModContent.ProjectileType<MuramasaShred>(), 30, 1, -1, 1, 1, 1);
+                        ModContent.ProjectileType<MuramasaShred>(), Downed.Contains(Bosses.Atmospheron) ? 100 : 30, 1, -1, 1, 1, 1);
                 }
             }
 
@@ -204,14 +210,14 @@ namespace TranscendenceMod.NPCs.Miniboss
                 Duration = 150;
                 NPC.rotation += 0.5f;
 
-                if (Timer > 45 && Timer < (Duration - 60) && Timer % 6 == 0)
+                if (Timer > 45 && Timer < (Duration - 60) && Timer % (Downed.Contains(Bosses.Atmospheron) ? 6 : 10) == 0)
                 {
                     for (int i = 0; i < 4; i++)
                     {
                         Vector2 pos = player.Center + Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 750f;
 
                         int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, pos.DirectionTo(player.Center).RotatedByRandom(MathHelper.PiOver2),
-                            ModContent.ProjectileType<MuramasaDeathLaser>(), 25, 1, -1, 1, 0, 3);
+                            ModContent.ProjectileType<MuramasaDeathLaser>(), Downed.Contains(Bosses.Atmospheron) ? 90 : 25, 1, -1, 1, 0, 3);
                         Main.projectile[p].extraUpdates = 0;
                     }
                 }
@@ -249,8 +255,8 @@ namespace TranscendenceMod.NPCs.Miniboss
 
                         if (Timer % 5 == 0)
                         {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(2, 0), ModContent.ProjectileType<MuramasaSlash>(), 30, 2, -1, 0, 0, 2);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(-2, 0), ModContent.ProjectileType<MuramasaSlash>(), 30, 2, -1, 0, 0, 2);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(2, 0), ModContent.ProjectileType<MuramasaSlash>(), Downed.Contains(Bosses.Atmospheron) ? 100 : 30, 2, -1, 0, 0, 2);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(-2, 0), ModContent.ProjectileType<MuramasaSlash>(), Downed.Contains(Bosses.Atmospheron) ? 100 : 30, 2, -1, 0, 0, 2);
                         }
 
 
@@ -263,12 +269,12 @@ namespace TranscendenceMod.NPCs.Miniboss
                     }
                     else
                     {
-                        if (++NPC.ai[0] < 60 && Timer % 10 == 0)
+                        if ((++NPC.ai[0] < 60 || Downed.Contains(Bosses.Atmospheron)) && Timer % 10 == 0)
                         {
                             float rand = Main.rand.NextFloat(-25f, 25f);
                             int rand2 = Main.rand.Next(2, 9);
                             
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(player.Center) * 4f, ModContent.ProjectileType<MuramasaSlash>(), 20, 2, -1, 0, 0, 2);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.DirectionTo(player.Center) * 4f, ModContent.ProjectileType<MuramasaSlash>(), Downed.Contains(Bosses.Atmospheron) ? 80 : 20, 2, -1, 0, 0, 2);
 
                             SoundEngine.PlaySound(SoundID.Item71 with { MaxInstances = 0}, NPC.Center);
                         }

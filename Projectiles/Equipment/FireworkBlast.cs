@@ -20,12 +20,16 @@ namespace TranscendenceMod.Projectiles.Equipment
             Projectile.penetrate = -1;
 
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 5;
+            Projectile.localNPCHitCooldown = -1;
 
             Projectile.friendly = true;
             Projectile.scale = 6;
         }
-        //new Color(Main.rand.Next(122, 255), Main.rand.Next(122, 255), Main.rand.Next(122, 255));
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (target != null && target.active && !target.boss && target.realLife == -1)
+                target.velocity += target.DirectionTo(Projectile.Center) * -12f * target.knockBackResist;
+        }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             if (targetHitbox.Distance(Projectile.Center) < 100 * Projectile.scale)
@@ -36,9 +40,6 @@ namespace TranscendenceMod.Projectiles.Equipment
         {
             Lighting.AddLight(Projectile.Center, Main.DiscoR / 50f, Main.DiscoG / 50f, Main.DiscoB / 50f);
         }
-        public override bool PreDraw(ref Color lightColor)
-        {
-            return false;
-        }
+        public override bool PreDraw(ref Color lightColor) => false;
     }
 }

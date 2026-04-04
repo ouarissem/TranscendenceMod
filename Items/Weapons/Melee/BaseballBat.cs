@@ -30,7 +30,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
 
             Item.shoot = projectile;
 
-            Item.value = Item.sellPrice(gold: 2);
+            Item.value = Item.sellPrice(silver: 50);
             Item.rare = ItemRarityID.Blue;
 
             Item.noUseGraphic = true;
@@ -40,6 +40,13 @@ namespace TranscendenceMod.Items.Weapons.Melee
         public override bool CanShoot(Player player)
         {
             return player.ownedProjectileCounts[projectile] == 0;
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddRecipeGroup(RecipeGroupID.Wood, 40)
+                .AddTile(TileID.HeavyWorkBench)
+                .Register();
         }
     }
     internal class BaseballBatProj : ModProjectile

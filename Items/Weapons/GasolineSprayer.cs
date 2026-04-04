@@ -23,7 +23,7 @@ namespace TranscendenceMod.Items.Weapons
             Item.width = 18;
             Item.height = 22;
 
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 5);
             Item.rare = ItemRarityID.Green;
 
             Item.shoot = ModContent.ProjectileType<GasolineProj>();

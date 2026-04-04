@@ -4,6 +4,7 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using TranscendenceMod.Miscannellous;
 using TranscendenceMod.Miscannellous.GlobalStuff;
+using TranscendenceMod.NPCs.Boss.FrostSerpent;
 
 namespace TranscendenceMod.Projectiles.NPCs.Bosses.FrostSerpent
 {
@@ -18,6 +19,8 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.FrostSerpent
             Projectile.tileCollide = false;
             Projectile.hostile = true;
             Projectile.timeLeft = 600;
+
+            Projectile.GetGlobalProjectile<TranscendenceProjectiles>().ModUnparryable = true;
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -30,6 +33,9 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.FrostSerpent
         }
         public override void AI()
         {
+            if (!NPC.AnyNPCs(ModContent.NPCType<FrostSerpent_Head>()))
+                Projectile.Kill();
+
             if (++Projectile.ai[2] > 30)
             {
                 Projectile.velocity *= 0.95f;
@@ -38,14 +44,13 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.FrostSerpent
                     Fade += 0.075f;
             }
             if (Projectile.timeLeft < 30 && Projectile.scale > 0f)
-                Projectile.scale -= 1f / 30f;
-
-            Projectile.GetGlobalProjectile<TranscendenceProjectiles>().ModUnparryable = !(Fade > 0.85f && Projectile.scale > 0.9f);
+                Projectile.scale = MathHelper.Lerp(Projectile.scale, 0f, 1f / 30f);
 
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            TranscendenceUtils.DrawEntity(Projectile, Color.Blue * 0.66f, 3f * Projectile.scale, "bloom", 0, Projectile.Center, null);
+            TranscendenceUtils.DrawEntity(Projectile, Color.Blue * 0.75f, 2.5f * Projectile.scale, "bloom", 0, Projectile.Center, null);
+            TranscendenceUtils.DrawEntity(Projectile, Color.DeepSkyBlue * 0.875f, 1.5f * Projectile.scale, "bloom", 0, Projectile.Center, null);
 
             TranscendenceUtils.VeryBasicProjOutline(Projectile, Texture, 2, 1f, 1f, 1f, 1f, false);
 

@@ -18,7 +18,7 @@ namespace TranscendenceMod.Items.Farming
         public override void SetDefaults()
         {
             Item.DefaultToFood(22, 22, BuffID.WellFed, 2 * 60 * 60);
-            Item.value = Item.buyPrice(silver: 30);
+            Item.value = Item.sellPrice(silver: 10);
         }
     }
 }

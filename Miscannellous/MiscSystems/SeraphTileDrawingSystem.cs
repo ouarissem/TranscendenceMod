@@ -33,7 +33,6 @@ namespace TranscendenceMod.Miscanellous.MiscSystems
             On_Collision.StepDown += On_Collision_StepDown;
             On_Player.DryCollision += On_Player_DryCollision;
             On_Collision.StickyTiles += On_Collision_StickyTiles;
-            On_Collision.SwitchTiles += On_Collision_SwitchTiles;
             On_Collision.SwitchTilesNew += On_Collision_SwitchTilesNew;
             On_Collision.SolidCollision_Vector2_int_int += On_Collision_SolidCollision_Vector2_int_int;
             On_Collision.SolidCollision_Vector2_int_int_bool += On_Collision_SolidCollision_Vector2_int_int_bool;
@@ -82,6 +81,12 @@ namespace TranscendenceMod.Miscanellous.MiscSystems
             On_Main.IsTileBiomeSightable_int_int_ushort_short_short_refColor += On_Main_IsTileBiomeSightable_int_int_ushort_short_short_refColor;
             On_Projectile.CutTilesAt += On_Projectile_CutTilesAt;
             On_DoorOpeningHelper.LookForDoorsToOpen += On_DoorOpeningHelper_LookForDoorsToOpen;
+        }
+
+        private void On_Main_DoDraw_Tiles_NonSolid(On_Main.orig_DoDraw_Tiles_NonSolid orig, Main self)
+        {
+            if (!PhaseThrough)
+                orig(self);
         }
 
         private bool On_WorldGen_SolidOrSlopedTile_Tile(On_WorldGen.orig_SolidOrSlopedTile_Tile orig, Tile tile)
@@ -254,13 +259,6 @@ namespace TranscendenceMod.Miscanellous.MiscSystems
             else return orig(self, Position, Width, Height, oldPosition, objType);
         }
 
-        private bool On_Collision_SwitchTiles(On_Collision.orig_SwitchTiles orig, Vector2 Position, int Width, int Height, Vector2 oldPosition, int objType)
-        {
-            if (PhaseThrough)
-                return false;
-            else return orig(Position, Width, Height, oldPosition, objType);
-        }
-
         private Vector3 On_LegacyLighting_GetColor(On_LegacyLighting.orig_GetColor orig, LegacyLighting self, int x, int y)
         {
             if (PhaseThrough)
@@ -359,11 +357,11 @@ namespace TranscendenceMod.Miscanellous.MiscSystems
                 orig(self);
         }
 
-        private void On_Main_DoDraw_Tiles_NonSolid(On_Main.orig_DoDraw_Tiles_NonSolid orig, Main self)
+        /*private void On_Main_DoDraw_Tiles_NonSolid(On_Main.orig_DoDraw_Tiles_NonSolid orig, Main self)
         {
             if (!PhaseThrough)
                 orig(self);
-        }
+        }*/
 
         private void On_Main_DoDraw_Tiles_Solid(On_Main.orig_DoDraw_Tiles_Solid orig, Main self)
         {

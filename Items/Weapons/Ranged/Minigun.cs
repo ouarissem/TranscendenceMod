@@ -217,11 +217,6 @@ namespace TranscendenceMod.Items.Weapons.Ranged
                             Main.gore[g].timeLeft = 90;
                         }
 
-                        if (player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge > 0)
-                        {
-                            player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge -= 0.0075f;
-                            player.HeldItem.GetGlobalItem<ModifiersItem>().ChargeCD = 45;
-                        }
                         Projectile.ai[1] = 0;
                     }
                 }

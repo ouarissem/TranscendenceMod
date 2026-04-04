@@ -7,7 +7,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.UI;
@@ -28,6 +30,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements
         public abstract float x { get; }
         public abstract float y { get; }
         public abstract string col { get; }
+
+        public abstract int reward { get; }
+        public abstract int amount { get; }
 
         public abstract CategoryIDs category { get; }
 
@@ -81,10 +86,15 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements
 
                 UICommon.TooltipMouseText($"[C/{col}:{Language.GetTextValue($"Mods.TranscendenceMod.Achievement.Steps.{typeString}.DisplayName")}]" + "\n" +
                     Language.GetTextValue($"Mods.TranscendenceMod.Achievement.Steps.{typeString}.Tooltip") + "\n" +
+                    Language.GetTextValue($"Mods.TranscendenceMod.Achievement.Rewards", amount, reward) + "\n" +
                     Language.GetTextValue($"Mods.TranscendenceMod.Achievement.Categories.{catString}"));
 
-                if (play.NewAchievements.Contains(type))
+                if (Main.mouseRight && play.NewAchievements.Contains(type))
+                {
+                    SoundEngine.PlaySound(SoundID.Research);
+                    Item.NewItem(Main.LocalPlayer.GetSource_FromAI(), Main.LocalPlayer.getRect(), reward, amount);
                     play.NewAchievements.Remove(type);
+                }
             }
         }
     }

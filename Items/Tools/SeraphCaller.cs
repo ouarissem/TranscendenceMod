@@ -19,7 +19,7 @@ namespace TranscendenceMod.Items.Tools
             Item.maxStack = 9999;
 
             Item.rare = ModContent.RarityType<CosmicRarity>();
-            Item.value = Item.buyPrice(gold: 25);
+            Item.value = Item.sellPrice(gold: 5);
 
             Item.UseSound = SoundID.Item35;
             Item.useStyle = ItemUseStyleID.Swing;

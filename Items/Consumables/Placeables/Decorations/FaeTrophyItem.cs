@@ -15,7 +15,7 @@ namespace TranscendenceMod.Items.Consumables.Placeables.Decorations
         public override void SetDefaults()
         {
             Item.DefaultToPlaceableTile(ModContent.TileType<FaeTrophy>());
-            Item.value = Item.buyPrice(gold: 1);
+            Item.value = Item.sellPrice(gold: 1);
             Item.rare = ItemRarityID.Blue;
             Item.maxStack = 9999;
         }

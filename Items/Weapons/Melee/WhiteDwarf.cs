@@ -29,7 +29,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
             Item.useAnimation = 25;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.knockBack = 2;
-            Item.value = Item.buyPrice(gold: 50);
+            Item.value = Item.sellPrice(gold: 50);
             Item.rare = ModContent.RarityType<Brown>();
             Item.UseSound = SoundID.Item1;
             Item.noUseGraphic = true;
@@ -46,7 +46,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
             .AddIngredient(ModContent.ItemType<DysphoricThrow>())
             .AddIngredient(ModContent.ItemType<SpaceRockItem>(), 20)
             .AddIngredient(ItemID.FragmentVortex, 17)
-            .AddIngredient(ModContent.ItemType<AtmospheragonScale>(), 4)
+            .AddIngredient(ModContent.ItemType<PoseidonsTide>(), 4)
             .AddTile(ModContent.TileType<ShimmerAltar>())
             .Register();
         }

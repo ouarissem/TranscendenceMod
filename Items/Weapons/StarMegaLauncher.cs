@@ -22,15 +22,15 @@ namespace TranscendenceMod.Items.Weapons
         {
             Item.DamageType = ModContent.GetInstance<MagicRangedDamageClass>();
             Item.damage = 100;
-            Item.mana = 15;
+            Item.mana = 10;
             Item.useAmmo = AmmoID.Bullet;
             Item.knockBack = 2;
 
             Item.width = 42;
             Item.height = 20;
 
-            Item.useTime = 25;
-            Item.useAnimation = 25;
+            Item.useTime = 20;
+            Item.useAnimation = 20;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.autoReuse = true;
             Item.noMelee = true;
@@ -68,9 +68,10 @@ namespace TranscendenceMod.Items.Weapons
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<StarLauncher>())
             .AddIngredient(ModContent.ItemType<StarGun>())
-            .AddIngredient(ModContent.ItemType<GalaxyAlloy>(), 3)
-            .AddIngredient(ItemID.FallenStar, 25)
-            .AddIngredient(ModContent.ItemType<Lightning>(), 12)
+            .AddIngredient(ItemID.FragmentSolar, 10)
+            .AddIngredient(ItemID.FragmentVortex, 10)
+            .AddIngredient(ItemID.FragmentNebula, 10)
+            .AddIngredient(ItemID.FragmentStardust, 10)
             .AddTile(TileID.LunarCraftingStation)
             .Register();
         }

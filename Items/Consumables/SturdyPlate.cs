@@ -31,14 +31,21 @@ namespace TranscendenceMod.Items.Consumables
         {
             if (player.ItemAnimationJustStarted)
             {
-                if (player.GetModPlayer<TranscendencePlayer>().SturdyPlateTimer < (30 * 60 * 60))
+                if (player.GetModPlayer<TranscendencePlayer>().SturdyPlateTimer < (4 * 60 * 60))
                 {
-                    player.GetModPlayer<TranscendencePlayer>().SturdyPlateTimer += 5 * 60 * 60;
+                    player.GetModPlayer<TranscendencePlayer>().SturdyPlateTimer = 8 * 60 * 60;
                 }
+                else
+                {
+
+                    return false;
+                }
+
                 for (int i = 0; i < 20; i++)
                 {
                     Dust.NewDustPerfect(player.Center, DustID.PlatinumCoin, Main.rand.NextVector2Circular(7.5f, 15));
                 }
+
                 if (Item.stack == 1)
                     Item.TurnToAir();
                 else Item.stack--;

@@ -29,7 +29,7 @@ namespace TranscendenceMod.Items.Weapons.Ranged.Ammo
             Item.maxStack = 9999;
             Item.width = 18;
             Item.height = 18;
-            Item.value = Item.buyPrice(silver: 5);
+            Item.value = Item.sellPrice(silver: 5);
             Item.rare = ItemRarityID.Yellow;
         }
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)

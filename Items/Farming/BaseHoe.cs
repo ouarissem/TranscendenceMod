@@ -26,7 +26,7 @@ namespace TranscendenceMod.Items.Farming
             Item.useAnimation = 20;
             Item.useTime = 20;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 5);
             Item.autoReuse = true;
 
             Item.shoot = ProjectileID.PurificationPowder;

@@ -24,6 +24,7 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.Muramasa
             Projectile.height = 16;
 
             Projectile.aiStyle = -1;
+            Projectile.penetrate = -1;
  
             Projectile.tileCollide = false;
             Projectile.scale = 0f;

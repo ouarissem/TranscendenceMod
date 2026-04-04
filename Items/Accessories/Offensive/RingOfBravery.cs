@@ -17,7 +17,7 @@ namespace TranscendenceMod.Items.Accessories.Offensive
             Item.width = 34;
 
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 2);
             Item.rare = ItemRarityID.Green;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)

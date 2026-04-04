@@ -53,7 +53,7 @@ namespace TranscendenceMod.Projectiles.Weapons.Magic
             revolvePos = pos + new Vector2(ellipse.X, ellipse.Y / 2f);
             pos = Vector2.Lerp(pos, Main.MouseWorld, 0.0125f);
 
-            if (player.channel)
+            if (player.channel && player.statMana > player.HeldItem.mana)
                 Projectile.timeLeft = 5;
 
             Vector2 pos2 = revolvePos + Vector2.One.RotatedBy(Projectile.rotation * -2f) * 100;

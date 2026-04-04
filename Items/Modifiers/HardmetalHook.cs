@@ -18,7 +18,7 @@ namespace TranscendenceMod.Items.Modifiers
             base.SetDefaults();
             Item.width = 16;
             Item.height = 16;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(silver: 50);
             Item.rare = ItemRarityID.Orange;
         }
         public override void AddRecipes()

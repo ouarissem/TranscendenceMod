@@ -18,7 +18,7 @@ namespace TranscendenceMod.Items.Accessories.Shields
             Item.width = 20;
             Item.height = 16;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 10, silver: 50);
+            Item.value = Item.sellPrice(gold: 10, silver: 50);
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

@@ -24,9 +24,9 @@ namespace TranscendenceMod.Items.Weapons.Magic
         {
             Item.DamageType = DamageClass.Magic;
             Item.damage = 155;
-            Item.mana = 17;
+            Item.mana = 15;
             Item.crit = 20;
-            Item.knockBack = 5f;
+            Item.knockBack = 4f;
             Item.channel = true;
 
             Item.width = 12;
@@ -37,14 +37,14 @@ namespace TranscendenceMod.Items.Weapons.Magic
             Item.useStyle = ItemUseStyleID.Shoot;
 
             Item.autoReuse = true;
-            Item.value = Item.buyPrice(gold: 10);
+            Item.value = Item.sellPrice(gold: 5);
             Item.rare = ItemRarityID.Yellow;
             Item.shoot = proj2;
             Item.shootSpeed = 1;
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            tooltips.FirstOrDefault(x => x.Name == "ItemName").OverrideColor = Color.Lerp(Color.Orange, Color.MidnightBlue, Main.cursorAlpha);
+            tooltips.FirstOrDefault(x => x.Name == "ItemName").OverrideColor = Color.Lerp(Color.Orange, Color.Gray, Main.cursorAlpha);
         }
         public override bool CanShoot(Player player)
         {

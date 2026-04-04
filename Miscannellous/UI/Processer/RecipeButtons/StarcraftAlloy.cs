@@ -26,9 +26,9 @@ namespace TranscendenceMod.Miscannellous.UI.Processer.RecipeButtons
     {
         public override int ItemType => ModContent.ItemType<StarcraftedAlloy>();
 
-        public override int xMod => 150;
+        public override int xMod => 0;
 
-        public override int yMod => 100;
+        public override int yMod => 150;
 
         public override int resultAmount => ProcessRecipes.StarcraftedAlloy()[16];
 

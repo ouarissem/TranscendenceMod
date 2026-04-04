@@ -19,7 +19,7 @@ namespace TranscendenceMod.Items.Accessories.Defensive
             Item.width = 25;
             Item.height = 30;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 17, silver: 50);
+            Item.value = Item.sellPrice(gold: 17, silver: 50);
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
@@ -32,8 +32,6 @@ namespace TranscendenceMod.Items.Accessories.Defensive
             CreateRecipe()
             .AddIngredient(ItemID.StarCloak)
             .AddIngredient(ModContent.ItemType<SquidAccessory>())
-            .AddIngredient(ItemID.GiantHarpyFeather, 2)
-            .AddIngredient(ItemID.RainCloud, 25)
             .AddTile(TileID.TinkerersWorkbench)
             .Register();
         }

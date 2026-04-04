@@ -28,7 +28,7 @@ namespace TranscendenceMod.Items.Tools.Generic.Hardmetal
             Item.useStyle = ItemUseStyleID.Swing;
 
             Item.knockBack = 5;
-            Item.value = Item.buyPrice(silver: 37, copper: 50);
+            Item.value = Item.sellPrice(silver: 37, copper: 50);
             Item.rare = ItemRarityID.Green;
 
             Item.UseSound = SoundID.Item1;

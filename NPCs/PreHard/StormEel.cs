@@ -60,7 +60,7 @@ namespace TranscendenceMod.NPCs.PreHard
             SpriteBatch sb = Main.spriteBatch;
             if (Charged)
             {
-                TranscendenceUtils.DrawEntity(NPC, Color.DeepSkyBlue * 0.5f * ChargeAlpha, 0.66f, "TranscendenceMod/Miscannellous/Assets/Shockwave", 0, NPC.Center, null);
+                TranscendenceUtils.DrawEntity(NPC, new Color(0f, 0.5f, 0.75f, 0f) * ChargeAlpha, 3f, "TranscendenceMod/Miscannellous/Assets/GlowBloom", 0, NPC.Center, null);
             }
 
             spriteBatch.Draw(sprite, pos, rec, Color.White, NPC.rotation, origin, NPC.scale,

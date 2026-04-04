@@ -25,12 +25,12 @@ namespace TranscendenceMod.Projectiles
 
             Projectile.aiStyle = 1;
             AIType = ProjectileID.Bullet;
-            Projectile.extraUpdates = 3;
+            Projectile.extraUpdates = 2;
             Projectile.penetrate = -1;
             Projectile.DamageType = DamageClass.Ranged;
 
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = -1;
+            Projectile.localNPCHitCooldown = 10;
 
             Projectile.ownerHitCheck = true;
             Projectile.tileCollide = false;

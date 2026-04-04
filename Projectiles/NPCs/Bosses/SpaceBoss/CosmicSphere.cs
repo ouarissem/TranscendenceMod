@@ -48,14 +48,18 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.SpaceBoss
             TranscendenceUtils.DrawEntity(Projectile, TranscendenceWorld.CosmicPurple * 0.8f, 1.25f * Projectile.scale, "bloom", 0, Projectile.Center, null);
 
             SpriteBatch sb = Main.spriteBatch;
-            sb.End();
-            sb.Begin(default, BlendState.Additive, default,default, default, null, Main.GameViewMatrix.TransformationMatrix);
 
-            TranscendenceUtils.BetterDrawTrailProj(Projectile, TranscendenceWorld.CosmicPurple, Projectile.scale * 1.5f,
-                "TranscendenceMod/Miscannellous/Assets/Trail", 0f, true, 4f * Projectile.scale, Vector2.Zero, MathHelper.PiOver2);
+            if (Projectile.velocity.Length() > 0f)
+            {
+                sb.End();
+                sb.Begin(default, BlendState.Additive, default, default, default, null, Main.GameViewMatrix.TransformationMatrix);
 
-            TranscendenceUtils.BetterDrawTrailProj(Projectile, Color.White * 0.75f, Projectile.scale,
-                "TranscendenceMod/Miscannellous/Assets/Trail", 0f, true, 4f * Projectile.scale, Vector2.Zero, MathHelper.PiOver2);
+                TranscendenceUtils.BetterDrawTrailProj(Projectile, TranscendenceWorld.CosmicPurple, Projectile.scale * 1.5f,
+                    "TranscendenceMod/Miscannellous/Assets/Trail", 0f, true, 4f * Projectile.scale, Vector2.Zero, MathHelper.PiOver2);
+
+                TranscendenceUtils.BetterDrawTrailProj(Projectile, Color.White * 0.75f, Projectile.scale,
+                    "TranscendenceMod/Miscannellous/Assets/Trail", 0f, true, 4f * Projectile.scale, Vector2.Zero, MathHelper.PiOver2);
+            }
 
             TranscendenceUtils.VeryBasicProjOutline(Projectile, Texture, 2f, 1f, 1f, 1f, 1f, false);
 

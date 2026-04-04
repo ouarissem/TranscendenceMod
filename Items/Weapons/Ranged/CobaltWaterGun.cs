@@ -28,7 +28,7 @@ namespace TranscendenceMod.Items.Weapons.Ranged
             Item.autoReuse = true;
             Item.width = 24;
             Item.height = 16;
-            Item.value = Item.buyPrice(gold: 10);
+            Item.value = Item.sellPrice(gold: 10);
             Item.rare = ItemRarityID.Green;
 
             Item.shoot = ModContent.ProjectileType<CobaltWater>();

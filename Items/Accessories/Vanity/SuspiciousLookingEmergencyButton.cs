@@ -3,8 +3,10 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TranscendenceMod.Buffs.Items;
+using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Miscannellous.GlobalStuff;
 using TranscendenceMod.Miscannellous.Rarities;
+using TranscendenceMod.Tiles.BigTiles;
 
 namespace TranscendenceMod.Items.Accessories.Vanity
 {
@@ -20,12 +22,10 @@ namespace TranscendenceMod.Items.Accessories.Vanity
         {
             Item.width = 16;
             Item.height = 16;
-            Item.value = Item.buyPrice(platinum: 25);
+
             Item.rare = ModContent.RarityType<CosmicRarity>();
-            Item.master = true;
             Item.accessory = true;
             Item.vanity = true;
-            Item.GetGlobalItem<TranscendenceItem>().SeraphDifficultyItem = true;
         }
         public override void UpdateVanity(Player player)
         {
@@ -60,6 +60,16 @@ namespace TranscendenceMod.Items.Accessories.Vanity
                 ArmorIDs.Legs.Sets.HidesTopSkin[legs] = true;
                 ArmorIDs.Head.Sets.DrawHead[head] = false;
             }
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+            .AddRecipeGroup(nameof(ItemID.SilverBar), 14)
+            .AddIngredient(ItemID.ThrowingKnife, 99)
+            .AddIngredient(ItemID.Wire, 99)
+            .AddIngredient(ModContent.ItemType<PulverizedPlanet>(), 12)
+            .AddTile(ModContent.TileType<ShimmerAltar>())
+            .Register();
         }
     }
 }

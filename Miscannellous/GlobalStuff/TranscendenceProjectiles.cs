@@ -24,8 +24,6 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
     {
         public int StellarDirection = 0;
         public int SpaceBossPortalProjectile = 1;
-        public bool Grazed;
-        public bool CustomCollision;
         public int Timer;
         public int Timer2;
         public bool CanBeTimeStopped;
@@ -54,6 +52,11 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
         public override void ModifyHitPlayer(Projectile projectile, Player target, ref Player.HurtModifiers modifiers)
         {
             base.ModifyHitPlayer(projectile, target, ref modifiers);
+
+            if ((projectile.type == ProjectileID.PhantasmalBolt || projectile.type == ProjectileID.PhantasmalEye || projectile.type == ProjectileID.PhantasmalDeathray || projectile.type == ProjectileID.PhantasmalSphere) && target.GetModPlayer<TranscendencePlayer>().FairerMoonlord)
+            {
+                modifiers.FinalDamage *= 0.5f;
+            }
         }
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {
@@ -72,18 +75,17 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
         {
             return projectile.hostile && projectile.damage > 0 && !Unparryable(projectile) && TranscendenceUtils.GeneralParryConditions(target);
         }
+        public override bool? CanDamage(Projectile projectile)
+        {
+            if (Main.player[projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<EmpressLaser>()] > 0 && projectile.IsMinionOrSentryRelated)
+                return false;
+
+            return base.CanDamage(projectile);
+        }
         public override bool CanHitPlayer(Projectile projectile, Player target)
         {
             if (projectile.type == ProjectileID.PoisonSeedPlantera && projectile.ai[0] < 1)
                 return projectile.localAI[1] > 45;
-
-            if (projectile.type == ProjectileID.PhantasmalDeathray || projectile.type == ProjectileID.PhantasmalSphere)
-            {
-                if (target.GetModPlayer<TranscendencePlayer>().FairerMoonlord)
-                    return false;
-
-                return base.CanHitPlayer(projectile, target);
-            }
 
             if (projectile.type == ProjectileID.HallowBossRainbowStreak && projectile.timeLeft < 60)
                 return false;
@@ -106,8 +108,6 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
 
             DialogUI.SpawnDialogCutscene(Language.GetTextValue("Mods.TranscendenceMod.Messages.Parry"), DialogBoxes.Generic, 1, 1, target, new Vector2(0, -target.height - 40), 90, Color.Gold);
 
-            Projectile.NewProjectile(target.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<ParryVisual>(), 0, 0, target.whoAmI, target.GetModPlayer<TranscendencePlayer>().ShieldID);
-
             if (modplayer.EolAegis)
             {
                 TranscendenceUtils.ProjectileRing(target, 9, target.GetSource_FromAI(), target.Center, ModContent.ProjectileType<EolShieldLaser>(), 160, 0, 2, 0, 0, 1, target.whoAmI, 0);
@@ -121,8 +121,11 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
             modplayer.ParryTimer = 0;
             modplayer.ParryTimerCD = 0;
             modplayer.ShieldIFrames = 60;
-            modplayer.Focus -= 35f;
-            
+            float pfc = modplayer.ParryFocusCost;
+            if (modplayer.LegendarySwordTimer > 0)
+                pfc /= 2f;
+            modplayer.Focus -= pfc;
+
             target.SetImmuneTimeForAllTypes(45);
         }
 
@@ -135,20 +138,6 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
 
             if (source is EntitySource_Parent npc && npc.Entity is NPC npc2 && npc2 != null && npc2.active)
                 owner = npc2;
-
-            if ((projectile.type == ProjectileID.PaladinsHammerHostile && owner.type == NPCID.Paladin ||
-                projectile.type == ProjectileID.LostSoulHostile && (owner.type == NPCID.RaggedCaster || owner.type == NPCID.RaggedCasterOpenCoat)) && Downed.Contains(Bosses.Atmospheron) && owner != null)
-            {
-                projectile.damage *= 2;
-                projectile.velocity *= 1.75f;
-            }
-
-            if (projectile.type == ProjectileID.ShadowBeamHostile && Downed.Contains(Bosses.Atmospheron) && owner != null && (owner.type == NPCID.Necromancer || owner.type == NPCID.NecromancerArmored))
-            {
-                projectile.extraUpdates = 3;
-                projectile.timeLeft *= 6;
-                projectile.damage *= 2;
-            }
 
             base.OnSpawn(projectile, source);
         }
@@ -198,47 +187,6 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                 return false;
             }
 
-            if (SnowArrow && owner2 != null && owner2.active && Timer % 2 == 0 && Timer > 2)
-            {
-                Projectile.NewProjectile(projectile.GetSource_FromAI(), projectile.Center, Main.rand.NextVector2Circular(1f, 1f), ModContent.ProjectileType<FrostMist>(), projectile.damage / 7, 0f, owner2.whoAmI);
-            }
-
-            if ((projectile.type == ProjectileID.PaladinsHammerHostile && owner != null && owner.type == NPCID.Paladin) && Downed.Contains(Bosses.Atmospheron))
-            {
-                if (Timer == 60)
-                    projectile.velocity = projectile.DirectionTo(owner.Center) * 12f;
-            }
-
-            if ((projectile.type == ProjectileID.RocketSkeleton && owner != null && owner.type == NPCID.SkeletonCommando ||
-                projectile.type == ProjectileID.Shadowflames && owner != null && owner.type == NPCID.GiantCursedSkull ||
-                projectile.type == ProjectileID.BulletDeadeye && owner != null && owner.type == NPCID.TacticalSkeleton ||
-                projectile.type == ProjectileID.ShadowBeamHostile && owner != null && Timer % 15 == 0 && Timer < 60 && (owner.type == NPCID.Necromancer || owner.type == NPCID.NecromancerArmored) ||
-                projectile.type == ProjectileID.InfernoHostileBolt && (owner.type == NPCID.DiabolistRed || owner.type == NPCID.DiabolistWhite)) && Downed.Contains(Bosses.Atmospheron))
-            {
-                if (Timer % 2 == 0 && projectile.type == ProjectileID.RocketSkeleton)
-                {
-                    projectile.tileCollide = false;
-                    Dust.NewDustPerfect(projectile.Center, ModContent.DustType<MuramasaDust>(), projectile.velocity * -1f, 0, default, 1f);
-                }
-
-                if (owner.type == NPCID.TacticalSkeleton)
-                {
-                    Dust d = Dust.NewDustPerfect(projectile.Center, DustID.CursedTorch, Vector2.Zero, 0, default, 2f);
-                    d.noGravity = true;
-                }
-
-                float speed = projectile.type == ProjectileID.Shadowflames ? 3f : 6f;
-                for (int i = 0; i < Main.maxPlayers; i++)
-                {
-                    Player p = Main.player[i];
-                    if (p != null && p.active && p.Distance(projectile.Center) < 500 && Timer > 30 && Timer < 120)
-                    {
-                        Vector2 vel = owner.type == NPCID.TacticalSkeleton ? Vector2.Lerp(projectile.velocity, projectile.DirectionTo(p.Center) * 8f, 0.05f) : projectile.DirectionTo(p.Center).RotatedByRandom(0.2f) * speed;
-                        projectile.velocity = vel;
-                    }
-                }
-            }
-
             if (owner2 != null && owner2.active && !projectile.hostile && projectile.type != ProjectileID.StardustGuardian && projectile.type != ModContent.ProjectileType<MuramasaSummon>() && owner2.HasBuff(ModContent.BuffType<SeraphTimeStop>()) || Main.LocalPlayer.HasBuff(ModContent.BuffType<SeraphTimeStop>()) && CanBeTimeStopped)
             {
                 projectile.timeLeft = projectile.timeLeft + 1;
@@ -272,22 +220,6 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
         public override void AI(Projectile projectile)
         {
             Player owner = Main.player[projectile.owner];
-
-            switch (projectile.type)
-            {
-                case ProjectileID.PhantasmalDeathray: CustomCollision = true; break;
-                case ProjectileID.SaucerDeathray: CustomCollision = true; break;
-                case ProjectileID.HallowBossLastingRainbow: CustomCollision = true; break;
-                case ProjectileID.FairyQueenSunDance: CustomCollision = true; break;
-                case ProjectileID.HallowBossSplitShotCore: CustomCollision = true; break;
-                case ProjectileID.VortexLaser: CustomCollision = true; break;
-                case ProjectileID.VortexLightning: CustomCollision = true; break;
-                case ProjectileID.StardustSoldierLaser: CustomCollision = true; break;
-                case ProjectileID.SandnadoHostile: CustomCollision = true; break;
-                case ProjectileID.DD2BetsyFlameBreath: CustomCollision = true; break;
-                case ProjectileID.SolarFlareRay: CustomCollision = true; break;
-                case ProjectileID.DeerclopsIceSpike: CustomCollision = true; break;
-            }
         }
 
         public override void PostAI(Projectile projectile)

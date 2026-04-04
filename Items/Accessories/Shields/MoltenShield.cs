@@ -10,9 +10,7 @@ namespace TranscendenceMod.Items.Accessories.Shields
 {
     public class MoltenShield : BaseShield
     {
-        public override int Leniency => 40;
-
-        public override int Cooldown => 90;
+        public override int Cooldown => 120;
 
         public override int DefenseAmount => 3;
 

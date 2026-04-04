@@ -16,7 +16,7 @@ namespace TranscendenceMod.Items.Materials
         {
             Item.width = 7;
             Item.height = 7;
-            Item.value = Item.buyPrice(silver: 15);
+            Item.value = Item.sellPrice(silver: 5);
             Item.rare = ItemRarityID.Blue;
             Item.maxStack = 9999;
 
@@ -26,7 +26,7 @@ namespace TranscendenceMod.Items.Materials
             Item.useTurn = true;
             Item.consumable = true;
             Item.autoReuse = true;
-            Item.createTile = ModContent.TileType<CarbonOreTile>();
+            Item.createTile = ModContent.TileType<HardmetalOreTile>();
         }
     }
 }

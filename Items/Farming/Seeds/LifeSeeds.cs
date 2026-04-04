@@ -13,16 +13,18 @@ namespace TranscendenceMod.Items.Farming.Seeds
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Item.value = Item.buyPrice(gold: 1);
+            Item.value = Item.sellPrice(gold: 1);
             Item.rare = ItemRarityID.Lime;
         }
         public override void AddRecipes()
         {
             CreateRecipe(2)
             .AddIngredient(ItemID.LifeFruit)
-            .AddIngredient(ItemID.JungleSpores, 3)
-            .AddIngredient(ItemID.PixieDust, 2)
+            .AddIngredient(ItemID.JungleSpores, 6)
+            .AddIngredient(ItemID.PixieDust, 6)
+            .AddIngredient(ItemID.ChlorophyteOre, 8)
             .AddTile(TileID.Blendomatic)
+            .DisableDecraft()
             .Register();
         }
     }

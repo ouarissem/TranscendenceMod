@@ -17,7 +17,7 @@ namespace TranscendenceMod.Items.Accessories.Other
             Item.height = 26;
             Item.width = 24;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 1, silver: 50);
+            Item.value = Item.buyPrice(gold: 10);
             Item.rare = ItemRarityID.LightRed;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)

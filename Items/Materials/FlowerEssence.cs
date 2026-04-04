@@ -12,7 +12,7 @@ namespace TranscendenceMod.Items.Materials
         {
             Item.width = 24;
             Item.height = 24;
-            Item.value = Item.buyPrice(gold: 2, silver: 50);
+            Item.value = Item.sellPrice(silver: 50);
             Item.maxStack = 9999;
             Item.rare = ItemRarityID.Expert;
         }

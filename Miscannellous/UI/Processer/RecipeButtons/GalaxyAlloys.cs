@@ -26,7 +26,7 @@ namespace TranscendenceMod.Miscannellous.UI.Processer.RecipeButtons
     {
         public override int ItemType => ModContent.ItemType<GalaxyAlloy>();
 
-        public override int xMod => 100;
+        public override int xMod => 150;
 
         public override int yMod => 100;
 

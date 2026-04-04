@@ -12,7 +12,6 @@ using TranscendenceMod.Buffs;
 using TranscendenceMod.Dusts;
 using TranscendenceMod.Items.Materials;
 using TranscendenceMod.Items.Materials.MobDrops;
-using TranscendenceMod.Items.NPCShops;
 using TranscendenceMod.Miscannellous;
 using TranscendenceMod.Miscannellous.Rarities;
 using TranscendenceMod.Projectiles.Weapons.Ranged;
@@ -189,8 +188,6 @@ namespace TranscendenceMod.Items.Weapons.Ranged
                 {
                     SoundEngine.PlaySound(ModSoundstyles.SFtB with { MaxInstances = 0, Volume = 0.33f, Pitch = 0.5f}, Projectile.Center);
                     player.PickAmmo(VanillaIsSoPicky, out int projToShoot, out float speed, out int damage, out float knockBack, out int usedAmmoItemId, false);
-
-                    if (player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge > 0) player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge -= 0.075f;
 
                     float speed3 = (float)((Timer2 + 25) / 30f);
                     for (int i = 0; i < 2; i++)

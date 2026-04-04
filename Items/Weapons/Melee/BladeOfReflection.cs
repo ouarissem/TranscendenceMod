@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TranscendenceMod.Projectiles.Weapons.Melee;
@@ -141,122 +142,13 @@ namespace TranscendenceMod.Items.Weapons.Melee
             p2.Center = Projectile.Center;
             p2.direction = -p.direction;
 
-            DrawPlayer(p2, p2.position, -p.fullRotation, p.fullRotationOrigin, 0, 1);
+            Main.PlayerRenderer.DrawPlayer(Main.Camera, p2, p2.position, -p.fullRotation, p.fullRotationOrigin, 0, 1);
 
             return false;
         }
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
         {
             overPlayers.Add(index);
-        }
-
-
-        private readonly List<DrawData> _drawData = new List<DrawData>();
-
-        private readonly List<int> _dust = new List<int>();
-
-        private readonly List<int> _gore = new List<int>();
-
-        public void DrawPlayer(Player drawPlayer, Vector2 position, float rotation, Vector2 rotationOrigin, float shadow = 0f, float scale = 1f)
-        {
-            DrawPlayerInternal(drawPlayer, position, rotation, rotationOrigin, shadow, scale);
-        }
-
-        //Blatantly stolen from Vanilla Terraria Code
-        private void DrawPlayerInternal(Player drawPlayer, Vector2 position, float rotation, Vector2 rotationOrigin, float shadow = 0f, float alpha = 1f, float scale = 1f, bool headOnly = false)
-        {
-            if (drawPlayer.ShouldNotDraw)
-            {
-                return;
-            }
-            PlayerDrawSet drawInfo = default(PlayerDrawSet);
-            _drawData.Clear();
-            _dust.Clear();
-            _gore.Clear();
-
-            if (headOnly)
-            {
-                drawInfo.HeadOnlySetup(drawPlayer, _drawData, _dust, _gore, position.X, position.Y, alpha, scale);
-            }
-            else
-            {
-                drawInfo.BoringSetup(drawPlayer, _drawData, _dust, _gore, position, shadow, rotation, rotationOrigin);
-            }
-
-            PlayerLoader.ModifyDrawInfo(ref drawInfo);
-            PlayerDrawLayer[] drawLayers = PlayerDrawLayerLoader.GetDrawLayers(drawInfo);
-
-            foreach (PlayerDrawLayer layer in drawLayers)
-            {
-                if ((!headOnly || layer.IsHeadLayer))
-                {
-                    layer.DrawWithTransformationAndChildren(ref drawInfo);
-                }
-            }
-
-            PlayerDrawLayers.DrawPlayer_MakeIntoFirstFractalAfterImage(ref drawInfo);
-            PlayerDrawLayers.DrawPlayer_TransformDrawData(ref drawInfo);
-
-            if (scale != 1f)
-            {
-                PlayerDrawLayers.DrawPlayer_ScaleDrawData(ref drawInfo, scale);
-            }
-            DrawPlayer_RenderAllLayers(ref drawInfo);
-            if (!drawInfo.drawPlayer.mount.Active || !drawInfo.drawPlayer.UsingSuperCart)
-            {
-                return;
-            }
-            for (int i = 0; i < Main.maxProjectiles; i++)
-            {
-                if (Main.projectile[i].active && Main.projectile[i].owner == drawInfo.drawPlayer.whoAmI && Main.projectile[i].type == ProjectileID.MinecartMechLaser)
-                {
-                    Main.instance.DrawProj(i);
-                }
-            }
-        }
-        public static SpriteDrawBuffer spriteBuffer;
-        public static void DrawPlayer_RenderAllLayers(ref PlayerDrawSet drawinfo)
-        {
-            List<DrawData> drawDataCache = drawinfo.DrawDataCache;
-            if (spriteBuffer == null)
-            {
-                spriteBuffer = new SpriteDrawBuffer(Main.graphics.GraphicsDevice, 200);
-            }
-            else
-            {
-                spriteBuffer.CheckGraphicsDevice(Main.graphics.GraphicsDevice);
-            }
-            foreach (DrawData item in drawDataCache)
-            {
-                if (item.texture != null)
-                {
-                    item.Draw(spriteBuffer);
-                }
-            }
-            spriteBuffer.UploadAndBind();
-            DrawData cdd = default(DrawData);
-            int num = 0;
-            for (int i = 0; i <= drawDataCache.Count; i++)
-            {
-                if (drawinfo.projectileDrawPosition == i)
-                {
-                    spriteBuffer.Unbind();
-                    spriteBuffer.Bind();
-                }
-                if (i != drawDataCache.Count)
-                {
-                    cdd = drawDataCache[i];
-                    if (!cdd.sourceRect.HasValue)
-                    {
-                        cdd.sourceRect = cdd.texture.Frame();
-                    }
-                    if (cdd.texture != null)
-                    {
-                        spriteBuffer.DrawSingle(num++);
-                    }
-                }
-            }
-            spriteBuffer.Unbind();
         }
     }
     public class BladeOfReflectionProj : ModProjectile

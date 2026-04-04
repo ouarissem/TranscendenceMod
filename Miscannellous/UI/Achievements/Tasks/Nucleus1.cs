@@ -27,6 +27,10 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "668086";
 
         public override CategoryIDs category => CategoryIDs.Prog;
+
+        
+        public override int reward => ItemID.SoulofNight;
+        public override int amount => 25;
     }
 }
 

@@ -22,7 +22,7 @@ namespace TranscendenceMod.Items.Accessories.Movement.Wings
             Item.width = 29;
             Item.height = 24;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 15);
+            Item.value = Item.sellPrice(gold: 15);
             ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(180, 9, 1f, true, 10);
         }
         public override void UpdateEquip(Player player)
@@ -31,17 +31,17 @@ namespace TranscendenceMod.Items.Accessories.Movement.Wings
         }
         public override void HorizontalWingSpeeds(Player player, ref float speed, ref float acceleration)
         {
-            speed = 11;
+            speed = 10;
             acceleration = 1f;
-            player.runSlowdown += 1.25f;
+            player.runSlowdown += 0.75f;
         }
         public override void VerticalWingSpeeds(Player player, ref float ascentWhenFalling, ref float ascentWhenRising, ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)
         {
             ascentWhenFalling = 0.8f;
             ascentWhenRising = 1f;
             maxCanAscendMultiplier = 0.75f;
-            maxAscentMultiplier = 2f;
-            constantAscend = 0.5f;
+            maxAscentMultiplier = 1.5f;
+            constantAscend = 0.375f;
         }
         public override void AddRecipes()
         {

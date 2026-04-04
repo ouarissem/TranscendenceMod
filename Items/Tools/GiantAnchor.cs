@@ -25,7 +25,7 @@ namespace TranscendenceMod.Items.Tools
             Item.width = 38;
             Item.height = 38;
 
-            Item.value = Item.buyPrice(gold: 10);
+            Item.value = Item.sellPrice(gold: 1);
             Item.rare = ItemRarityID.Green;
 
             Item.shoot = proj;

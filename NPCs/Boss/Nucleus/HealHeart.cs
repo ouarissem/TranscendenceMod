@@ -23,7 +23,7 @@ namespace TranscendenceMod.NPCs.Boss.Nucleus
         {
             Main.npcFrameCount[Type] = 4;
 
-            NPC.lifeMax = 14250;
+            NPC.lifeMax = 7250;
             NPC.defense = 35;
             NPC.knockBackResist = 0.5f;
 

@@ -19,7 +19,7 @@ namespace TranscendenceMod.Items.Consumables.FoodAndDrinks
             Item.buffType = ModContent.BuffType<ExtraTerrestrialBuff>();
             Item.width = 16;
             Item.height = 16;
-            Item.value = Item.buyPrice(silver: 75);
+            Item.value = Item.sellPrice(silver: 75);
             Item.rare = ItemRarityID.LightPurple;
         }
     }

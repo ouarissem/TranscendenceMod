@@ -20,14 +20,14 @@ namespace TranscendenceMod.Items.Modifiers
             base.SetDefaults();
             Item.width = 24;
             Item.height = 18;
-            Item.value = Item.buyPrice(gold:1);
+            Item.value = Item.sellPrice(silver: 50);
             Item.rare = ItemRarityID.Blue;
         }
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ModContent.ItemType<AetherRootItem>(), 6)
-            .AddIngredient(ModContent.ItemType<PulverizedPlanet>(), 4)
+            .AddIngredient(ModContent.ItemType<AetherRootItem>(), 8)
+            .AddIngredient(ModContent.ItemType<PulverizedPlanet>(), 2)
             .AddTile(TileID.WorkBenches)
             .Register();
         }

@@ -1,6 +1,8 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TranscendenceMod.Items.Farming.Seeds;
+using TranscendenceMod.Items.Materials;
 using TranscendenceMod.Tiles.TilesheetHell.Nature.Farming;
 
 namespace TranscendenceMod.Items.Farming
@@ -23,7 +25,17 @@ namespace TranscendenceMod.Items.Farming
             Item.useAnimation = 20;
             Item.useTime = 20;
 
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(silver: 50);
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<HardmetalBar>(), 8)
+            .AddRecipeGroup(RecipeGroupID.IronBar, 8)
+            .AddIngredient(ItemID.Wood, 8)
+            .AddTile(TileID.Anvils)
+            .Register();
         }
     }
 }

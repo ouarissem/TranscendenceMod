@@ -19,7 +19,7 @@ namespace TranscendenceMod.Items.Consumables
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.LifeFruit);
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 5);
             Item.rare = ItemRarityID.Cyan;
             Item.useStyle = ItemUseStyleID.EatFood;
             Item.UseSound = SoundID.Item2;

@@ -13,7 +13,7 @@ namespace TranscendenceMod.Projectiles.Weapons.Melee
         public Vector2[] pos = new Vector2[5];
         public float fade;
         public float endFade;
-        public override string Texture => "TranscendenceMod/Miscannellous/Assets/InvisSprite";
+        public override string Texture => "TranscendenceMod/Miscannellous/Assets/Smoke";
         public override void SetDefaults()
         {
             Projectile.width = 32;

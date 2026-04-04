@@ -5,6 +5,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TranscendenceMod.Buffs;
 using TranscendenceMod.Items.Materials;
 using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Miscannellous.Rarities;
@@ -25,7 +26,7 @@ namespace TranscendenceMod.Items.Weapons.Magic
         {
             Item.DamageType = DamageClass.Magic;
             Item.damage = 225;
-            Item.mana = 10;
+            Item.mana = 8;
             Item.knockBack = 2;
             Item.crit = 10;
 
@@ -41,7 +42,7 @@ namespace TranscendenceMod.Items.Weapons.Magic
             Item.autoReuse = true;
             Item.noMelee = true;
 
-            Item.value = Item.buyPrice(gold: 35);
+            Item.value = Item.sellPrice(gold: 10);
             Item.rare = ModContent.RarityType<ModdedPurple>();
 
             Item.shoot = proj;
@@ -53,6 +54,15 @@ namespace TranscendenceMod.Items.Weapons.Magic
         public override bool AltFunctionUse(Player player) => player.ownedProjectileCounts[aura] == 0 ? true : false;
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
+            if (player.HasBuff(BuffID.ManaSickness))
+            {
+                player.AddBuff(BuffID.Cursed, 120);
+                player.AddBuff(BuffID.Obstructed, 300);
+                player.AddBuff(ModContent.BuffType<SpaceDebuff>(), 300);
+
+                return false;
+            }
+
             Combo++;
 
             for (int i = 0; i < Main.maxProjectiles; i++)

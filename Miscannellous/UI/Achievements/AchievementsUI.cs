@@ -74,6 +74,9 @@ namespace TranscendenceMod.Miscannellous.UI.Achievements
             UIElement volcanic = new Volcanic();
             modPanel.Append(volcanic);
 
+            UIElement chalice = new Chalice();
+            modPanel.Append(chalice);
+
             UIElement Sans = new sans();
             modPanel.Append(Sans);
 
@@ -88,9 +91,6 @@ namespace TranscendenceMod.Miscannellous.UI.Achievements
 
             UIElement moon = new Moonlord();
             modPanel.Append(moon);
-
-            UIElement voidbiome = new VoidBiome();
-            modPanel.Append(voidbiome);
 
             UIElement serpent = new FrostSerpent();
             modPanel.Append(serpent);
@@ -121,6 +121,12 @@ namespace TranscendenceMod.Miscannellous.UI.Achievements
 
             UIElement nucchal = new NucleusChallenge();
             modPanel.Append(nucchal);
+
+            UIElement ttchal = new TwentyTwo();
+            modPanel.Append(ttchal);
+
+            UIElement dchal = new DragonChallenge();
+            modPanel.Append(dchal);
 
             UIElement begin = new Begin();
             modPanel.Append(begin);

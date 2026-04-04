@@ -23,9 +23,9 @@ namespace TranscendenceMod.Items.Armor.Hats
             Item.width = 24;
             Item.height = 18;
 
-            Item.defense = 12;
-            Item.value = Item.buyPrice(gold: 25);
-            Item.rare = ModContent.RarityType<CosmicRarity>();
+            Item.defense = 10;
+            Item.value = Item.sellPrice(gold: 5);
+            Item.rare = ItemRarityID.LightPurple;
         }
         public override void UpdateEquip(Player player)
         {
@@ -34,10 +34,10 @@ namespace TranscendenceMod.Items.Armor.Hats
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.HallowedBar, 18)
-            .AddIngredient(ModContent.ItemType<PulverizedPlanet>(), 18)
+            .AddRecipeGroup(nameof(ItemID.TitaniumBar), 10)
+            .AddIngredient(ModContent.ItemType<PulverizedPlanet>(), 10)
             .AddIngredient(ItemID.BlueStarryGlassBlock, 10)
-            .AddTile(TileID.LunarCraftingStation)
+            .AddTile(TileID.MythrilAnvil)
             .Register();
         }
     }

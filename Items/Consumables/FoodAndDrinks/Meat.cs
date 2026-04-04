@@ -21,7 +21,7 @@ namespace TranscendenceMod.Items.Consumables.FoodAndDrinks
         }
         public override void SetDefaults()
         {
-            Item.DefaultToFood(24, 16, BuffID.WellFed2, 6 * 60 * 60);
+            Item.DefaultToFood(24, 16, BuffID.WellFed2, 8 * 60 * 60);
         }
     }
 }

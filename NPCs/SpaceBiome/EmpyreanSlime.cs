@@ -19,7 +19,6 @@ namespace TranscendenceMod.NPCs.SpaceBiome
 {
     public class EmpyreanSlime : SpaceBiomeNPC
     {
-        public int AttackTimer;
         public bool TouchedGround;
         public float Fade;
         public override void SetStaticDefaults()
@@ -33,8 +32,7 @@ namespace TranscendenceMod.NPCs.SpaceBiome
         public override void SetDefaults()
         {
             NPC.lifeMax = NPC.downedMoonlord ? 2505 : 380;
-            NPC.defense = 10;
-            NPC.damage = NPC.downedMoonlord ? 100 : 60;
+            NPC.damage = NPC.downedMoonlord ? 80 : 40;
             NPC.knockBackResist = NPC.downedMoonlord ? 0f : 0.25f;
 
             NPC.width = 48;
@@ -48,8 +46,7 @@ namespace TranscendenceMod.NPCs.SpaceBiome
 
             NPC.friendly = false;
             NPC.value = Item.buyPrice(silver: 25);
-            SpawnModBiomes = new int[2] { ModContent.GetInstance<CosmicDimensions>().Type,
-                ModContent.GetInstance<Heaven>().Type };
+            SpawnModBiomes = new int[1] { ModContent.GetInstance<Heaven>().Type };
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
@@ -59,7 +56,7 @@ namespace TranscendenceMod.NPCs.SpaceBiome
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (spawnInfo.Player.GetModPlayer<TranscendencePlayer>().ZoneStar && Main.hardMode)
-                return 0.85f;
+                return 2f;
             else return 0;
         }
         public override Color? GetAlpha(Color drawColor) => Color.White;
@@ -68,7 +65,6 @@ namespace TranscendenceMod.NPCs.SpaceBiome
             Texture2D sprite = ModContent.Request<Texture2D>("TranscendenceMod/Miscannellous/Assets/ExpandingTelegraph").Value;
             Vector2 pos = NPC.Center - Main.screenPosition;
 
-            spriteBatch.Draw(sprite, new Rectangle((int)(pos.X - (NPC.ai[0] / 2)), (int)pos.Y, (int)NPC.ai[0], 2000), null, new Color(0.75f, 0.1f, 0.4f, 0f) * Fade);
             TranscendenceUtils.DrawTrailNPC(NPC, Color.Magenta, NPC.scale, Texture + "_Glow", false, true, 1.5f, new Vector2(0, 4));
 
             return base.PreDraw(spriteBatch, screenPos, drawColor);
@@ -84,76 +80,35 @@ namespace TranscendenceMod.NPCs.SpaceBiome
             bool downedML = NPC.downedMoonlord;
             bool OnGround = Collision.SolidCollision(NPC.Left, NPC.width, NPC.height);
 
-            NPC.noTileCollide = NPC.ai[3] > 0;
-
-            if (NPC.Center.Y < (player.Center.Y - 125) && (OnGround || NPC.ai[3] > 0))
-                NPC.ai[3]++;
-
-            else NPC.ai[3] = 0;
-
-            if (AttackTimer < 51 && OnGround)
+            if (NPC.ai[0] < 51 && OnGround)
             {
                 NPC.ai[2] = NPC.direction;
-                NPC.ai[0] = 0;
-                Fade = 0;
                 NPC.velocity.X *= 0.8f;
-                AttackTimer++;
+                NPC.ai[0]++;
             }
 
             if (NPC.ai[1] > 0)
                 NPC.ai[1]--;
 
-            if (AttackTimer > 50)
+            if (NPC.ai[0] > 50)
             {
                 TouchedGround = false;
+                
+                NPC.ai[0]++;
+                if (NPC.ai[1] == 0)
+                    NPC.velocity.X = (downedML ? 12.5f : 7.5f) * NPC.ai[2];
+                if (NPC.ai[0] < 70)
+                    NPC.velocity.Y = -7.5f;
 
-                bool Crushing = (NPC.ai[1] > 0 && OnGround || NPC.Center.Between(player.Center - new Vector2(20, 2000), player.Center + new Vector2(20, -100)));
-                if (NPC.Center.Between(player.Center - new Vector2(600, 1500), player.Center + new Vector2(600, 1500)) && NPC.downedMoonlord)
+                if (Main.rand.NextBool(4))
                 {
-                    if (NPC.ai[0] < NPC.width)
-                    {
-                        if (!Crushing && NPC.ai[0] > 30 && Fade > 0)
-                            Fade -= 0.025f;
-
-                        Fade += 0.0125f;
-                        NPC.ai[0]++;
-                    }
-                }
-                else Fade -= 0.025f;
-
-                if (Crushing && downedML)
-                {
-                    if (!OnGround)
-                    {
-                        NPC.velocity.Y = 20;
-                        NPC.ai[1] = 100;
-                    }
-                    else
-                    {
-                        for (int i = -50; i < 100; i += 50)
-                        {
-                            int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(i / 2f, 0), new Vector2(i / 20f, -2.5f), ModContent.ProjectileType<StellarFireball>(), 70, 2, -1, 0, 0, 0.25f);
-                            Main.projectile[p].friendly = false;
-                        }
-                        SoundEngine.PlaySound(SoundID.Item167, NPC.Center);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Shockwave>(), 500, 8, -1, 1f, 0.2f, 0.8f);
-
-                        NPC.ai[1] = 0;
-                        AttackTimer = 0;
-                    }
-                    NPC.velocity.X = 0;
-                }
-                else
-                {
-                    AttackTimer++;
-                    if (NPC.ai[1] == 0)
-                        NPC.velocity.X = (downedML ? 7.5f : 3.33f) * NPC.ai[2];
-                    if (AttackTimer < 70)
-                        NPC.velocity.Y = downedML ? -12.5f : -7.5f;
+                    int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Main.rand.NextVector2Circular(25f, 50f), Vector2.Zero,
+                        ModContent.ProjectileType<CosmicSphere>(), 80, 0f);
+                    Main.projectile[p].timeLeft = NPC.downedMoonlord ? 90 : 30;
                 }
             }
-            if (AttackTimer > 150)
-                AttackTimer = 0;
+            if (NPC.ai[0] > 100)
+                NPC.ai[0] = 0;
         }
         public override void FindFrame(int frameHeight)
         {

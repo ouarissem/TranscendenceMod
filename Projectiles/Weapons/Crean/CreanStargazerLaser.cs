@@ -11,6 +11,7 @@ using Terraria.ModLoader;
 using TranscendenceMod.Dusts;
 using TranscendenceMod.Miscannellous;
 using TranscendenceMod.Miscannellous.GlobalStuff;
+using static TranscendenceMod.TranscendenceWorld;
 
 namespace TranscendenceMod.Projectiles.Weapons.Crean
 {
@@ -53,15 +54,18 @@ namespace TranscendenceMod.Projectiles.Weapons.Crean
             Entity ent = ChosenProjectile;
             if (Projectile.ai[2] >= 1f)
             {
-                int num = Main.rand.Next(0, 40);
-                Vector2 pos = Center + Vector2.One.RotatedBy(rot) * 75f;
-                Vector2 pos2 = Vector2.Lerp(pos, pos + Vector2.One.RotatedBy(rot) * 96.5f * 0.7f, num);
-                Color col = Main.hslToRgb(Main.rand.NextFloat(), 1f, 0.5f);
+                for (int i = 0; i < 2; i++)
+                {
+                    int num = Main.rand.Next(0, 20);
+                    Vector2 pos = Center + Vector2.One.RotatedBy(rot) * 75f;
+                    Vector2 pos2 = Vector2.Lerp(pos, pos + Vector2.One.RotatedBy(rot) * 96.5f * 0.7f, num);
+                    Color col = Main.hslToRgb(Main.rand.NextFloat(), 1f, 0.5f);
 
-                Dust.NewDustPerfect(pos2, ModContent.DustType<PlayerCosmicBlood>(), Main.rand.NextVector2CircularEdge(4f, 4f) * Main.rand.NextFloat(1f, 2f), 0, col, Main.rand.NextFloat(1f, 2.5f));
-                ent = Main.player[Projectile.owner];
+                    Dust.NewDustPerfect(pos2, ModContent.DustType<PlayerCosmicBlood>(), Main.rand.NextVector2CircularEdge(4f, 4f) * Main.rand.NextFloat(1f, 2f), 0, col, Main.rand.NextFloat(1f, 2f));
+                    ent = Main.player[Projectile.owner];
+                }
             }
-            rot = ent.DirectionTo(Main.MouseWorld).ToRotation() - MathHelper.PiOver4;
+            rot = ent.DirectionTo(Main.MouseWorld).ToRotation() - MathHelper.PiOver4 + Projectile.localAI[0];
 
 
             if (!ChosenProjectile.active)
@@ -92,15 +96,15 @@ namespace TranscendenceMod.Projectiles.Weapons.Crean
 
             ChosenProjectile = Main.projectile[(int)Projectile.ai[1]];
             Projectile.timeLeft = time;
+            
+            player = Main.player[Projectile.owner];
 
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             base.OnHitNPC(target, hit, damageDone);
 
-            Projectile.damage = (int)(Projectile.damage * 0.95f);
-
-            Player player = Main.player[Projectile.owner];
+            Projectile.damage = (int)(Projectile.damage * 0.95f);            
             int laser = ModContent.ProjectileType<CreanLaser>();
 
             if (player == null || !player.active || player.ownedProjectileCounts[laser] > 0 || Projectile.ai[2] < 1f || Projectile.ai[0] == 1f)

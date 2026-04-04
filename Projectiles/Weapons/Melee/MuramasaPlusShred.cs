@@ -28,6 +28,8 @@ namespace TranscendenceMod.Projectiles.Weapons.Melee
             Projectile.aiStyle = 1;
             AIType = ProjectileID.Stake;
             Projectile.ArmorPenetration = 25;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 20;
 
             Projectile.friendly = true;
             Projectile.tileCollide = false;

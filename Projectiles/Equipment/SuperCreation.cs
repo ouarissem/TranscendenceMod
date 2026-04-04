@@ -68,7 +68,7 @@ namespace TranscendenceMod.Projectiles.Equipment
 
                     if (block2 != null && Projectile.owner == Main.myPlayer && player != null && tile != null && (i * i + j * j) <= rad * rad)
                     {
-                        if (player.HasItem(block2.type) && (Projectile.ai[1] == 0 && !tile.HasTile || Projectile.ai[1] == 1 && tile.WallType == 0) && Tries < 750)
+                        if (player.HasItem(block2.type) && (Projectile.ai[1] == 0 && !tile.HasTile || Projectile.ai[1] == 1 && tile.WallType == 0) && Tries < 7750)
                         {
                             if (Projectile.ai[1] == 0) WorldGen.PlaceTile((int)(pos.X / 16), (int)(pos.Y / 16), block2.createTile);
                             else WorldGen.PlaceWall((int)(pos.X / 16), (int)(pos.Y / 16), block2.createWall);
@@ -107,7 +107,7 @@ namespace TranscendenceMod.Projectiles.Equipment
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (targetHitbox.Distance(Projectile.Center + new Vector2(Projectile.width * 0.25f, Projectile.height * 0.15f)) < (Projectile.width * 0.33f) && Projectile.timeLeft > 100)
+            if (targetHitbox.Distance(Projectile.Center + new Vector2(Projectile.width * 0.25f, Projectile.height * 0.15f)) < (Projectile.width * 0.33f) && Projectile.timeLeft > 100 && Projectile.timeLeft < 500)
                 return true;
             return false;
         }

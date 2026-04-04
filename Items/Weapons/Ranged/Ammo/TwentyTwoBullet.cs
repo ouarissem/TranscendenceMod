@@ -24,6 +24,7 @@ namespace TranscendenceMod.Items.Weapons.Ranged.Ammo
 
             Item.ammo = AmmoID.Bullet;
             Item.shoot = ModContent.ProjectileType<TwentyTwoBulletProj>();
+            Item.shootSpeed = 10f;
 
             Item.consumable = true;
             Item.maxStack = 9999;
@@ -31,7 +32,7 @@ namespace TranscendenceMod.Items.Weapons.Ranged.Ammo
             Item.width = 16;
             Item.height = 24;
 
-            Item.value = Item.buyPrice(silver: 15);
+            Item.value = Item.sellPrice(silver: 15);
             Item.rare = ModContent.RarityType<Brown>();
         }
         public override void AddRecipes()

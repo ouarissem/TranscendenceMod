@@ -4,6 +4,7 @@ using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TranscendenceMod.Miscannellous.GlobalStuff;
 
 namespace TranscendenceMod.Projectiles.Weapons.Ranged
 {
@@ -30,7 +31,7 @@ namespace TranscendenceMod.Projectiles.Weapons.Ranged
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.penetrate = -1;
 
-            Projectile.extraUpdates = 3;
+            Projectile.extraUpdates = 4;
             Projectile.timeLeft = 115;
 
             Projectile.friendly = true;
@@ -53,15 +54,16 @@ namespace TranscendenceMod.Projectiles.Weapons.Ranged
                 return;
             }
 
-            if (++Projectile.ai[1] < 35)
+            if (++Projectile.ai[1] < 75)
             {
-                float multiplier = 1.2f;
-                Projectile.velocity = vel.RotatedBy(Math.Sin(GalaxyColorFadeTimer * Projectile.ai[0] * multiplier) * 0.6f);
+                float multiplier = Projectile.ai[2];
+                Projectile.velocity = vel.RotatedBy(Math.Sin(GalaxyColorFadeTimer * Projectile.ai[0] * multiplier) * 0.4f);
             }
-            else Projectile.velocity *= 0.9f;
+            else
+                Projectile.velocity = Projectile.velocity.RotatedByRandom(0.7f) * 0.9f;
 
             if (Projectile.timeLeft < 60)
-                Projectile.ai[2] += 1f / 60f;
+                Projectile.localAI[2] += 1f / 60f;
         }
         public override bool PreDraw(ref Color lightColor)
         {
@@ -69,12 +71,15 @@ namespace TranscendenceMod.Projectiles.Weapons.Ranged
 
             Texture2D sprite = ModContent.Request<Texture2D>(Texture).Value;
 
+            if (Projectile.timeLeft > 105)
+                return false;
+
             for (int i = 0; i < (Projectile.oldPos.Length / 2); i++)
             {
                 Vector2 pos = Projectile.oldPos[i * 2] - Main.screenPosition;
 
-                Main.EntitySpriteDraw(sprite, pos, null, Color.White * 0.25f * (1f - Projectile.ai[2]), Projectile.oldRot[i * 2], sprite.Size() * 0.5f, Projectile.scale * 1.5f * MathHelper.Lerp(0f, 3f - Projectile.ai[2], i / (float)Projectile.oldPos.Length), SpriteEffects.None);
-                Main.EntitySpriteDraw(sprite, pos, null, Color.White * (1f - Projectile.ai[2]), Projectile.oldRot[i * 2], sprite.Size() * 0.5f, Projectile.scale * MathHelper.Lerp(0f, 3f - Projectile.ai[2], i / (float)Projectile.oldPos.Length), SpriteEffects.None);
+                Main.EntitySpriteDraw(sprite, pos, null, Color.White * 0.375f * (1f - Projectile.localAI[2]), Projectile.oldRot[i * 2], sprite.Size() * 0.5f, Projectile.scale * 2f * MathHelper.Lerp(0f, 3f - Projectile.localAI[2], i / (float)Projectile.oldPos.Length), SpriteEffects.None);
+                Main.EntitySpriteDraw(sprite, pos, null, Color.White * (1.5f - Projectile.localAI[2]), Projectile.oldRot[i * 2], sprite.Size() * 0.5f, Projectile.scale * MathHelper.Lerp(0f, 3f - Projectile.localAI[2], i / (float)Projectile.oldPos.Length), SpriteEffects.None);
             }
             return false;
         }

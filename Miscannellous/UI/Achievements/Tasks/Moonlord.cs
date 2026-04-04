@@ -26,6 +26,10 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "43c3ac";
 
         public override CategoryIDs category => CategoryIDs.Prog;
+
+
+        public override int reward => ItemID.LunarBar;
+        public override int amount => 8;
     }
 }
 

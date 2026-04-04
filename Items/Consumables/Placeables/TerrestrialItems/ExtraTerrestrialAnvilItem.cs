@@ -20,7 +20,7 @@ namespace TranscendenceMod.Items.Consumables.Placeables.TerrestrialItems
             Item.width = 16;
             Item.height = 16;
 
-            Item.value = Item.buyPrice(silver: 25);
+            Item.value = Item.sellPrice(silver: 25);
             Item.rare = ModContent.RarityType<ModdedPurple>();
             Item.maxStack = 9999;
 

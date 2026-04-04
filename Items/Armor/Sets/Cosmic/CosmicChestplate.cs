@@ -31,7 +31,7 @@ namespace TranscendenceMod.Items.Armor.Sets.Cosmic
             Item.height = 20;
             Item.rare = ModContent.RarityType<CosmicRarity>();
             Item.defense = 28;
-            Item.value = Item.sellPrice(gold: 25);
+            Item.value = Item.sellPrice(gold: 22);
         }
         public override void UpdateEquip(Player player)
         {

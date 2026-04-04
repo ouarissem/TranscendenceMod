@@ -9,14 +9,14 @@ namespace TranscendenceMod.Items.Modifiers
         public override int RequiredItem => ItemID.LunarTabletFragment;
         public override int RequiredAmount => 6;
         public override ModifierIDs ModifierType => ModifierIDs.Luminous;
-        public override bool CanBeApplied(Item item) => item.accessory;
+        public override bool CanBeApplied(Item item) => item.headSlot > 0 || item.bodySlot > 0 || item.legSlot > 0;
 
         public override void SetDefaults()
         {
             base.SetDefaults();
             Item.width = 18;
             Item.height = 26;
-            Item.value = Item.buyPrice(gold: 10, silver: 75);
+            Item.value = Item.sellPrice(gold: 2, silver: 75);
             Item.rare = ItemRarityID.Yellow;
         }
     }

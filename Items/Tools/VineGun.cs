@@ -16,7 +16,7 @@ namespace TranscendenceMod.Items.Tools
 		{
             Item.width = 15;
 			Item.height = 7;
-			Item.value = Item.buyPrice(silver: 25);
+			Item.value = Item.sellPrice(silver: 25);
 			Item.rare = ItemRarityID.Blue;
 			Item.shoot = ProjectileID.VineRopeCoil;
             Item.useAmmo = ItemID.VineRopeCoil;

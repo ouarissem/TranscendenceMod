@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using TranscendenceMod.Items.Materials;
-using TranscendenceMod.Items.NPCShops;
+using TranscendenceMod.Items.Weapons.Ranged;
 
 namespace TranscendenceMod.Items.Modifiers.Upgrades
 {
@@ -26,7 +26,7 @@ namespace TranscendenceMod.Items.Modifiers.Upgrades
             Item.width = 18;
             Item.height = 20;
 
-            Item.value = Item.buyPrice(gold: 1);
+            Item.value = Item.sellPrice(gold: 1);
             Item.rare = ItemRarityID.LightRed;
         }
         public override void AddRecipes()

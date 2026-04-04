@@ -43,7 +43,7 @@ namespace TranscendenceMod.NPCs.PostML
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            if (Main.IsItStorming && NPC.downedMoonlord) return SpawnCondition.OverworldDay.Chance * 0.4f;
+            if (Main.IsItStorming && NPC.downedMoonlord && NPC.CountNPCS(Type) < 3) return SpawnCondition.OverworldDay.Chance * 0.4f;
             else return 0;
         }
         public override void AI()

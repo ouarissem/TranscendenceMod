@@ -4,9 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using TranscendenceMod.Items.Farming.Seeds;
+using TranscendenceMod.Items.Tools;
 using TranscendenceMod.Items.Tools.Generic.Hardmetal;
 using TranscendenceMod.Items.Weapons.Magic;
 
@@ -25,6 +28,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "9e254c";
 
         public override CategoryIDs category => CategoryIDs.Prog;
+
+        public override int reward => ModContent.ItemType<LifeSeeds>();
+        public override int amount => 4;
     }
 }
 

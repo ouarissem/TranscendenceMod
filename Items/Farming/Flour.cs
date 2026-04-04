@@ -17,7 +17,7 @@ namespace TranscendenceMod.Items.Farming
             Item.height = 20;
             Item.maxStack = 9999;
 
-            Item.value = Item.buyPrice(gold: 1, silver: 50);
+            Item.value = Item.sellPrice(gold: 1, silver: 50);
             Item.rare = ItemRarityID.Green;
         }
         public override void AddRecipes()

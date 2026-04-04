@@ -18,7 +18,7 @@ namespace TranscendenceMod.Items.Farming
             Item.maxStack = 9999;
 
 
-            Item.value = Item.buyPrice(silver: 75);
+            Item.value = Item.sellPrice(silver: 25);
             Item.rare = ItemRarityID.Green;
         }
     }

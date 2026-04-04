@@ -24,6 +24,8 @@ namespace TranscendenceMod.Items.Armor.Sets.Hardmetal
             Item.height = 22;
             Item.rare = ItemRarityID.Green;
             Item.defense = 6;
+
+            Item.value = Item.sellPrice(silver: 40);
         }
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {
@@ -36,7 +38,7 @@ namespace TranscendenceMod.Items.Armor.Sets.Hardmetal
         {
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<HardmetalBar>(), 20)
-            .AddIngredient(ItemID.Leather, 6)
+            .AddIngredient(ItemID.Leather, 4)
             .AddTile(TileID.Anvils)
             .Register();
         }

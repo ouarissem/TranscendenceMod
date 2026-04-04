@@ -26,9 +26,9 @@ namespace TranscendenceMod.NPCs.PreHard
 
         public override void SetDefaults()
         {
-            NPC.lifeMax = NPC.downedMoonlord ? 4125 : Main.hardMode ? 220 : NPC.downedBoss2 ? 55 : 25;
+            NPC.lifeMax = Main.hardMode ? 220 : 55;
             NPC.defense = 10;
-            NPC.damage = NPC.downedMoonlord ? 120 : Main.hardMode ? 60 : 20;
+            NPC.damage = Main.hardMode ? 60 : 20;
             NPC.knockBackResist = 0.25f;
 
             NPC.width = 40;

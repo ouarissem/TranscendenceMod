@@ -22,7 +22,7 @@ namespace TranscendenceMod.Items.Consumables.FoodAndDrinks
         }
         public override void SetDefaults()
         {
-            Item.DefaultToFood(24, 16, ModContent.BuffType<JellyBuff>(), 2 * 60 * 60);
+            Item.DefaultToFood(24, 16, ModContent.BuffType<JellyBuff>(), 4 * 60 * 60);
         }
     }
 }

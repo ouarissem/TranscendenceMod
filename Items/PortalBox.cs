@@ -28,8 +28,8 @@ namespace TranscendenceMod.Items
             Item.width = 18;
             Item.height = 18;
 
-            Item.value = Item.buyPrice(gold: 2, silver: 50);
-            Item.rare = ModContent.RarityType<CosmicRarity>();
+            Item.value = Item.sellPrice(gold: 7, silver: 50);
+            Item.rare = ItemRarityID.Green;
 
         }
         public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)

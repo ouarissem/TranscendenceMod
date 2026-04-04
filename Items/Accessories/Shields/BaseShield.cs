@@ -7,10 +7,6 @@ namespace TranscendenceMod.Items.Accessories.Shields
 {
     public abstract class BaseShield : ModItem
     {
-        /// <summary>
-        /// Lower = Better
-        /// </summary>
-        public abstract int Leniency { get; }
         public abstract int Cooldown { get; }
         public abstract int DefenseAmount { get; }
         public override void SetStaticDefaults()
@@ -23,7 +19,6 @@ namespace TranscendenceMod.Items.Accessories.Shields
             Item.accessory = true;
             Item.defense = DefenseAmount;
 
-            Item.GetGlobalItem<TranscendenceItem>().ShieldParryLeniency = Leniency;
             Item.GetGlobalItem<TranscendenceItem>().ShieldParryCD = Cooldown;
         }
 

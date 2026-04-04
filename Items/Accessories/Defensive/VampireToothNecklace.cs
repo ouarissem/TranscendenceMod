@@ -9,6 +9,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using TranscendenceMod.Items.Accessories.Movement;
 using TranscendenceMod.Items.Accessories.Offensive.EoL;
+using TranscendenceMod.Items.Materials;
+using TranscendenceMod.Items.Materials.LargeRecipes;
+using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Miscannellous;
 
 namespace TranscendenceMod.Items.Accessories.Defensive
@@ -23,11 +26,11 @@ namespace TranscendenceMod.Items.Accessories.Defensive
 
         public override void SetDefaults()
         {
-            Item.rare = ItemRarityID.Red;
+            Item.rare = ItemRarityID.Orange;
             Item.width = 24;
             Item.height = 24;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 75);
+            Item.value = Item.sellPrice(gold: 12, silver: 50);
         }
 
         public override bool MeleePrefix() => false;
@@ -74,25 +77,18 @@ namespace TranscendenceMod.Items.Accessories.Defensive
             player.GetModPlayer<TranscendencePlayer>().Vampire = true;
         }
 
-        public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player)
-        {
-            if (equippedItem.type == ModContent.ItemType<eoltransform>())
-                return incomingItem.type != ModContent.ItemType<eoltransform>();
-
-            if (equippedItem.type == ModContent.ItemType<CorruptedWanderingKit>())
-                return incomingItem.type != ModContent.ItemType<CorruptedWanderingKit>();
-
-            return base.CanAccessoryBeEquippedWith(equippedItem, incomingItem, player);
-        }
 
         public override void AddRecipes()
         {
             CreateRecipe()
+            .AddIngredient(ItemID.CharmofMyths)
             .AddIngredient(ItemID.StingerNecklace)
-            .AddIngredient(ItemID.SoulofNight, 30)
-            .AddIngredient(ItemID.CrimtaneBar, 75)
-            .AddIngredient(ItemID.FragmentNebula, 30)
-            .AddIngredient(ItemID.LunarBar, 10)
+            .AddIngredient(ModContent.ItemType<GalaxyAlloy>(), 12)
+            .AddIngredient(ItemID.SoulofNight, 50)
+            .AddIngredient(ItemID.FragmentNebula, 75)
+            .AddIngredient(ItemID.Vertebrae, 125)
+            .AddIngredient(ModContent.ItemType<LivingOrganicMatter>())
+            .AddIngredient(ModContent.ItemType<VoidFragment>(), 20)
             .AddTile(TileID.LunarCraftingStation)
             .Register();
         }

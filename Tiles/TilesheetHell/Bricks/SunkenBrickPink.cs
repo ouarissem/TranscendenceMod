@@ -18,10 +18,9 @@ namespace TranscendenceMod.Tiles.TilesheetHell.Bricks
 
             DustType = DustID.DungeonPink;
 
-            RegisterItemDrop(TileID.PinkDungeonBrick);
             AddMapEntry(new Color(113, 55, 85));
             HitSound = SoundID.Tink;
-            MinPick = 175;
+            MinPick = 100;
             MineResist = 3f;
         }
     }

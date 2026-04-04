@@ -18,7 +18,7 @@ namespace TranscendenceMod.Items.Accessories.Offensive
             Item.width = 24;
 
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 50);
+            Item.value = Item.sellPrice(gold: 50);
             Item.rare = ItemRarityID.Cyan;
         }
         public override Color? GetAlpha(Color lightColor) => Color.White;

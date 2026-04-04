@@ -12,7 +12,7 @@ namespace TranscendenceMod.Items.Modifiers.Upgrades
     {
         public override bool CanBeApplied(Item item) => item.type == ModContent.ItemType<BaseballBat>();
         public override int RequiredItem => ModContent.ItemType<HardmetalBar>();
-        public override int RequiredAmount => 4;
+        public override int RequiredAmount => 8;
         public override ModifierIDs ModifierType => ModifierIDs.BaseballBatUpgrade;
         public override int CraftingResultItem => ModContent.ItemType<SpikedBaseballBat>();
 
@@ -26,7 +26,7 @@ namespace TranscendenceMod.Items.Modifiers.Upgrades
             Item.width = 18;
             Item.height = 20;
 
-            Item.value = Item.buyPrice(silver: 75);
+            Item.value = Item.sellPrice(silver: 75);
             Item.rare = ItemRarityID.Green;
         }
         public override void AddRecipes()

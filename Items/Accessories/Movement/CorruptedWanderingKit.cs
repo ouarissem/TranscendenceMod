@@ -10,6 +10,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using TranscendenceMod.Items.Accessories.Defensive;
 using TranscendenceMod.Items.Accessories.Offensive.EoL;
+using TranscendenceMod.Items.Materials;
+using TranscendenceMod.Items.Materials.LargeRecipes;
+using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Miscannellous;
 
 namespace TranscendenceMod.Items.Accessories.Movement
@@ -47,36 +50,25 @@ namespace TranscendenceMod.Items.Accessories.Movement
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
-        public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player)
-        {
-            if (equippedItem.type == ModContent.ItemType<VampireToothNecklace>())
-                return incomingItem.type != ModContent.ItemType<VampireToothNecklace>();
-
-            if (equippedItem.type == ModContent.ItemType<CorruptedWanderingKit>())
-                return incomingItem.type != ModContent.ItemType<eoltransform>();
-
-            return base.CanAccessoryBeEquippedWith(equippedItem, incomingItem, player);
-        }
-
         public override void SetDefaults()
         {
             Item.rare = ItemRarityID.Lime;
             Item.width = 25;
             Item.height = 30;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 75);
-            ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(600, 12, 0.5f, true, 10);
+            Item.value = Item.sellPrice(gold: 75);
+            ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(300, 12, 0.5f, true, 10);
         }
 
         public override void HorizontalWingSpeeds(Player player, ref float speed, ref float acceleration)
         {
-            speed = 12f;
-            acceleration = 0.33f;
+            speed = 10;
+            acceleration = 1f;
 
-            if (player.controlDown && player.controlJump && player.wingTime > 0)
+            if (player.controlDown && player.controlJump && player.wingTime > 0 && player.GetModPlayer<TranscendencePlayer>().Focus > 0.15f)
             {
-                acceleration = 1.5f;
-                speed = 10;
+                acceleration = 2.5f;
+                speed = 18;
 
                 player.position.Y -= player.velocity.Y;
 
@@ -85,22 +77,25 @@ namespace TranscendenceMod.Items.Accessories.Movement
 
                 else if (player.velocity.Y < -0.1f)
                     player.velocity.Y = -0.1f;
+
+                player.GetModPlayer<TranscendencePlayer>().ExpendFocus(player, 0.15f, 5f);
             }
         }
         public override void VerticalWingSpeeds(Player player, ref float ascentWhenFalling, ref float ascentWhenRising, ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)
         {
             ascentWhenFalling = 0.8f;
-            ascentWhenRising = 0.325f;
-            maxCanAscendMultiplier = 1.5f;
-            maxAscentMultiplier = 4f;
-            constantAscend = 0.175f;
+            ascentWhenRising = 1f;
+            maxCanAscendMultiplier = 0.75f;
+            maxAscentMultiplier = 1.325f;
+            constantAscend = 0.2f;
 
-            if (player.controlUp && player.controlJump)
+            if (player.controlUp && player.controlJump && player.GetModPlayer<TranscendencePlayer>().Focus > 0.1f)
             {
-                constantAscend = 0.25f;
-                ascentWhenRising = 0.5f;
-                maxCanAscendMultiplier = 2.25f;
-                maxAscentMultiplier = 6f;
+                constantAscend = 1f;
+                ascentWhenRising = 1.75f;
+                maxAscentMultiplier = 2.5f;
+
+                player.GetModPlayer<TranscendencePlayer>().ExpendFocus(player, 0.1f, 5f);
             }
         }
 
@@ -111,11 +106,14 @@ namespace TranscendenceMod.Items.Accessories.Movement
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.TerrasparkBoots)
-            .AddIngredient(ItemID.SoulofNight, 30)
-            .AddIngredient(ItemID.DemoniteBar, 75)
-            .AddIngredient(ItemID.FragmentVortex, 30)
-            .AddIngredient(ItemID.LunarBar, 10)
+            .AddIngredient(ItemID.LongRainbowTrailWings)
+            .AddIngredient(ItemID.MasterNinjaGear)
+            .AddIngredient(ModContent.ItemType<GalaxyAlloy>(), 12)
+            .AddIngredient(ItemID.SoulofNight, 50)
+            .AddIngredient(ItemID.FragmentVortex, 75)
+            .AddIngredient(ItemID.RottenChunk, 125)
+            .AddIngredient(ModContent.ItemType<LivingOrganicMatter>())
+            .AddIngredient(ModContent.ItemType<VoidFragment>(), 20)
             .AddTile(TileID.LunarCraftingStation)
             .Register();
         }

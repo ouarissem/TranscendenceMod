@@ -26,7 +26,7 @@ namespace TranscendenceMod.Items.Consumables.Placeables.SpaceBiome
             Item.useTurn = true;
             Item.consumable = true;
             Item.autoReuse = true;
-            Item.value = Item.buyPrice(silver: 15);
+            Item.value = Item.sellPrice(silver: 15);
         }
         public override bool? UseItem(Player player)
         {

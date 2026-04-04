@@ -98,7 +98,10 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.SpaceBoss
         {
             Player player = Main.player[Projectile.owner];
             float reference = float.NaN;
-            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), ChosenNPC.Center, ChosenNPC.Center + Vector2.One.RotatedBy(rot + MathHelper.PiOver4 * Projectile.ai[0]) * 2000, 6 * Projectile.scale, ref reference))
+
+            Vector2 pos = Center + Vector2.One.RotatedBy(rot) * 50f;
+
+            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), pos, pos + Vector2.One.RotatedBy(rot + MathHelper.PiOver4 * Projectile.ai[0]) * 2000f, 12f * Projectile.scale, ref reference))
                 return true;
             else return false;
         }

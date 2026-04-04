@@ -28,8 +28,8 @@ namespace TranscendenceMod.Items.Weapons.Ranged
             Item.crit = 50;
             Item.channel = true;
 
-            Item.useTime = 90;
-            Item.useAnimation = 90;
+            Item.useTime = 60;
+            Item.useAnimation = 60;
             Item.autoReuse = true;
 
             Item.useStyle = ItemUseStyleID.None;
@@ -160,7 +160,6 @@ namespace TranscendenceMod.Items.Weapons.Ranged
                 {
                     SoundEngine.PlaySound(ModSoundstyles.SFtB, Projectile.Center);
                     player.velocity += player.DirectionTo(Main.MouseWorld) * -2.5f;
-                    if (player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge > 0) player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge -= 0.5f;
                     player.PickAmmo(VanillaIsSoPicky, out int projToShoot, out float speed, out int damage, out float knockBack, out int usedAmmoItemId, false);
 
                     Vector2 vec = Projectile.Center + Projectile.velocity * 2 + Projectile.velocity.RotatedBy(MathHelper.ToRadians(rot)) * 2.4f;

@@ -46,7 +46,7 @@ namespace TranscendenceMod.Projectiles.Equipment.Tools
                     if (Projectile.owner == Main.myPlayer && tile.HasTile && Main.player[Projectile.owner] != null && tile != null && Projectile.ai[2] == 0)
                     {
                         ModTile mt = ModContent.GetModTile(tile.TileType);
-                        if (mt != null && mt is BaseCrop crop && crop.GetAge((int)pos.X / 16, (int)pos.Y / 16) == CropAge.Grown)
+                        if (mt != null && mt is BaseCrop crop && tile.TileFrameX >= 72)
                         {
                             Main.player[Projectile.owner].PickTile((int)(pos.X / 16), (int)(pos.Y / 16), 155);
                             Projectile.ai[2] = 2;

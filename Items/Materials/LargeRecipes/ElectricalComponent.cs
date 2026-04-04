@@ -17,19 +17,20 @@ namespace TranscendenceMod.Items.Materials.LargeRecipes
         {
             Item.width = 22;
             Item.height = 22;
-            Item.value = Item.buyPrice(gold: 17, silver: 50);
+            Item.value = Item.sellPrice(gold: 3, silver: 75);
             Item.rare = ModContent.RarityType<Brown>();
             Item.maxStack = 9999;
         }
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddRecipeGroup(nameof(ItemID.TitaniumBar), 15)
-            .AddIngredient(ItemID.SoulofSight, 10)
-            .AddIngredient(ItemID.SoulofMight, 10)
-            .AddIngredient(ItemID.SoulofFright, 10)
+            .AddRecipeGroup(nameof(ItemID.TitaniumBar), 12)
+            .AddRecipeGroup(nameof(ItemID.CopperBar), 8)
+            .AddIngredient(ItemID.SoulofSight, 4)
+            .AddIngredient(ItemID.SoulofMight, 4)
+            .AddIngredient(ItemID.SoulofFright, 4)
             .AddIngredient(ModContent.ItemType<SoulOfKnight>(), 4)
-            .AddIngredient(ModContent.ItemType<Lightning>(), 5)
+            .AddIngredient(ModContent.ItemType<Lightning>(), 4)
             .AddTile(TileID.MythrilAnvil)
             .Register();
         }

@@ -4,7 +4,6 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using TranscendenceMod.Items.Materials;
-using TranscendenceMod.Items.NPCShops;
 using TranscendenceMod.Items.Weapons.Melee;
 
 namespace TranscendenceMod.Items.Modifiers.Upgrades

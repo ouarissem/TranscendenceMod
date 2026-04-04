@@ -4,10 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using TranscendenceMod.Items.Materials.MobDrops;
+using TranscendenceMod.Items.Tools;
 using TranscendenceMod.Items.Tools.Generic.Hardmetal;
 
 namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
@@ -25,6 +27,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "ff6700";
 
         public override CategoryIDs category => CategoryIDs.EaM;
+
+        public override int reward => ItemID.Obsidian;
+        public override int amount => 20;
     }
 }
 

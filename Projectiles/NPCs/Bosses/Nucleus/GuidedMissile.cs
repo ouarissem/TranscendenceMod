@@ -82,7 +82,7 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.Nucleus
 
             if (player != null && player.active)
             {
-                if (player.Distance(Projectile.Center) < 5000 && Timer2 > 30 && Timer2 < 150)
+                if (player.Distance(Projectile.Center) < 5000 && Timer2 > 30 && Timer2 < 120)
                 {
                     if (Timer2 % 8 == 0)
                     {

@@ -28,7 +28,7 @@ namespace TranscendenceMod.Items.Consumables.SuperBomb
             Item.useTime = 22;
             Item.useAnimation = 22;
             Item.noUseGraphic = true;
-            Item.value = Item.buyPrice(gold: 3);
+            Item.value = Item.sellPrice(gold: 3);
 
             Item.consumable = true;
             Item.maxStack = 9999;

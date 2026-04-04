@@ -34,7 +34,7 @@ namespace TranscendenceMod.Items.Weapons
             Item.mana = 25;
 
             Item.knockBack = 2;
-            Item.value = Item.buyPrice(gold: 25);
+            Item.value = Item.sellPrice(gold: 25);
             Item.rare = ItemRarityID.Blue;
             Item.autoReuse = true;
             Item.noMelee = true;
@@ -42,7 +42,6 @@ namespace TranscendenceMod.Items.Weapons
             Item.shootSpeed = 20;
             Item.crit = 25;
             Item.useAmmo = AmmoID.Arrow;
-            Item.GetGlobalItem<ModifiersItem>().DoesUseCharge = false;
 
         }
         public override void ModifyManaCost(Player player, ref float reduce, ref float mult) => mult *= 0;
@@ -206,7 +205,6 @@ namespace TranscendenceMod.Items.Weapons
 
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Projectile.DirectionTo(Main.MouseWorld) * player.HeldItem.shootSpeed,
                         ModContent.ProjectileType<ElementalArrow>(), Projectile.damage, Projectile.knockBack, player.whoAmI);
-                    if (player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge > 0) player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge -= 1f;
                     Projectile.ai[1] = 0;
                 }
             }

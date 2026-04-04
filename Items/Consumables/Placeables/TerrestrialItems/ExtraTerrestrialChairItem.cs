@@ -18,7 +18,7 @@ namespace TranscendenceMod.Items.Consumables.Placeables.TerrestrialItems
         {
             Item.width = 12;
             Item.height = 18;
-            Item.value = Item.buyPrice(silver: 5);
+            Item.value = Item.sellPrice(silver: 5);
             Item.rare = ModContent.RarityType<ModdedPurple>();
             Item.DefaultToPlaceableTile(ModContent.TileType<ExtraTerrestrialChair>());
         }

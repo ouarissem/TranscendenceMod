@@ -62,7 +62,7 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.Nucleus
                 && !Main.LocalPlayer.GetModPlayer<NucleusGame>().Active && npc.ai[1] != 99)
                 Main.LocalPlayer.AddBuff(ModContent.BuffType<MagmaBlood>(), 2);
 
-            int height = 1050;
+            int height = 1000;
 
             if (npc == null || !npc.active || npc.life < (npc.lifeMax * 0.1f) || npc.type != ModContent.NPCType<ProjectNucleus>())
             {

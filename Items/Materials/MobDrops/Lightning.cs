@@ -19,7 +19,7 @@ namespace TranscendenceMod.Items.Materials.MobDrops
         {
             Item.width = 22;
             Item.height = 22;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(silver: 25);
             Item.rare = ItemRarityID.Cyan;
             Item.maxStack = 9999;
         }

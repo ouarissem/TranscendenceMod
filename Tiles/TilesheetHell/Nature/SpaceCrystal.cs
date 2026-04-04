@@ -2,9 +2,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TranscendenceMod.Dusts;
+using TranscendenceMod.Miscannellous;
+using TranscendenceMod.NPCs.Boss.Seraph;
+using TranscendenceMod.Projectiles;
 
 namespace TranscendenceMod.Tiles.TilesheetHell.Nature
 {
@@ -21,7 +25,7 @@ namespace TranscendenceMod.Tiles.TilesheetHell.Nature
             AddMapEntry(new Color(96, 9, 108));
             HitSound = SoundID.Shatter;
             MinPick = 110;
-            MineResist = 7f;
+            MineResist = 5f;
         }
 
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
@@ -50,6 +54,17 @@ namespace TranscendenceMod.Tiles.TilesheetHell.Nature
             else return base.PreDraw(i, j, spriteBatch);
         }
 
+        public override void NearbyEffects(int i, int j, bool closer)
+        {
+            int chance = 500;
+
+            if (closer && !NPC.AnyNPCs(ModContent.NPCType<CelestialSeraph>()) && Main.rand.NextBool(chance) && !Main.gameInactive && !Main.gamePaused)
+            {
+                Projectile.NewProjectile(new EntitySource_TileUpdate(i, j), new Vector2(i, j) * 16,
+                    Vector2.Zero, ModContent.ProjectileType<CrystalRadiationCloud>(), 0, 0f, -1);
+            }
+        }
+
         public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;
@@ -57,7 +72,6 @@ namespace TranscendenceMod.Tiles.TilesheetHell.Nature
 
             if (item == null || item.pick < 110)
             {
-                player.cursorItemIconText = "Pickaxe Power Too Low!";
                 player.cursorItemIconEnabled = true;
                 player.cursorItemIconID = Math.Sin(Main.GlobalTimeWrappedHourly * 4f) > 0 ? ItemID.PalladiumPickaxe : ItemID.CobaltPickaxe;
             }

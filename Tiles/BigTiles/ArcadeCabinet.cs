@@ -54,7 +54,7 @@ namespace TranscendenceMod.Tiles.BigTiles
             Tile altar = Main.tile[i, j];
             Player local = Main.LocalPlayer;
 
-            int price = Item.buyPrice(gold: 2);
+            int price = Item.buyPrice(gold: 10);
             if (local.CanAfford(price))
             {
                 local.BuyItem(price);

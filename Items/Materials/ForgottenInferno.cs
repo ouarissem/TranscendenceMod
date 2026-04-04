@@ -5,6 +5,9 @@ using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TranscendenceMod.Items.Consumables;
+using TranscendenceMod.Tiles;
+using TranscendenceMod.Tiles.BigTiles;
 
 namespace TranscendenceMod.Items.Materials
 {
@@ -18,8 +21,15 @@ namespace TranscendenceMod.Items.Materials
         {
             Item.width = 14;
             Item.height = 16;
-            Item.value = Item.sellPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 3, silver: 75);
             Item.rare = ItemRarityID.LightRed;
+
+            Item.useAnimation = 15;
+            Item.useTime = 15;
+
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.consumable = true;
+            Item.createTile = ModContent.TileType<InfernoChaliceTile>();
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)
         {

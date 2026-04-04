@@ -10,8 +10,6 @@ namespace TranscendenceMod.Items.Accessories.Shields
 {
     public class DungeonShield : BaseShield
     {
-        public override int Leniency => 25;
-
         public override int Cooldown => 60;
 
         public override int DefenseAmount => 10;
@@ -22,7 +20,7 @@ namespace TranscendenceMod.Items.Accessories.Shields
             Item.rare = ModContent.RarityType<Brown>();
             Item.width = 35;
             Item.height = 25;
-            Item.value = Item.buyPrice(gold: 50);
+            Item.value = Item.sellPrice(gold: 50);
         }
         public override void AddRecipes()
         {

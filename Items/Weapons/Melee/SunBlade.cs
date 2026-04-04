@@ -60,7 +60,8 @@ namespace TranscendenceMod.Items.Weapons.Melee
             .AddIngredient(ItemID.DD2SquireBetsySword)
             .AddIngredient(ItemID.SolarEruption)
             .AddIngredient(ItemID.FragmentSolar, 15)
-            .AddIngredient(ModContent.ItemType<AtmospheragonScale>(), 4)
+            .AddIngredient(ModContent.ItemType<PoseidonsTide>(), 4)
+            .AddIngredient(ModContent.ItemType<SoulOfKnight>(), 4)
             .AddTile(TileID.LunarCraftingStation)
             .Register();
         }

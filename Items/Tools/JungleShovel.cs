@@ -24,7 +24,7 @@ namespace TranscendenceMod.Items.Tools
             Item.useAnimation = 25;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 4;
-            Item.value = Item.buyPrice(silver: 50);
+            Item.value = Item.sellPrice(gold: 1);
             Item.rare = ItemRarityID.Green;
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;

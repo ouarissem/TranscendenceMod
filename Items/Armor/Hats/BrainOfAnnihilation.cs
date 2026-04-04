@@ -21,6 +21,8 @@ namespace TranscendenceMod.Items.Armor.Hats
             Item.height = 20;
             Item.rare = ModContent.RarityType<Brown>();
             Item.defense = 20;
+
+            Item.value = Item.sellPrice(gold: 10);
         }
         public override void UpdateEquip(Player player)
         {
@@ -35,7 +37,7 @@ namespace TranscendenceMod.Items.Armor.Hats
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.LunarBar, 20);
+            recipe.AddIngredient(ModContent.ItemType<GalaxyAlloy>(), 8);
             recipe.AddIngredient(ItemID.RottenChunk, 20);
             recipe.AddIngredient(ItemID.SoulofLight, 8);
             recipe.AddIngredient(ItemID.SoulofNight, 8);
@@ -48,7 +50,7 @@ namespace TranscendenceMod.Items.Armor.Hats
             recipe.Register();
 
             Recipe recipe2 = CreateRecipe();
-            recipe2.AddIngredient(ItemID.LunarBar, 20);
+            recipe2.AddIngredient(ModContent.ItemType<GalaxyAlloy>(), 8);
             recipe2.AddIngredient(ItemID.Vertebrae, 20);
             recipe2.AddIngredient(ItemID.SoulofLight, 8);
             recipe2.AddIngredient(ItemID.SoulofNight, 8);

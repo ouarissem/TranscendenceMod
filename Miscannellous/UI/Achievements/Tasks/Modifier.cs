@@ -30,6 +30,10 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "ffcd00";
 
         public override CategoryIDs category => CategoryIDs.EaM;
+
+
+        public override int reward => ModContent.ItemType<AbsolutePurity>();
+        public override int amount => 4;
     }
 }
 

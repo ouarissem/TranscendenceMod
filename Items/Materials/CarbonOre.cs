@@ -16,7 +16,7 @@ namespace TranscendenceMod.Items.Materials
         {
             Item.width = 22;
             Item.height = 22;
-            Item.value = Item.buyPrice(silver: 10);
+            Item.value = Item.sellPrice(silver: 5);
             Item.rare = ItemRarityID.White;
             Item.maxStack = 9999;
 

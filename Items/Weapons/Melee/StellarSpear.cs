@@ -10,6 +10,7 @@ using TranscendenceMod.Dusts;
 using TranscendenceMod.Items.Consumables.Placeables.SpaceBiome;
 using TranscendenceMod.Items.Materials;
 using TranscendenceMod.Items.Materials.MobDrops;
+using TranscendenceMod.Miscannellous;
 using TranscendenceMod.Miscannellous.Rarities;
 using TranscendenceMod.Tiles.BigTiles;
 
@@ -38,7 +39,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
             Item.reuseDelay = 18;
             Item.useStyle = ItemUseStyleID.Shoot;
 
-            Item.knockBack = 4;
+            Item.knockBack = 3f;
             Item.shoot = projectile;
             Item.shootSpeed = 12;
 
@@ -186,25 +187,23 @@ namespace TranscendenceMod.Items.Weapons.Melee
         public override bool PreDraw(ref Color lightColor)
         {
             SpriteBatch spriteBatch = Main.spriteBatch;
-            spriteBatch.End();
-            spriteBatch.Begin(default, BlendState.Additive, Main.DefaultSamplerState, default, default, null, Main.GameViewMatrix.TransformationMatrix);
+            //TranscendenceUtils.RestartSB(spriteBatch, BlendState.Additive, null);
 
             Texture2D sprite = ModContent.Request<Texture2D>($"{Texture}").Value;
-            Texture2D sprite2 = ModContent.Request<Texture2D>("TranscendenceMod/Miscannellous/Assets/Trail").Value;
+            Texture2D sprite2 = ModContent.Request<Texture2D>("TranscendenceMod/Miscannellous/Assets/TrailDarkBG").Value;
 
             for (int i = 1; i < 5; i++)
             {
                 Vector2 pos = (Projectile.Center + Projectile.velocity * 2.5f * Projectile.scale * (1 + (vel * 0.25f)) * (1 + (i * 0.35f))) - Main.screenPosition + new Vector2(0f, 8f);
-                spriteBatch.Draw(sprite2, new Rectangle((int)(pos.X), (int)(pos.Y), (int)((int)(75 + (vel * 5) * Projectile.scale) * thickness), (int)(300 * Projectile.scale)), null, new Color(5, 7, 45) * (i * 2),
+                spriteBatch.Draw(sprite2, new Rectangle((int)(pos.X), (int)(pos.Y), (int)((int)(75 + (vel * 5) * Projectile.scale) * thickness), (int)(300 * Projectile.scale)), null, new Color(5f / 255f, 7f / 255f, 45f / 255f, 0f) * (i * 2),
                     Projectile.rotation + MathHelper.ToRadians(45), sprite2.Size() * 0.5f, SpriteEffects.None, 0);
 
-                spriteBatch.Draw(sprite2, new Rectangle((int)(pos.X), (int)(pos.Y), (int)((int)(25 + (vel * 5) * Projectile.scale) * thickness), (int)(200 * Projectile.scale)), null, new Color(255, 25, 7) * (1 - (i * 0.1f)),
+                spriteBatch.Draw(sprite2, new Rectangle((int)(pos.X), (int)(pos.Y), (int)((int)(25 + (vel * 5) * Projectile.scale) * thickness), (int)(200 * Projectile.scale)), null, new Color(1f, 25f / 255f, 7f / 255f, 0f) * (1 - (i * 0.1f)),
                     Projectile.rotation + MathHelper.ToRadians(45), sprite2.Size() * 0.5f, SpriteEffects.None, 0);
 
             }
 
-            spriteBatch.End();
-            spriteBatch.Begin(default, BlendState.AlphaBlend, Main.DefaultSamplerState, default, default, null, Main.GameViewMatrix.TransformationMatrix);
+            //TranscendenceUtils.RestartSB(spriteBatch, BlendState.AlphaBlend, null);
 
             bool boolean = Main.player[Projectile.owner].direction == 1;
 

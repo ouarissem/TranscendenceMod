@@ -20,7 +20,7 @@ namespace TranscendenceMod.Items.Consumables.Placeables
         {
             Item.width = 14;
             Item.height = 16;
-            Item.value = Item.buyPrice(gold: 35);
+            Item.value = Item.sellPrice(gold: 35);
             Item.rare = ModContent.RarityType<CosmicRarity>();
             Item.maxStack = 9999;
             Item.useAnimation = 15;

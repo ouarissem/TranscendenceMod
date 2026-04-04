@@ -17,7 +17,7 @@ namespace TranscendenceMod.Items.Accessories.Movement
             Item.width = 18;
             Item.height = 16;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 5);
             Item.rare = ItemRarityID.Green;
 
             Item.useAnimation = 15;

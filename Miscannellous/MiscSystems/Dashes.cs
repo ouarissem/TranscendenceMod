@@ -29,7 +29,8 @@ namespace TranscendenceMod
             Molten,
             Palladium,
             Sharkscale,
-            SeraphAegis
+            SeraphAegis,
+            Corrupt
         }
 
         public DashType dashType = DashType.None;
@@ -77,7 +78,7 @@ namespace TranscendenceMod
                     break;
 
                 case DashType.Palladium:
-                    dashSpeed = 17.5f;
+                    dashSpeed = 20f;
                     dashCD = 45;
                     dashTime = 10;
                     dashBounce = 1;
@@ -95,6 +96,12 @@ namespace TranscendenceMod
                     dashCD = 30;
                     dashTime = 15;
                     dashBounce = 2;
+                    break;
+                case DashType.Corrupt:
+                    dashSpeed = 32f;
+                    dashCD = 30;
+                    dashTime = 12;
+                    dashBounce = 0;
                     break;
             }
 
@@ -135,12 +142,12 @@ namespace TranscendenceMod
                 }
                 else
                 {
-                    if (doubleRight && dashType != DashType.None && Player.timeSinceLastDashStarted > dashCD || dashTimer > 0 && dashDir == 1)
+                    if (doubleRight && dashType != DashType.None && Player.timeSinceLastDashStarted > dashCD && mp.Focus >= 10f || dashTimer > 0 && dashDir == 1)
                     {
                         dashDir = 1;
                         DoDash();
                     }
-                    else if (doubleLeft && dashType != DashType.None && Player.timeSinceLastDashStarted > dashCD || dashTimer > 0 && dashDir == -1)
+                    else if (doubleLeft && dashType != DashType.None && Player.timeSinceLastDashStarted > dashCD && mp.Focus >= 10f || dashTimer > 0 && dashDir == -1)
                     {
                         dashDir = -1;
                         DoDash();
@@ -170,8 +177,11 @@ namespace TranscendenceMod
             self.TryGetModPlayer(out Dashes mp);
             self.TryGetModPlayer(out TranscendencePlayer mp2);
 
-            if (!mp2.EmpoweringTabletEquipped && mp.dashType == DashType.None && mp.dashTimer == 0 && mp.dashRefillTimer == 0 && mp2.OCoreTimer == 0 && mp2.FishTrans == 0)
+            if (!mp2.EmpoweringTabletEquipped && mp2.Focus >= 10f && mp.dashType == DashType.None && mp.dashTimer == 0 && mp.dashRefillTimer == 0 && mp2.OCoreTimer <= 0 && mp2.FishTrans == 0)
             {
+                if (self.timeSinceLastDashStarted == 1)
+                    mp2.ExpendFocus(self, 10f, 60f);
+
                 orig(self);
             }
         }
@@ -209,6 +219,12 @@ namespace TranscendenceMod
                 visualDash = DashType.SeraphAegis;
                 dashRefillTimer = 30;
             }
+            if (TranscendencePlayer.CorruptWanderingKit)
+            {
+                dashType = DashType.Corrupt;
+                visualDash = DashType.Corrupt;
+                dashRefillTimer = 30;
+            }
 
 
             if (ramTimer > 0)
@@ -236,7 +252,7 @@ namespace TranscendenceMod
                     }
                     if (shouldBeHit && npc.Hitbox.Intersects(Player.Hitbox) && dashBounce == 2)
                     {
-                        int dmg = 0;
+                        int dmg = 30;
                         switch (dashType)
                         {
                             case DashType.SeraphAegis: dmg = TranscendencePlayer.AegisRamDamage; break;
@@ -245,16 +261,6 @@ namespace TranscendenceMod
                         {
                             npc.SimpleStrikeNPC(dmg, -dashDir, true, Player.GetTotalKnockback(DamageClass.Generic).Base, DamageClass.Melee, true);
                             Player.GiveImmuneTimeForCollisionAttack(60);
-
-                            if (dashType == DashType.SeraphAegis)
-                            {
-                                for (int j = 0; j < 7; j++)
-                                {
-                                    Vector2 pos = Player.Center + Vector2.One.RotatedBy(MathHelper.TwoPi * j / 7f) * 200f;
-                                    Projectile.NewProjectile(Player.GetSource_FromAI(), pos, pos.DirectionTo(Player.Center) * 15f,
-                                        ModContent.ProjectileType<PoCStar>(), TranscendencePlayer.AegisRamDamage, 2, Player.whoAmI, 0, npc.Center.X, npc.Center.Y);
-                                }
-                            }
                         }
                         npc.GetGlobalNPC<TranscendenceNPC>().HitCD = 45;
                         ramTimer = 15;
@@ -305,6 +311,9 @@ namespace TranscendenceMod
         {
             Player.TryGetModPlayer(out TranscendencePlayer TranscendencePlayer);
 
+            if (dashTimer == 0)
+                TranscendencePlayer.ExpendFocus(Player, 10f, 60f);
+
             Player.timeSinceLastDashStarted = 0;
             TranscendencePlayer.FullRotResetCD = 5;
 
@@ -348,7 +357,7 @@ namespace TranscendenceMod
                     }
                 case DashType.Sharkscale:
                     {
-                        int type = Main.rand.NextBool(3) ? ModContent.DustType<MuramasaDust>() : ModContent.DustType<BetterWater>();
+                        int type = Main.rand.NextBool(3) ? ModContent.DustType<MuramasaDust>() : ModContent.DustType<BetterBlood>();
                         Dust d = Dust.NewDustPerfect(Player.Center - new Vector2(Player.width / 2 * dashDir, (float)Math.Ceiling(Math.Sin(TranscendenceWorld.Timer)) * 25f), type,
                             Player.velocity, 0, Color.White, type == ModContent.DustType<BetterWater>() ? 2f : 1f);
                         d.velocity = new Vector2(dashDir * -5, 0);
@@ -369,12 +378,23 @@ namespace TranscendenceMod
                     }
                 case DashType.Palladium:
                     {
-                        Dust d = Dust.NewDustPerfect(Player.Center - new Vector2(Player.width / 2 * dashDir, (float)(Math.Sin(TranscendenceWorld.Timer / 2f) * 35)), ModContent.DustType<Palladium2>(),
+                        Dust d = Dust.NewDustPerfect(Player.Center - new Vector2(Player.width / 2 * dashDir, (float)(Math.Sin(dashTimer / 2f) * 35)), ModContent.DustType<Ember2>(),
                             Vector2.Zero, 0, Color.OrangeRed, 1f);
                         d.velocity = new Vector2(dashDir * -5, 0);
 
-                        Dust d2 = Dust.NewDustPerfect(Player.Center - new Vector2(Player.width / 2 * dashDir, (float)(Math.Sin(TranscendenceWorld.Timer / 2f) * -35)), ModContent.DustType<Palladium2>(),
+                        Dust d2 = Dust.NewDustPerfect(Player.Center - new Vector2(Player.width / 2 * dashDir, (float)(Math.Sin(dashTimer / 2f) * -35)), ModContent.DustType<Ember2>(),
                             Vector2.Zero, 0, Color.OrangeRed, 1f);
+                        d2.velocity = new Vector2(dashDir * -5, 0);
+                        break;
+                    }
+                case DashType.Corrupt:
+                    {
+                        Dust d = Dust.NewDustPerfect(Player.Center - new Vector2(Player.width / 2 * dashDir, (float)(Math.Sin(dashTimer * 0.66f) * 45f)), ModContent.DustType<ArenaDustNoCenter>(),
+                            Vector2.Zero, 0, Color.Lerp(Color.Teal, Color.Yellow, dashTimer / (float)dashTime), 1f);
+                        d.velocity = new Vector2(dashDir * -5, 0);
+
+                        Dust d2 = Dust.NewDustPerfect(Player.Center - new Vector2(Player.width / 2 * dashDir, (float)(Math.Sin(dashTimer * 0.66f) * -45f)), ModContent.DustType<ArenaDustNoCenter>(),
+                            Vector2.Zero, 0, Color.Lerp(Color.Teal, Color.Yellow, dashTimer / (float)dashTime), 1f);
                         d2.velocity = new Vector2(dashDir * -5, 0);
                         break;
                     }

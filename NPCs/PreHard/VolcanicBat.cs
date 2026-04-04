@@ -32,9 +32,9 @@ namespace TranscendenceMod.NPCs.PreHard
             NPC.width = 38;
             NPC.height = 38;
 
-            NPC.lifeMax = NPC.downedPlantBoss ? 400 :  Main.hardMode ? 280 : 60;
+            NPC.lifeMax = Main.hardMode ? 280 : 60;
             NPC.defense = 5;
-            NPC.damage = NPC.downedPlantBoss ? 120 : Main.hardMode ? 85 : 30;
+            NPC.damage = Main.hardMode ? 85 : 30;
             NPC.knockBackResist = 0.5f;
 
             NPC.HitSound = SoundID.Tink;

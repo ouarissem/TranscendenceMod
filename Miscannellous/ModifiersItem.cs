@@ -23,9 +23,6 @@ namespace TranscendenceMod.Miscannellous
         public bool ModifiersUnlocked;
         public int ModifierCD;
         public int ModifierCD2;
-        public int ChargeCD;
-        public float ChargerCharge;
-        public bool DoesUseCharge = true;
 
         public bool BlacksmithGiantHandleAllowed;
 
@@ -46,60 +43,11 @@ namespace TranscendenceMod.Miscannellous
             Modifier = (ModifierIDs)mod;
             ModifiersUnlocked = tag.ContainsKey("ModifiersUnlocked");
         }
-        public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage)
-        {
-            if (Modifier == ModifierIDs.Charger)
-            {
-                damage *= (0.66f + ChargerCharge);
-            }
-        }
-        public override bool? UseItem(Item item, Player player)
-        {
-            if (Modifier == ModifierIDs.Charger && DoesUseCharge)
-            {
-                float amount = MathHelper.Lerp(0.075f, 0.25f, item.useAnimation / 20f);
-
-                if (ChargerCharge > 0)
-                    ChargerCharge -= amount;
-
-                ModifierCD = 120;
-                ModifierCD2 = 10;
-            }
-            return base.UseItem(item, player);
-        }
         public override void UpdateInventory(Item item, Player player)
         {
             if (Modifier != ModifierIDs.None)
             {
                 player.GetModPlayer<TranscendencePlayer>().HasModifiersInventory = true;
-            }
-
-            if (ChargeCD > 0)
-                ChargeCD--;
-            if (Modifier == ModifierIDs.Charger)
-            {
-                if (ModifierCD2 > 0)
-                    ModifierCD2--;
-
-                if (ModifierCD > 0)
-                {
-                    ModifierCD--;
-                    return;
-                }
-
-                if (ChargerCharge < 1.25f && ChargeCD == 0)
-                {
-                    Dust d = Dust.NewDustPerfect(player.Center + new Vector2(30, player.height), DustID.Electric);
-                    Dust d2 = Dust.NewDustPerfect(player.Center - new Vector2(30, player.height), DustID.Electric);
-
-                    d.noGravity = true;
-                    d.velocity = new Vector2(0, -5);
-
-                    d2.noGravity = true;
-                    d2.velocity = new Vector2(0, 5);
-
-                    ChargerCharge += 0.005f;
-                }
             }
         }
         public override void Load()
@@ -261,18 +209,9 @@ namespace TranscendenceMod.Miscannellous
 
             if (Modifier == ModifierIDs.EnchantedPearl)
                 player.GetModPlayer<TranscendencePlayer>().PearlMod = true;
-
-            if (Modifier == ModifierIDs.LongPickHead)
-                player.GetModPlayer<TranscendencePlayer>().ExtendedHead = true;
-
-            if (Modifier == ModifierIDs.GiantHandle)
-                player.GetModPlayer<TranscendencePlayer>().BigHandle = true;
         }
         public override void UpdateEquip(Item item, Player player)
         {
-            if (Modifier == ModifierIDs.Mystic)
-                player.GetModPlayer<TranscendencePlayer>().MysticCards++;
-
             if (Modifier == ModifierIDs.Silky)
                 player.GetModPlayer<TranscendencePlayer>().SilkyEgg++;
 
@@ -280,16 +219,17 @@ namespace TranscendenceMod.Miscannellous
                 player.GetModPlayer<TranscendencePlayer>().Jolly++;
 
             if (Modifier == ModifierIDs.Draconic)
+            {
                 player.GetModPlayer<TranscendencePlayer>().DragonScales++;
+                player.statDefense -= 5;
+            }
 
             if (Modifier == ModifierIDs.DangerDetecting)
-            {
-                player.GetModPlayer<TranscendencePlayer>().DangerDetection = true;
-            }
+                player.dangerSense = true;
+
             if (Modifier == ModifierIDs.GiantSlayer)
-            {
                 player.GetModPlayer<TranscendencePlayer>().GiantSlayer++;
-            }
+
             if (Modifier == ModifierIDs.Spazzy)
             {
                 if (++ModifierCD > 1)
@@ -303,9 +243,6 @@ namespace TranscendenceMod.Miscannellous
                     ModifierCD = 0;
                 }
             }
-        }
-        public override void UpdateAccessory(Item Item, Player player, bool hideVisual)
-        {
             if (Modifier == ModifierIDs.Luminous)
             {
                 player.GetModPlayer<TranscendencePlayer>().CritDamage += 0.05f;
@@ -316,6 +253,9 @@ namespace TranscendenceMod.Miscannellous
             {
                 player.GetModPlayer<TranscendencePlayer>().CultScrollsEquipped += 1;
             }
+        }
+        public override void UpdateAccessory(Item Item, Player player, bool hideVisual)
+        {
         }
     }
 }

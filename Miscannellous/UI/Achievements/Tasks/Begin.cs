@@ -7,7 +7,10 @@ using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using TranscendenceMod.Items.Accessories.Movement;
 using TranscendenceMod.Items.Materials;
+using TranscendenceMod.Items.Materials.MobDrops;
+using TranscendenceMod.Items.Tools;
 using TranscendenceMod.Items.Tools.Generic.Hardmetal;
 
 namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
@@ -25,6 +28,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "4ad09c";
 
         public override CategoryIDs category => CategoryIDs.Prog;
+
+        public override int reward => ModContent.ItemType<VineGun>();
+        public override int amount => 1;
     }
 }
 

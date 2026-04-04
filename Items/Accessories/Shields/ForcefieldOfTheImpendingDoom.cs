@@ -24,7 +24,7 @@ namespace TranscendenceMod.Items.Accessories.Shields
             Item.width = 20;
             Item.height = 28;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 20);
+            Item.value = Item.sellPrice(gold: 20);
         }
         public override Color? GetAlpha(Color lightColor) => Color.White;
         public override void UpdateAccessory(Player player, bool hideVisual)

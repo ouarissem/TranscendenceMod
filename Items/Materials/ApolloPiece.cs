@@ -17,7 +17,7 @@ namespace TranscendenceMod.Items.Materials
         {
             Item.width = 12;
             Item.height = 12;
-            Item.value = Item.buyPrice(gold: 2, silver: 50);
+            Item.value = Item.sellPrice(gold: 1);
             Item.rare = ModContent.RarityType<CosmicRarity>();
             Item.maxStack = 9999;
         }

@@ -19,6 +19,7 @@ namespace TranscendenceMod.Projectiles.Equipment
             Projectile.width = 1;
             Projectile.height = 1;
             Projectile.penetrate = -1;
+            Projectile.extraUpdates = 2;
 
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;

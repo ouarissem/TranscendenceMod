@@ -30,7 +30,7 @@ namespace TranscendenceMod.Items.Modifiers
             Item.width = 16;
             Item.height = 24;
 
-            Item.value = Item.buyPrice(gold: 25);
+            Item.value = Item.sellPrice(gold: 25);
             Item.rare = ItemRarityID.Orange;
 
             ItemsInside = new Item[28];

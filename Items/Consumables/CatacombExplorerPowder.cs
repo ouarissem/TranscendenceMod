@@ -27,7 +27,7 @@ namespace TranscendenceMod.Items.Consumables
             Item.useTime = 20;
             Item.useAnimation = 20;
             Item.noUseGraphic = true;
-            Item.value = Item.buyPrice(silver: 10);
+            Item.value = Item.sellPrice(silver: 10);
 
             Item.consumable = true;
             Item.maxStack = 9999;
@@ -35,9 +35,9 @@ namespace TranscendenceMod.Items.Consumables
         }
         public override void AddRecipes()
         {
-            CreateRecipe(3)
+            CreateRecipe(6)
             .AddIngredient(ItemID.Leather)
-            .AddIngredient(ItemID.FallenStar, 3)
+            .AddIngredient(ItemID.FallenStar, 2)
             .AddIngredient(ItemID.Bone)
             .AddTile(TileID.Anvils)
             .Register();

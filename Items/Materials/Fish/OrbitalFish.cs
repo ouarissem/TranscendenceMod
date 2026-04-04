@@ -15,7 +15,7 @@ namespace TranscendenceMod.Items.Materials.Fish
         {
             Item.width = 22;
             Item.height = 22;
-            Item.value = Item.buyPrice(silver: 25);
+            Item.value = Item.sellPrice(silver: 25);
             Item.rare = ItemRarityID.Green;
             Item.maxStack = 9999;
         }

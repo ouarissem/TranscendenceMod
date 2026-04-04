@@ -48,20 +48,16 @@ namespace TranscendenceMod.NPCs.SpaceBiome
 
             NPC.friendly = false;
             NPC.value = Item.buyPrice(silver: 75);
-            SpawnModBiomes = new int[3] { ModContent.GetInstance<CosmicDimensions>().Type,
-                ModContent.GetInstance<Limbo>().Type,
-                ModContent.GetInstance<Heaven>().Type };
+            SpawnModBiomes = SpawnModBiomes = new int[1] { ModContent.GetInstance<Heaven>().Type };
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PulverizedPlanet>(), 1, 1, 3));
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BlackholeMod>(), 15));
-            npcLoot.Add(ItemDropRule.Common(ItemID.FragmentVortex, 1, 2, 5));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<VoidFragment>(), 1, 5, 8));
         }
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
             if (NPC.downedMoonlord && spawnInfo.Player.GetModPlayer<TranscendencePlayer>().ZoneStar)
-                return 0.1f;
+                return 0.4f;
             else return 0;
         }
         public override void AI()

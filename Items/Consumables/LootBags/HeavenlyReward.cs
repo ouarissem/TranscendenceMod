@@ -59,6 +59,7 @@ namespace TranscendenceMod.Items.Consumables.LootBags
             };
 
             ItemDropRule.Coins(Main.rand.Next(Item.sellPrice(gold: 12, silver: 50), Item.sellPrice(gold: 17, silver: 75)), false);
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ApolloPiece>(), 1, 2, 5));
 
             itemLoot.Add(new AlwaysAtleastOneSuccessDropRule(Generic));
             itemLoot.Add(new AlwaysAtleastOneSuccessDropRule(Generic));

@@ -11,8 +11,6 @@ namespace TranscendenceMod.Items.Accessories.Shields
     [AutoloadEquip(EquipType.Shield)]
     public class CelestialAegis : BaseShield
     {
-        public override int Leniency => 20;
-
         public override int Cooldown => 50;
 
         public override int DefenseAmount => 14;
@@ -21,13 +19,13 @@ namespace TranscendenceMod.Items.Accessories.Shields
         {
             base.SetDefaults();
 
-            Item.damage = 1275;
+            Item.damage = 500;
             Item.DamageType = DamageClass.Melee;
 
             Item.rare = ModContent.RarityType<CosmicRarity>();
             Item.width = 32;
             Item.height = 32;
-            Item.value = Item.buyPrice(platinum: 1, gold : 50);
+            Item.value = Item.sellPrice(platinum: 1, gold : 50);
         }
         public override void UpdateAccessory(Player player, bool hideVisual)
         {

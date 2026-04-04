@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using TranscendenceMod.Items.Weapons.Melee;
 using TranscendenceMod.Miscannellous;
+using TranscendenceMod.Miscannellous.GlobalStuff;
 using TranscendenceMod.Miscannellous.Rarities;
 using TranscendenceMod.Projectiles.Weapons.Crean;
 using static TranscendenceMod.TranscendenceWorld;
@@ -23,7 +24,7 @@ namespace TranscendenceMod.Items.Weapons
         public override void SetDefaults()
         {
             Item.DamageType = DamageClass.Generic;
-            Item.damage = 300;
+            Item.damage = 275;
             Item.knockBack = 2f;
             Item.crit = 10;
             Item.shoot = ProjectileID.PurificationPowder;
@@ -51,7 +52,7 @@ namespace TranscendenceMod.Items.Weapons
             if (player.ownedProjectileCounts[proj] == 0 && !player.GetModPlayer<TranscendencePlayer>().CannotUseItems)
             {
                 Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero,
-                    proj, Item.damage, Item.knockBack, player.whoAmI);
+                    proj, Item.damage, Item.knockBack, player.whoAmI, 1f);
             }
         }
         public override void AddRecipes()
@@ -134,25 +135,13 @@ namespace TranscendenceMod.Items.Weapons
             Vector2 vel = Projectile.DirectionTo(Main.MouseWorld);
 
 
-
             int snatcher = ModContent.ProjectileType<CreanSnatcher>();
-            int cog = ModContent.ProjectileType<CreanCog>();
-            int stargazer = ModContent.ProjectileType<CreanStargazer>();
 
             if (player.ownedProjectileCounts[snatcher] == 0 && Downed.Contains(Bosses.FrostSerpent))
             {
                 for (int i = 0; i < 5; i++)
                     Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, snatcher, player.HeldItem.damage / 4, 2f, player.whoAmI, 0f, i, 5f);
             }
-            if (player.ownedProjectileCounts[cog] == 0 && Downed.Contains(Bosses.ProjectNucleus))
-            {
-                Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, vel * 8f, cog, player.HeldItem.damage, 3f, player.whoAmI);
-            }
-            if (player.ownedProjectileCounts[stargazer] < 2 && Downed.Contains(Bosses.CelestialSeraph))
-            {
-                Projectile.NewProjectile(player.GetSource_FromAI(), player.Center, Vector2.Zero, stargazer, player.HeldItem.damage, 2f, player.whoAmI, 0f, player.ownedProjectileCounts[stargazer], 2f);
-            }
-
             player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - MathHelper.PiOver4);
             dir = Main.MouseWorld.X > player.Center.X ? 1 : -1;
             player.direction = dir;
@@ -163,19 +152,23 @@ namespace TranscendenceMod.Items.Weapons
 
             if (player.controlUseItem && Projectile.ai[2] == 0)
             {
-                for (int i = 0; i < 3; i++)
-                SoundEngine.PlaySound(SoundID.Item72 with { Volume = 2, MaxInstances = 0}, Projectile.Center);
+                for (int i = 0; i < 9; i++)
+                {
+                    if (i < 3)
+                        SoundEngine.PlaySound(SoundID.Item72 with { Volume = 2, MaxInstances = 0 }, Projectile.Center);
+
+                    if (Downed.Contains(Bosses.ProjectNucleus) && (i < 3 || i > 5))
+                    {
+                        int p2 = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Projectile.DirectionTo(Main.MouseWorld).RotatedBy(
+                            MathHelper.Lerp(-MathHelper.PiOver2 * 0.66f, MathHelper.PiOver2 * 0.66f, i / 8f)) * 2.5f,
+                            ModContent.ProjectileType<CreanHeart>(), Projectile.damage / 3, 2f, Projectile.owner, 0, Projectile.whoAmI, 1f);
+                        Main.projectile[p2].GetGlobalProjectile<TranscendenceProjectiles>().GoToPos = Projectile.Center + Vector2.One.RotatedBy(Projectile.DirectionTo(Main.MouseWorld).ToRotation() - MathHelper.PiOver4) * 275f;
+                    }
+                }
 
                 int p = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Projectile.DirectionTo(Main.MouseWorld),
                     ModContent.ProjectileType<CreanStargazerLaser>(), Projectile.damage, 2f, Projectile.owner, 0, Projectile.whoAmI, 1f);
                 Main.projectile[p].localAI[2] = Main.rand.Next(0, 40);
-
-
-                if (player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge > 0)
-                {
-                    player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge -= 0.05f;
-                    player.HeldItem.GetGlobalItem<ModifiersItem>().ChargeCD = 60;
-                }
 
                 if (player.GetModPlayer<TranscendencePlayer>().CreanStaffClick == 0)
                     player.GetModPlayer<TranscendencePlayer>().CreanStaffClick = 40;

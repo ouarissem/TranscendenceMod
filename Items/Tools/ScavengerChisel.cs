@@ -33,7 +33,7 @@ namespace TranscendenceMod.Items.Tools
             Item.useAnimation = 20;
             Item.useTime = 20;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(silver: 25);
             Item.autoReuse = true;
 
             Item.shoot = ProjectileID.PurificationPowder;
@@ -45,26 +45,46 @@ namespace TranscendenceMod.Items.Tools
             Vector2 pos = Main.MouseWorld;
             pos /= 16;
             Tile tile = Main.tile[(int)pos.X, (int)pos.Y];
-            if ((tile.TileType == TileID.Silt || tile.TileType == TileID.Slush || tile.TileType == TileID.DesertFossil) && player.Distance(Main.MouseWorld) < (4 * 16))
+            if ((tile.TileType == TileID.Silt || tile.TileType == TileID.Slush || tile.TileType == TileID.DesertFossil || tile.TileType == TileID.Hive) && player.Distance(Main.MouseWorld) < (4 * 16))
             {
-                int CurrentItem = ModContent.ItemType<ThrowingPebble>();
-                switch (Main.rand.Next(0, 15))
+                int CurrentItem = ItemID.PoopBlock;
+                if (tile.TileType == TileID.Hive)
                 {
-                    case 0: CurrentItem = ModContent.ItemType<CaveWood>(); break;
-                    case 1: CurrentItem = ItemID.Ruby; break;
-                    case 2: CurrentItem = ItemID.Amber; break;
-                    case 3: CurrentItem = ItemID.Topaz; break;
-                    case 4: CurrentItem = ItemID.Emerald; break;
-                    case 6: CurrentItem = ItemID.Diamond; break;
-                    case 7: CurrentItem = ItemID.Sapphire; break;
-                    case 8: CurrentItem = ItemID.Acorn; break;
-                    case 9: CurrentItem = ItemID.GrassSeeds; break;
-                    case 10: CurrentItem = ItemID.Cobweb; break;
-                    case 11: CurrentItem = WorldGen.crimson ? ItemID.CorruptSeeds : ItemID.CrimsonSeeds; break;
-                    case 12: CurrentItem = ModContent.ItemType<CocoaBeanSeeds>(); break;
-                    case 13: CurrentItem = ItemID.Fertilizer; break;
-                    case 14: CurrentItem = ModContent.ItemType<CarbonOre>(); break;
+                    switch (Main.rand.Next(1, 11))
+                    {
+                        case 1: CurrentItem = ItemID.JungleSpores; break;
+                        case 2: CurrentItem = ItemID.Vine; break;
+                        case 3: CurrentItem = ItemID.Stinger; break;
+                        case 4: CurrentItem = ItemID.HoneyBlock; break;
+                        case 5: CurrentItem = ItemID.MushroomGrassSeeds; break;
+                        case 6: CurrentItem = ItemID.JungleGrassSeeds; break;
+                        case 7: CurrentItem = ItemID.GrassSeeds; break;
+                        case 8: CurrentItem = ModContent.ItemType<CocoaBeanSeeds>(); break;
+                        case 9: CurrentItem = ModContent.ItemType<CarrotSeeds>(); break;
+                        case 10: CurrentItem = ModContent.ItemType<TomatoSeeds>(); break;
+                    }
                 }
+                else
+                {
+                    switch (Main.rand.Next(1, 15))
+                    {
+                        case 1: CurrentItem = ModContent.ItemType<CaveWood>(); break;
+                        case 2: CurrentItem = ItemID.Ruby; break;
+                        case 3: CurrentItem = ItemID.Amber; break;
+                        case 4: CurrentItem = ItemID.Topaz; break;
+                        case 5: CurrentItem = ItemID.Emerald; break;
+                        case 6: CurrentItem = ItemID.Diamond; break;
+                        case 7: CurrentItem = ItemID.Sapphire; break;
+                        case 8: CurrentItem = ItemID.Acorn; break;
+                        case 9: CurrentItem = ItemID.GrassSeeds; break;
+                        case 10: CurrentItem = ItemID.Cobweb; break;
+                        case 11: CurrentItem = WorldGen.crimson ? ItemID.CorruptSeeds : ItemID.CrimsonSeeds; break;
+                        case 12: CurrentItem = ModContent.ItemType<PotatoSeed>(); break;
+                        case 13: CurrentItem = ModContent.ItemType<WheatSeed>(); break;
+                        case 14: CurrentItem = ModContent.ItemType<CarbonOre>(); break;
+                    }
+                }
+
                 Item.NewItem(player.GetSource_ItemUse(Item), new Rectangle((int)pos.X * 16, (int)pos.Y * 16, 1, 1), CurrentItem, Main.rand.Next(1, 3));
                 WorldGen.KillTile((int)pos.X, (int)pos.Y, false, false, true);
 
@@ -92,9 +112,9 @@ namespace TranscendenceMod.Items.Tools
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddRecipeGroup(nameof(ItemID.SilverBar), 3)
+            .AddRecipeGroup(nameof(ItemID.SilverBar), 4)
             .AddRecipeGroup(nameof(ItemID.CopperBar), 4)
-            .AddIngredient(ItemID.Gel, 2)
+            .AddIngredient(ItemID.Gel, 4)
             .AddTile(TileID.WorkBenches)
             .DisableDecraft()
             .Register();

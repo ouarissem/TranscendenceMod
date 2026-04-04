@@ -6,8 +6,6 @@ namespace TranscendenceMod.Items.Accessories.Shields
 {
     public class JungleShield1 : BaseShield
     {
-        public override int Leniency => 35;
-
         public override int Cooldown => 120;
 
         public override int DefenseAmount => 6;
@@ -18,7 +16,7 @@ namespace TranscendenceMod.Items.Accessories.Shields
             Item.rare = ItemRarityID.Lime;
             Item.width = 26;
             Item.height = 33;
-            Item.value = Item.buyPrice(gold: 5, silver: 75);
+            Item.value = Item.sellPrice(gold: 5, silver: 75);
         }
         public override void UpdateEquip(Player player)
         {

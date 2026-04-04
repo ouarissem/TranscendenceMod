@@ -42,10 +42,9 @@ namespace TranscendenceMod.Items.Consumables.Boss
             CreateRecipe()
             .AddIngredient(ItemID.SnowBlock, 750)
             .AddIngredient(ItemID.IceBlock, 500)
-            .AddIngredient(ItemID.SpectreBar, 20)
-            .AddIngredient(ModContent.ItemType<GalaxyAlloy>(), 2)
             .AddIngredient(ItemID.SoulofLight, 5)
             .AddIngredient(ItemID.SoulofNight, 5)
+            .AddIngredient(ItemID.LunarOre, 5)
             .AddTile(TileID.IceMachine)
             .Register();
         }

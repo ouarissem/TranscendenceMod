@@ -3,7 +3,9 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
+using Terraria.Map;
 using Terraria.ModLoader;
+using TranscendenceMod.Tiles.TilesheetHell.Nature.Farming;
 
 namespace TranscendenceMod.Items.Farming.Seeds
 {
@@ -17,25 +19,17 @@ namespace TranscendenceMod.Items.Farming.Seeds
         }
         public override void SetDefaults()
         {
-            Item.useStyle = ItemUseStyleID.Swing;
-            Item.shoot = ProjectileID.PurificationPowder;
-            Item.maxStack = 9999;
+            Item.DefaultToPlaceableTile(Tile);
 
-            Item.useTime = 7;
-            Item.useAnimation = 7;
-            Item.consumable = true;
-            Item.autoReuse = true;
+            Item.maxStack = 9999;
 
             Item.width = 14;
             Item.height = 20;
+
+            Item.useTime = Item.useAnimation;
         }
 
-        public override bool ConsumeItem(Player player)
-        {
-            return false;
-        }
-
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override bool CanUseItem(Player player)
         {
             Vector2 pos = Main.MouseWorld;
             pos /= 16;
@@ -43,16 +37,14 @@ namespace TranscendenceMod.Items.Farming.Seeds
             Tile tile = Main.tile[(int)pos.X, (int)pos.Y];
             Tile tile2 = Main.tile[(int)pos.X, (int)pos.Y + 1];
 
-            if (!tile.HasTile && allowed(tile2) && player.Distance(Main.MouseWorld) < (4 * 16))
-            {
-                WorldGen.PlaceTile((int)pos.X, (int)pos.Y, Tile);
+            if (!tile.HasTile && allowed(tile2) && player.Distance(Main.MouseWorld) < (4 * 16) && TranscendenceWorld.AmountCrops < 32)
+                return true;
 
-                //Custom consumption code
-                if (Item.stack > 1)
-                    Item.stack -= 1;
-                else Item.TurnToAir();
-            }
+            return false;
+        }
 
+        public override bool ConsumeItem(Player player)
+        {
             return false;
         }
     }

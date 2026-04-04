@@ -12,13 +12,12 @@ namespace TranscendenceMod.Projectiles.Weapons.Melee
     {
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Type] = 15;
+            ProjectileID.Sets.TrailCacheLength[Type] = 40;
             ProjectileID.Sets.TrailingMode[Type] = 3;
         }
 
         public override void SetDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Type] = 40;
             Projectile.width = 80;
             Projectile.height = 80;
             Projectile.penetrate = 1;
@@ -39,7 +38,6 @@ namespace TranscendenceMod.Projectiles.Weapons.Melee
         }
         public static bool Tiles(Projectile projectile) => Collision.SolidCollision(projectile.Center - new Vector2(5), 10, 10) || projectile.ai[1] == 1;
         public Color col(Projectile projectile) => Tiles(projectile) ? Color.DarkGray * 0.25f : Color.White;
-        public override Color? GetAlpha(Color lightColor) => col(Projectile) * Projectile.Opacity;
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
@@ -69,14 +67,13 @@ namespace TranscendenceMod.Projectiles.Weapons.Melee
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            Color col2 = Tiles(Projectile) ? Color.DarkGray * 0.175f : Color.White;
             if (Projectile.Opacity > 0.75f)
-                TranscendenceUtils.DrawTrailProj(Projectile, col2 * Projectile.Opacity, Projectile.scale, $"{Texture}", false, true, 2f, Vector2.Zero);
+                TranscendenceUtils.DrawTrailProj(Projectile, col(Projectile) * Projectile.Opacity, Projectile.scale, $"{Texture}", false, true, 2f, Vector2.Zero);
             return false;
         }
         public override bool PreKill(int timeLeft)
         {
-            return true;
+            return base.PreKill(timeLeft);
         }
     }
     public class SunFlame : ModProjectile

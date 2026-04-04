@@ -42,7 +42,6 @@ namespace TranscendenceMod.Items.Weapons
             Item.shootSpeed = 20;
             Item.crit = 20;
             Item.useAmmo = AmmoID.Arrow;
-            Item.GetGlobalItem<ModifiersItem>().DoesUseCharge = false;
 
         }
         public override void ModifyManaCost(Player player, ref float reduce, ref float mult) => mult *= 0;
@@ -214,7 +213,6 @@ namespace TranscendenceMod.Items.Weapons
                         Vector2 pos3 = player.Center + Vector2.One.RotatedBy(rot - MathHelper.PiOver2 - MathHelper.PiOver4) * (0 + (j * 22.5f));
                         Projectile.NewProjectile(Projectile.GetSource_FromAI(), pos3, Shooting * player.HeldItem.shootSpeed, ModContent.ProjectileType<Terrarrow>(), Projectile.damage, Projectile.knockBack, -1, 1, 1.85f, 0.75f);
                     }
-                    if (player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge > 0) player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge -= 0.5f;
                     Projectile.ai[1] = 0;
                 }
             }

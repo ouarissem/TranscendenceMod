@@ -6,6 +6,8 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Achievements;
+using Terraria.GameContent.Drawing;
 using Terraria.GameInput;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.Graphics.Effects;
@@ -17,7 +19,7 @@ using Terraria.ModLoader.IO;
 using Terraria.ModLoader.UI;
 using TranscendenceMod.Buffs;
 using TranscendenceMod.Buffs.Items;
-using TranscendenceMod.Buffs.Items.Modifiers;
+using TranscendenceMod.Buffs.Items.InfectionAccessories;
 using TranscendenceMod.Buffs.Items.Potions;
 using TranscendenceMod.Dusts;
 using TranscendenceMod.Items;
@@ -37,8 +39,10 @@ using TranscendenceMod.Items.Materials.Fish;
 using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Items.Mounts;
 using TranscendenceMod.Items.Tools;
+using TranscendenceMod.Items.Weapons.Melee;
 using TranscendenceMod.Items.Weapons.Ranged;
 using TranscendenceMod.Miscanellous.MiscSystems;
+using TranscendenceMod.Miscanellous.UI.Achievements.Tasks;
 using TranscendenceMod.Miscannellous;
 using TranscendenceMod.Miscannellous.Biomes;
 using TranscendenceMod.Miscannellous.GlobalStuff;
@@ -49,6 +53,7 @@ using TranscendenceMod.NPCs.Boss.FrostSerpent;
 using TranscendenceMod.NPCs.Boss.Nucleus;
 using TranscendenceMod.NPCs.Boss.Seraph;
 using TranscendenceMod.NPCs.Passive;
+using TranscendenceMod.NPCs.PreHard;
 using TranscendenceMod.NPCs.SpaceBiome;
 using TranscendenceMod.Projectiles.Equipment;
 using TranscendenceMod.Projectiles.Equipment.Tools;
@@ -56,6 +61,7 @@ using TranscendenceMod.Projectiles.Modifiers;
 using TranscendenceMod.Projectiles.NPCs.Bosses.Nucleus;
 using TranscendenceMod.Projectiles.NPCs.Bosses.SpaceBoss;
 using TranscendenceMod.Projectiles.Weapons.Crean;
+using TranscendenceMod.Projectiles.Weapons.Ranged.Ammo;
 using TranscendenceMod.Tiles.TilesheetHell.Nature;
 using static Terraria.Player;
 using static TranscendenceMod.TranscendenceWorld;
@@ -73,15 +79,11 @@ namespace TranscendenceMod
         public int CultScrollsEquipped;
         public bool UsingCrateMagnet;
         public bool PearlMod;
-        public bool ExtendedHead;
-        public bool BigHandle;
         public int DragonScales;
-        public bool DraconicFury;
-        public int DraconicFuryCD;
+        public int DragonScalesCD;
         public int SilkyEgg;
         public int[] SilkyCD = new int[3];
         public int Jolly;
-        public int MysticCards;
 
         /*Accessories*/
         public bool CosmicAegis;
@@ -177,15 +179,18 @@ namespace TranscendenceMod
 
         /*Shields*/
         public bool HasParry;
-        public int ParryAmount;
         public int ParryCD;
         public int ParryTimer;
         public int ParryTimerCD;
         public int ShieldID;
+        /// <summary>
+        /// 0f to 100f
+        /// </summary>
         public float Focus;
         public float MaxFocus = 100f;
         public float FocusGatherSpeed = 0.075f;
-        public float ParryFocusCost = 35f;
+        public float ParryFocusCost = 85f;
+        public float FocusRegenDelay;
 
         public int TurtleCD;
         public int BeetleCD;
@@ -223,6 +228,8 @@ namespace TranscendenceMod
         public bool Vampire;
         public int VampireBlood;
         public int VampireHealAmount;
+        public int VampireMinTimer;
+        public int VampireMinTime = 1200;
         public int CrimsonNecklaceBloodCD;
         public int CrimsonNecklaceMaxBlood;
         public bool CorruptWanderingKit;
@@ -279,7 +286,7 @@ namespace TranscendenceMod
         public int CosmoShardTimer = 0;
         public int MaxStarfruits = 20;
         public int EatenStarfruits;
-        public bool ConsumedManaInferno;
+        public bool ConsumedInferno;
         public int MuramasaTime;
         public int MovingCannon;
         public Projectile Cannon;
@@ -309,9 +316,6 @@ namespace TranscendenceMod
         public bool ZoneStar;
         public int ZoneStarTimer;
         public float StarFade;
-
-        public bool ZoneLimbo => Player.InModBiome<Limbo>();
-        public float NullFade;
 
         public int FanWindCD;
         public float VolcanoHeatwaveTimer;
@@ -382,7 +386,7 @@ namespace TranscendenceMod
         {
             if (CosmicNPCQuests > 0) tag["CosmicNPCQuests"] = CosmicNPCQuests;
             if (TalkedToSnowy) tag["TalkedToSnowy"] = true;
-            if (ConsumedManaInferno) tag["ConsumedManaInferno"] = true;
+            if (ConsumedInferno) tag["ConsumedInferno"] = true;
             if (EatenStarfruits > 0) tag["EatenStarfruits"] = EatenStarfruits;
             if (FrostMoonHS > 0) tag["FrostMoonHS"] = FrostMoonHS;
             if (AmountSpentAtBlacksmith > 0) tag["AmountSpentAtBlacksmith"] = AmountSpentAtBlacksmith;
@@ -391,7 +395,7 @@ namespace TranscendenceMod
         {
             CosmicNPCQuests = tag.GetInt("CosmicNPCQuests");
             TalkedToSnowy = tag.ContainsKey("TalkedToSnowy");
-            ConsumedManaInferno = tag.ContainsKey("ConsumedManaInferno");
+            ConsumedInferno = tag.ContainsKey("ConsumedInferno");
             EatenStarfruits = tag.GetInt("EatenStarfruits");
             FrostMoonHS = tag.GetInt("FrostMoonHS");
             AmountSpentAtBlacksmith = tag.GetInt("AmountSpentAtBlacksmith");
@@ -431,14 +435,19 @@ namespace TranscendenceMod
         }
         public override void ResetEffects()
         {
-            FocusGatherSpeed = 0.1f;
-            ParryFocusCost = 35f;
-            MysticCards = 0;
+            if (FocusRegenDelay > 0)
+                FocusRegenDelay--;
+
+            if (!OverloadedCore)
+                OCoreTimer--;
+
+            MaxFocus = 100f;
+            FocusGatherSpeed = 0.2f;
+            ParryFocusCost = 40f;
             Jolly = 0;
             SilkyEgg = 0;
             DragonScales = 0;
             FrozenMaw = false;
-            DraconicFury = false;
             SunMelt = false;
             RingOfBravery = false;
             FrostBite = false;
@@ -505,7 +514,6 @@ namespace TranscendenceMod
             VoidNecklaceWithinRange = false;
             DragonClawBuff = false;
             DangerDetection = false;
-            BigHandle = false;
             PearlMod = false;
             PalladiumShieldEquipped = false;
             CosmicWings = false;
@@ -570,12 +578,14 @@ namespace TranscendenceMod
 
                 void TP(Vector2 pos, bool jump)
                 {
-                    if (jump && !TranscendenceUtils.BossAlive())
+                    if ((jump || pos.Y < Player.position.Y) && !TranscendenceUtils.BossAlive())
                     {
-                        int dir = pos.X > Player.Center.X ? 1 : -1;
-
-                        Player.velocity.X = 30 * dir;
-                        Player.velocity.Y = -10;
+                        if (jump)
+                        {
+                            int dir = pos.X > Player.Center.X ? 1 : -1;
+                            Player.velocity.X = 30 * dir;
+                        }
+                        Player.velocity.Y = pos.Y < Player.position.Y ? (pos.X != Player.Center.X ? -15f : -22.5f) : -10f;
                     }
 
                     Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Vector2.Zero, ModContent.ProjectileType<CosmicPortal>(), 0, 0, Player.whoAmI, 0, 1);
@@ -605,15 +615,7 @@ namespace TranscendenceMod
                 }
             }
 
-            if (ExtendedHead)
-            {
-                Player.pickSpeed *= 1.33f;
-                tileRangeX += 4;
-                tileRangeY += 4;
-            }
-
             VoidNecklaceAcc = false;
-            ExtendedHead = false;
 
             if (!Vampire)
                 VampireBlood = 0;
@@ -675,7 +677,7 @@ namespace TranscendenceMod
             HasEolProjectile = false;
             AstronautHelmet = false;
             ApolloHelmet = false;
-            HasParry = false;
+            HasParry = Player.HeldItem.type == ModContent.ItemType<LegendarySword>();
             BatteryAcc = 0;
             if (BatteryCooldown > 0)
                 BatteryCooldown--;
@@ -715,10 +717,12 @@ namespace TranscendenceMod
             base.UpdateDead();
             ShaderShit();
 
-            if (Player.respawnTimer < 15)
+            VampireBlood = 0;
+            if (Player.respawnTimer == 1)
             {
-                FishTrans = 0;
+                Focus = MaxFocus / 2f;
                 LacewingTrans = false;
+                FishTrans = 0;
             }
 
             if (Filters.Scene["TranscendenceMod:Static"].IsActive())
@@ -735,6 +739,8 @@ namespace TranscendenceMod
             EvasionStoneGraze = (int)(EvasionStoneGraze * 0.75f);
             EvasionStoneTimer = EvasionStoneMaxTimer;
 
+            ExpendFocus(Player, 15f, 30f);
+
             if (OcramHelmet && info.Damage > 5)
             {
                 SoundEngine.PlaySound(SoundID.Item14, Player.Center);
@@ -744,9 +750,6 @@ namespace TranscendenceMod
                 if (Player.statLife < (Player.statLifeMax2 / 2))
                     Player.AddBuff(ModContent.BuffType<BoABuff>(), 5);
             }
-
-            if (LacewingTrans)
-                Player.KillMe(info.DamageSource, 999999, 0);
 
             if (NohitMode)
             {
@@ -794,12 +797,6 @@ namespace TranscendenceMod
                     }
                 }
             }
-            if (Vampire)
-            {
-                VampireBlood -= (int)(CrimsonNecklaceMaxBlood * 0.33f);
-                if (VampireBlood < 0)
-                    VampireBlood = 0;
-            }
         }
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
@@ -815,17 +812,15 @@ namespace TranscendenceMod
             if (Possessing)
                 PossessedNPC.StrikeInstantKill();
 
-            if (FishTrans > 0)
-            {
-                int gore = Mod.Find<ModGore>("FishGore1").Type;
-                int gore2 = Mod.Find<ModGore>("FishGore2").Type;
-
-                Gore.NewGore(Player.GetSource_Death(), Player.Center, Main.rand.NextVector2Circular(2f, 2f), gore);
-                Gore.NewGore(Player.GetSource_Death(), Player.Center, Main.rand.NextVector2Circular(2f, 2f), gore2);
-            }
-
             if (LacewingTrans)
             {
+                for (int i = 0; i < 24; i++)
+                {
+                    int d = Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<PlayerCosmicBlood>(),
+                        Main.rand.NextFloat(-12f, 12f), Main.rand.NextFloat(-12f, 12f), 0, Main.hslToRgb(i / 8f, 1f, 0.5f), Main.rand.NextFloat(0.8f, 1.25f));
+                    Main.dust[d].alpha = Main.rand.Next(0, 15);
+                }
+
                 SoundEngine.PlaySound(SoundID.NPCDeath1, Player.Center);
                 playSound = false;
                 genGore = false;
@@ -843,6 +838,12 @@ namespace TranscendenceMod
                 }
             }
 
+            if (SuckedIn)
+            {
+                genGore = false;
+                playSound = false;
+            }
+
             if (InsideGolem)
             {
                 SoundEngine.PlaySound(SoundID.Item14, Player.Center);
@@ -855,6 +856,11 @@ namespace TranscendenceMod
 
             if (damageSource.SourceOtherIndex == 8 && hitDirection == 0)
             {
+                if (EverglowingCrownEquipped && CorruptWanderingKit ||
+                CorruptWanderingKit && Vampire ||
+                EverglowingCrownEquipped && Vampire)
+                    damageSource = PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Mods.TranscendenceMod.Messages.Death.BlackHole", Player.name));
+
                 if (MeltingBlood) damageSource = PlayerDeathReason.ByCustomReason(NetworkText.FromKey($"Mods.TranscendenceMod.Messages.Death.MagmaBlood{Main.rand.Next(0, 2)}", Player.name));
                 if (EolBurn) damageSource = PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Mods.TranscendenceMod.Messages.Death.FairyFire", Player.name));
                 if (BloodDying) damageSource = PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Mods.TranscendenceMod.Messages.Death.Blood", Player.name));
@@ -877,8 +883,11 @@ namespace TranscendenceMod
 
         public override void ModifyMaxStats(out StatModifier health, out StatModifier mana)
         {
-            health = StatModifier.Default with { Base = EatenStarfruits * 5f };
-            mana = StatModifier.Default with { Base = ConsumedManaInferno ? 100 : 0 };
+            float am = 0f;
+            am += EatenStarfruits * 5f;
+
+            health = StatModifier.Default with { Base = am };
+            mana = StatModifier.Default with { Base = 0 };
         }
 
         public override void UpdateBadLifeRegen()
@@ -897,6 +906,11 @@ namespace TranscendenceMod
             if (MeltingBlood) DoT(250);
             if (SunMelt) DoT(375);
             if (FrostBite) DoT(35);
+
+            if (EverglowingCrownEquipped && CorruptWanderingKit ||
+                CorruptWanderingKit && Vampire ||
+                EverglowingCrownEquipped && Vampire)
+                DoT(100);
         }
         public override void PostUpdateRunSpeeds()
         {
@@ -907,13 +921,15 @@ namespace TranscendenceMod
                 Player.jumpHeight = (int)(Player.jumpHeight * 1.5f);
                 Player.jumpSpeed *= 1.5f;
 
-                if (Player.controlDown && InfectionAbility)
+                if (Player.controlDown && InfectionAbility && Focus > 0.15f)
                 {
-                    Player.gravity *= 2.25f;
-                    Player.maxFallSpeed *= 2.25f;
+                    Player.gravity *= 2.75f;
+                    Player.maxFallSpeed *= 2.75f;
+
+                    ExpendFocus(Player, 0.1f, 5f);
                 }
 
-                Player.runSlowdown = 2;
+                Player.runSlowdown += 0.75f;
                 Player.runAcceleration = 2;
             }
 
@@ -925,7 +941,7 @@ namespace TranscendenceMod
 
             if (InsideGolem)
             {
-                Player.jumpHeight = 20;
+                Player.jumpHeight = 40;
                 Player.jumpSpeed = 15f;
             }
 
@@ -943,28 +959,6 @@ namespace TranscendenceMod
         }
         public override bool ConsumableDodge(Player.HurtInfo info)
         {
-            if (DraconicFuryCD >= 3600)
-            {
-                for (int i = 0; i < 32; i++)
-                {
-                    Dust d = Dust.NewDustPerfect(Player.Center, DustID.Torch, Main.rand.NextVector2Circular(8f, 18f), 0, default, 3f);
-                    d.noGravity = true;
-                }
-                Player.AddBuff(ModContent.BuffType<DraconicFury>(), 600);
-                Player.SetImmuneTimeForAllTypes(180);
-
-                DraconicFuryCD = 0;
-                return true;
-            }
-            if (EvasionStoneEquipped && EvasionStoneExists)
-            {
-                SoundEngine.PlaySound(SoundID.Dig, Player.Center);
-                Player.SetImmuneTimeForAllTypes(60);
-                Player.Heal((int)(Player.statLifeMax2 / 5));
-                EvasionStoneTimer = EvasionStoneMaxTimer;
-                EvasionStoneExists = false;
-                return true;
-            }
             return base.ConsumableDodge(info);
         }
         public override void PostUpdateEquips()
@@ -978,7 +972,7 @@ namespace TranscendenceMod
 
                 if (Collision.SolidCollision(Player.position, Player.width, Player.height + 2, true) && Player.velocity.Y == 0f || HorseshoeBonusActive > 0)
                 {
-                    Player.moveSpeed += 4f;
+                    Player.moveSpeed += 6f;
                     Player.accRunSpeed += 12f;
                     Player.runSlowdown *= 1.5f;
                     Player.CancelAllBootRunVisualEffects();
@@ -1006,7 +1000,7 @@ namespace TranscendenceMod
                 Player.moveSpeed *= 1.5f;
 
             if (SpaceBossDot && CrystalRadiationPill)
-                Player.moveSpeed *= 1.2f;
+                Player.moveSpeed *= 1.25f;
 
             if (InsideGolem)
             {
@@ -1025,19 +1019,6 @@ namespace TranscendenceMod
                 Player.fullRotation = Player.velocity.X * 0.025f;
                 if (WearingEarlygameShoes == 2) Player.moveSpeed += 0.2f;
             }
-
-            if (DraconicFury && DragonScales > 0)
-            {
-                Player.jumpSpeed *= 1f + (0.25f * DragonScales);
-                Player.moveSpeed += 1f * DragonScales;
-                Player.GetAttackSpeed(DamageClass.Melee) += 0.2f * DragonScales;
-
-                int d = Dust.NewDust(Player.position, Player.width, Player.height, DustID.CrimsonTorch, 0, 0, 0, default, 5f);
-                int d2 = Dust.NewDust(Player.position, Player.width, Player.height, DustID.Torch, 0, 0, 0, default, 5f);
-                Main.dust[d].noGravity = true;
-                Main.dust[d2].noGravity = true;
-
-            }
         }
         public override void PostUpdateMiscEffects()
         {
@@ -1050,6 +1031,67 @@ namespace TranscendenceMod
             On_LegacyPlayerRenderer.DrawPlayerInternal += On_LegacyPlayerRenderer_DrawPlayerInternal1;
             On_Player.PickTile += On_Player_PickTile;
             On_Player.SpawnFastRunParticles += On_Player_SpawnFastRunParticles;
+
+            On_Player.DryCollision += On_Player_DryCollision;
+            On_Player.WaterCollision += On_Player_WaterCollision;
+            On_Player.HoneyCollision += On_Player_HoneyCollision;
+            On_Player.ShimmerCollision += On_Player_ShimmerCollision;
+            On_Player.FloorVisuals += On_Player_FloorVisuals;
+            On_Player.UpdateTouchingTiles += On_Player_UpdateTouchingTiles;
+            On_Player.SlopingCollision += On_Player_SlopingCollision;
+        }
+
+        private void On_Player_SlopingCollision(On_Player.orig_SlopingCollision orig, Player self, bool fallThrough, bool ignorePlats)
+        {
+            if (!self.HasBuff(ModContent.BuffType<LacewingTransBuff>()))
+                orig(self, fallThrough, ignorePlats);
+        }
+
+        private void On_Player_UpdateTouchingTiles(On_Player.orig_UpdateTouchingTiles orig, Player self)
+        {
+            if (!self.HasBuff(ModContent.BuffType<LacewingTransBuff>()))
+                orig(self);
+        }
+
+        private void On_Player_FloorVisuals(On_Player.orig_FloorVisuals orig, Player self, bool Falling)
+        {
+            if (!self.HasBuff(ModContent.BuffType<LacewingTransBuff>()))
+                orig(self, false);
+        }
+
+        private void On_Player_ShimmerCollision(On_Player.orig_ShimmerCollision orig, Player self, bool fallThrough, bool ignorePlats, bool noCollision)
+        {
+            if (!self.HasBuff(ModContent.BuffType<LacewingTransBuff>()) && self.GetModPlayer<TranscendencePlayer>().FishTrans == 0)
+                orig(self, fallThrough, ignorePlats, noCollision);
+            else
+            {
+                if (self.GetModPlayer<TranscendencePlayer>().FishronPerceptionAcc)
+                    self.position += self.velocity;
+                else self.KillMe(PlayerDeathReason.ByCustomReason(NetworkText.FromKey($"Mods.TranscendenceMod.Messages.Death.FairyFire", self.name)), 9999, -self.direction);
+            }
+        }
+
+        private void On_Player_HoneyCollision(On_Player.orig_HoneyCollision orig, Player self, bool fallThrough, bool ignorePlats)
+        {
+            if (!self.HasBuff(ModContent.BuffType<LacewingTransBuff>()))
+                orig(self, fallThrough, ignorePlats);
+            else
+                self.position += self.velocity;
+        }
+
+        private void On_Player_WaterCollision(On_Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
+        {
+            if (!self.HasBuff(ModContent.BuffType<LacewingTransBuff>()))
+                orig(self, fallThrough, ignorePlats);
+            else
+                self.position += self.velocity;
+        }
+
+        private void On_Player_DryCollision(On_Player.orig_DryCollision orig, Player self, bool fallThrough, bool ignorePlats)
+        {
+            if (!self.HasBuff(ModContent.BuffType<LacewingTransBuff>()))
+                orig(self, fallThrough, ignorePlats);
+            else self.position += self.velocity;
         }
 
         private void On_Player_SpawnFastRunParticles(On_Player.orig_SpawnFastRunParticles orig, Player self)
@@ -1136,7 +1178,7 @@ namespace TranscendenceMod
             }
 
             int increasedWidth = (int)(20 * ScaleMult);
-            int increasedHeight = (int)(42 + (Player.mount.Active ? Player.mount.HeightBoost : 0) * ScaleMult);
+            int increasedHeight = (int)((42 + (Player.mount.Active ? Player.mount.HeightBoost : 0)) * ScaleMult);
 
             Player.position = Player.Bottom;
 
@@ -1195,19 +1237,17 @@ namespace TranscendenceMod
             HitTimer = 5;
             if (InsideShell == 0 && !InsideGolem)
             {
-                float decreases = 20;
-
-                if (StardustShield)
-                    decreases += 10f;
-
-                if (CultistForcefield)
-                    decreases += 10f;
+                float decreases = 0;
 
                 Focus -= decreases;
             }
 
             if (SilkyEgg > 0)
-                Player.AddBuff(BuffID.Dazed, SilkyEgg * 60);
+            {
+                if (Player.mount.Active)
+                    Player.AddBuff(BuffID.Dazed, 30 * SilkyEgg);
+                else Player.AddBuff(BuffID.Webbed, 15 * SilkyEgg);
+            }
 
             if (Possessing)
                 SoundEngine.PlaySound(PossessedNPC.HitSound, Player.Center);
@@ -1237,7 +1277,7 @@ namespace TranscendenceMod
 
         public override void HideDrawLayers(PlayerDrawSet drawInfo)
         {
-            if (Possessing || NucleusConsumed > 0)
+            if (Possessing && !Player.dead || NucleusConsumed > 0)
             {
                 drawInfo.hideEntirePlayer = true;
                 foreach (var layer in PlayerDrawLayerLoader.Layers)
@@ -1266,7 +1306,7 @@ namespace TranscendenceMod
                     if (layer.Name != "GolemBulwark") layer.Hide();
                 }
             }
-            if (InsideShell > 0 && (!Player.dead || BeetleShield))
+            if (InsideShell > 0 && !Player.dead)
             {
                 foreach (var layer in PlayerDrawLayerLoader.Layers)
                 {
@@ -1284,14 +1324,14 @@ namespace TranscendenceMod
 
             ParryTimer = 0;
 
-            if (DraconicFuryCD >= 2700)
-                modifiers.FinalDamage *= (1f + (0.333f * DragonScales));
-
             if (SpaceSuffocation && Main.rand.NextBool(4))
                 modifiers.FinalDamage *= 2f;
 
             if (OcramBuff)
                 modifiers.FinalDamage *= 1.5f;
+
+            if (EmpoweringTabletEquipped)
+                modifiers.FinalDamage *= 1.25f;
 
             if (Possessing)
                 modifiers.DisableSound();
@@ -1319,22 +1359,10 @@ namespace TranscendenceMod
             if (InsideShell > 0)
             {
                 modifiers.DisableSound();
-                float amount = BeetleShield ? 0.1f : TurtleShield ? 0.5f : OrangeShell ? 0.6f : 0.7f;
+                float amount = BeetleShield ? 0.2f : TurtleShield ? 0.5f : OrangeShell ? 0.6f : 0.7f;
                 if (BeetleShield && ShellCrumble > 0)
                     amount += (ShellCrumble / 100f);
                 modifiers.FinalDamage *= amount;
-
-                if (BeetleShield)
-                {
-                    modifiers.Knockback *= 3f;
-                    modifiers.KnockbackImmunityEffectiveness *= 0f;
-                }
-            }
-            else
-            {
-                modifiers.FinalDamage /= ScaleMult;
-                modifiers.Knockback /= ScaleMult;
-                modifiers.KnockbackImmunityEffectiveness *= ScaleMult;
             }
         }
         public override void PreUpdate()
@@ -1355,35 +1383,18 @@ namespace TranscendenceMod
             }
             else ParryTimerCD = ParryCD + 1;
             if (ParryTimer > 0)
-            {
-                if (ParryTimer > 5 || TranscendenceWorld.Timer % 2 == 0)
-                    ParryTimer -= ParryTimer > 5 ? 2 : 1;
-            }
+                ParryTimer -= 1;
 
             if (CosmoShardTimer > 0)
                 CosmoShardTimer--;
-
-                if (EvasionStoneTimer > 0 && EvasionStoneGraze > 12 && !Player.dead)
-                EvasionStoneTimer--;
-            if (EvasionStoneTimer == 0)
-            {
-                EvasionStoneGraze = 0;
-                EvasionStoneExists = true;
-            }
-
-            if (!EvasionStoneEquipped)
-            {
-                EvasionStoneGraze = 0;
-                EvasionStoneExists = false;
-            }
 
             if (HitTimer > 0)
                 HitTimer--;
 
             if (ZoneSerpentMonolith > 0)
             {
-                SkyManager.Instance.Activate("TranscendenceMod:FrostSky", Player.Center);
-                Filters.Scene.Activate("TranscendenceMod:ColdScreen");
+                Terraria.Graphics.Effects.Filters.Scene.Activate("TranscendenceMod:ColdScreen");
+                Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().ColdTimer = 15;
             }
             else
             {
@@ -1415,23 +1426,16 @@ namespace TranscendenceMod
                     Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<Rainbow>(), 0, 0, 0, Main.hslToRgb(Main.rand.NextFloat(), 1f, 0.5f, byte.MaxValue), 1.45f);
                 }
             }
-
-            for (int p = 0; p < Main.maxProjectiles; p++)
-            {
-                Projectile proj = Main.projectile[p];
-                if (proj.Distance(Player.Center) < 80 && proj.hostile && proj.active && proj.damage > 0 && !EvasionStoneExists && EvasionStoneEquipped && proj.GetGlobalProjectile
-                    <TranscendenceProjectiles>().Grazed != true && !Player.dead && Player.active && EvasionStoneGraze < 13)
-                {
-                    EvasionStoneGraze++;
-                    proj.GetGlobalProjectile<TranscendenceProjectiles>().Grazed = true;
-                    SoundEngine.PlaySound(SoundID.Dig);
-                }
-            }
         }
         public override bool CanHitNPC(NPC target)
         {
             if (target.GetGlobalNPC<TranscendenceNPC>().PossessionAvaivable || target.GetGlobalNPC<TranscendenceNPC>().Possessed) return false;
             return base.CanHitNPC(target);
+        }
+        public void ExpendFocus(Player player, float am, float delay)
+        {
+            player.GetModPlayer<TranscendencePlayer>().Focus -= am;
+            player.GetModPlayer<TranscendencePlayer>().FocusRegenDelay = delay;
         }
         public void SetStats()
         {
@@ -1442,30 +1446,56 @@ namespace TranscendenceMod
                 Tile tile = Framing.GetTileSafely(touchedPoint);
                 if (tile != null && tile.HasTile && !tile.IsActuated)
                 {
-                    if (tile.TileType == ModContent.TileType<VolcanicStone>() && !Player.fireWalk)
+                    if (tile.TileType == ModContent.TileType<VolcanicStone>() && !Player.fireWalk && !LacewingTrans)
                         Player.AddBuff(BuffID.Burning, 60);
 
-                    if (tile.TileType == ModContent.TileType<ModMeteorite>())
-                    {
+                    if ((tile.TileType == ModContent.TileType<SpaceCrystal>() || tile.TileType == ModContent.TileType<ModMeteorite>()) && !LacewingTrans)
                         Player.AddBuff(ModContent.BuffType<SpaceDebuff>(), 5);
-                        Player.AddBuff(BuffID.Burning, 5);
-                    }
+
                 }
             }
+
+            int bulletam = 0;
+            for (int i = 0; i < Main.maxProjectiles; i++)
+            {
+                Projectile p = Main.projectile[i];
+                if (p != null && p.active && p.owner == Player.whoAmI && p.GetGlobalProjectile<TranscendenceProjectiles>().Timer < 30 && p.type == ModContent.ProjectileType<TwentyTwoHoming>())
+                {
+                    bulletam++;
+                }
+            }
+            if (bulletam > 110 && !Player.GetModPlayer<ModAchievementsHelper>().TwentyTwoUnlock)
+            {
+                ModAchievementsHelper.CompleteChallenge(Player, TaskIDs.TwentyTwoChallenge);
+            }
+
+            if (LegendarySwordTimer > 0)
+                ShieldID = ModContent.ItemType<LegendarySword>();
 
             if (FrostBite)
                 Player.statDefense -= 20;
 
+            if (ConsumedInferno)
+                MaxFocus += 15f;
+
+            if (EverglowingCrownEquipped)
+                MaxFocus -= 25f;
+
             if (DualBall)
             {
-                float increase = 0.5f * FocusGatherSpeed;
+                float increase = 0.3f * FocusGatherSpeed;
                 FocusGatherSpeed = FocusGatherSpeed + increase;
             }
 
-            float MoveMult = Player.velocity.Length() > 12.5f ? 0f : MathHelper.Lerp(1f, 0f, Player.velocity.Length() / 12.5f);
+            float MoveMult = LacewingTrans ? 1f : Player.velocity.Length() > 10f ? 0f : MathHelper.Lerp(1f, 0f, Player.velocity.Length() / 10f);
+            if (SpaceBossDot && FocusGatherSpeed > 0f)
+                FocusGatherSpeed *= -1f;
 
             if (Focus < MaxFocus)
-                Focus += FocusGatherSpeed * MoveMult;
+            {
+                if (FocusRegenDelay <= 0f)
+                    Focus += FocusGatherSpeed * MoveMult;
+            }
             else Focus = MaxFocus;
 
             if (Focus <= ParryFocusCost)
@@ -1483,7 +1513,7 @@ namespace TranscendenceMod
             if (GiantSlayer > 0)
             {
                 Player.GetArmorPenetration(DamageClass.Generic) += 15 * GiantSlayer;
-                float am = 0.1f;
+                float am = 0.125f;
 
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
@@ -1497,44 +1527,35 @@ namespace TranscendenceMod
 
             if (EverglowingCrownEquipped)
             {
-                bool Danger = false;
-                for (int i = 0; i < Main.maxNPCs; i++)
-                {
-                    NPC n = Main.npc[i];
-                    if (n != null && n.active && n.Distance(Player.Center) < 750 && !n.friendly && n.lifeMax > 5)
-                        Danger = true;
-                }
-                if (Danger && ++EverglowingSunCD % 20 == 0)
-                {
-                    Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Player.DirectionTo(Main.MouseWorld) * 6f, ModContent.ProjectileType<EmpressSun>(), 200, 2f, Player.whoAmI);
-                }
-                if (TranscendenceWorld.InfectionAccessoryKeyBind.JustPressed)
-                {
-                    int laser = ModContent.ProjectileType<EmpressLaser>();
-                    if (Player.ownedProjectileCounts[laser] == 0 && !CannotUseItems)
-                    {
-                        Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Player.DirectionTo(Main.MouseWorld) * 6f, laser, 220, 2f, Player.whoAmI);
-                    }
-                }
                 if ((InfectionAbility || LacewingTrans) && Player.controlMount && LacewingTransCD == 0)
                 {
                     LacewingTrans = !LacewingTrans;
 
-                    for (int i = 0; i < 32; i++)
-                        Dust.NewDustPerfect(Player.Center, ModContent.DustType<ArenaDust>(),
-                            new Vector2(0, 5f + (float)Math.Sin(i) * 2f).RotatedBy(MathHelper.TwoPi * i / 32f + MathHelper.PiOver4 / 2f), 0, Main.hslToRgb(i / 32f, 1f, 0.5f), 3f);
+                    if (LacewingTransCD == 0)
+                    {
+                        for (int i = 0; i < 32; i++)
+                            Dust.NewDustPerfect(Player.Center, ModContent.DustType<ArenaDust>(),
+                                new Vector2(0, 5f + (float)Math.Sin(i) * 2f).RotatedBy(MathHelper.TwoPi * i / 32f + MathHelper.PiOver4 / 2f), 0, Main.hslToRgb(i / 32f, 1f, 0.5f), 3f);
+                    }
 
-                    LacewingTransCD = 60;
+                    LacewingTransCD = 30;
                 }
 
                 if (LacewingTrans)
                 {
+                    if (FishNeck && Player.wet)
+                        Player.gills = true;
+
+                    if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift))
+                        Player.velocity *= 0.8f;
+
+                    FocusGatherSpeed *= 2f;
                     CannotUseItems = true;
                     CannotUseItemsTimer = 5;
 
-                    Player.GetDamage(DamageClass.Generic) += 0.35f;
-                    Player.endurance *= 0f;
-                    Player.DefenseEffectiveness *= 0f;
+                    Player.statDefense *= 0f;
+                    Player.lavaImmune = true;
+                    Player.shimmerImmune = true;
                     Player.mount.SetMount(ModContent.MountType<LacewingTransformationMount>(), Player);
 
                     if (TranscendenceWorld.Timer % 10 == 0)
@@ -1544,12 +1565,36 @@ namespace TranscendenceMod
                             LacewingFrame = 0;
                     }
                 }
+
+                bool Danger = false;
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    NPC n = Main.npc[i];
+                    if (n != null && n.active && n.Distance(Player.Center) < 750 && !n.friendly && n.lifeMax > 5)
+                        Danger = true;
+                }
+                if (Danger && ++EverglowingSunCD % (LacewingTrans ? 10 : 20) == 0)
+                {
+                    Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Player.DirectionTo(Main.MouseWorld) * 6f, ModContent.ProjectileType<EmpressSun>(), 200, 2f, Player.whoAmI);
+                }
+                if (TranscendenceWorld.InfectionAccessoryKeyBind.JustPressed)
+                {
+                    int laser = ModContent.ProjectileType<EmpressLaser>();
+                    if (Player.ownedProjectileCounts[laser] == 0 && (!CannotUseItems || LacewingTrans))
+                    {
+                        int dmg = 280;
+                        for (int i = 0; i < (Player.maxMinions + Player.maxTurrets); i++)
+                            dmg += 5;
+
+                        Projectile.NewProjectile(Player.GetSource_FromAI(), Player.Center, Player.DirectionTo(Main.MouseWorld) * 6f, laser, dmg, 2f, Player.whoAmI);
+                    }
+                }
             }
             else LacewingTrans = false;
 
             Tile tile2 = Main.tile[(int)Player.Center.X / 16, (int)Player.Center.Y / 16];
 
-            bool cond = Player.wet && Player.controlUp && FishNeck;
+            bool cond = Player.wet && Player.controlUp && FishNeck && !LacewingTrans;
             if (cond)
             {
                 if (FishTrans == 0)
@@ -1559,14 +1604,13 @@ namespace TranscendenceMod
                 }
 
                 FishTrans = 5;
-                Player.gills = true;
                 FullRotResetCD = 5;
 
                 CannotUseItems = true;
                 CannotUseItemsTimer = 5;
 
-                Player.endurance *= 0f;
-                Player.DefenseEffectiveness *= 0f;
+                Player.gills = true;
+
                 Player.mount.Dismount(Player);
                 Player.velocity.X *= 0f;
 
@@ -1602,22 +1646,20 @@ namespace TranscendenceMod
             if (NucleusDeathAnim > 0 && !Player.dead)
                 NucleusDeathAnim--;
 
-            if (DragonScales > 0)
+            if (DragonScales > 0 && Player.velocity.Length() > 0f)
             {
-                if (DraconicFuryCD == 3599)
+                if (++DragonScalesCD > 5)
                 {
-                    DialogUI.SpawnDialog("Block Available", Player.Top - new Vector2(0, 38), 90, Color.OrangeRed);
-                    SoundEngine.PlaySound(SoundID.Item25, Player.Center);
-                }
-
-                if (DraconicFuryCD < 3600)
-                {
-                    if (DraconicFuryCD >= 2700)
-                        Player.AddBuff(ModContent.BuffType<DraconicFuryCD>(), 1);
-                    DraconicFuryCD++;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int p = Projectile.NewProjectile(Player.GetSource_FromAI(),
+                            Player.position + new Vector2(Main.rand.NextFloat(0f, Player.width), Main.rand.NextFloat(0f, Player.height)),
+                            Main.rand.NextVector2Circular(0.5f, 0.5f) * (float)DragonScales, ModContent.ProjectileType<DragonFlame>(), 75 + (DragonScales * 25), 0f, Player.whoAmI);
+                        Main.projectile[p].timeLeft = 45 + (DragonScales * 90);
+                    }
+                    DragonScalesCD = 0;
                 }
             }
-            else DraconicFuryCD = 0;
 
             if (IsBlind > 0)
             {
@@ -1630,10 +1672,7 @@ namespace TranscendenceMod
                     Filters.Scene["TranscendenceMod:Blindness"].Deactivate();
             }
 
-            if (BigHandle)
-                Player.GetAttackSpeed(DamageClass.Melee) *= 0.33f;
-
-            if (SilkyEgg < 0)
+            if (SilkyEgg > 0)
             {
                 for (int i = 0; i < 3; i++)
                 {
@@ -1646,8 +1685,6 @@ namespace TranscendenceMod
                             int dmg = 155;
                             if (NPC.downedGolemBoss)
                                 dmg = 205;
-                            if (NPC.downedAncientCultist)
-                                dmg = 230;
                             if (NPC.downedMoonlord)
                                 dmg = 295;
                             if (Downed.Contains(Bosses.ProjectNucleus))
@@ -1655,30 +1692,22 @@ namespace TranscendenceMod
 
                             SoundEngine.PlaySound(SoundID.DD2_OgreSpit, Player.Center);
 
-                            int slots = 5;
-                            if ((Main.expertMode || Main.masterMode) && Player.extraAccessorySlots > 0)
-                                slots += 1;
-                            if (Main.masterMode)
-                                slots += 1;
-
                             float ai = 0f;
-                            if (Luminosity >= (0.2f * slots))
+                            if (Luminosity >= 0.3f)
                             {
                                 ai = 1f;
 
-                                dmg = 240;
+                                dmg = 185;
                                 if (NPC.downedGolemBoss)
-                                    dmg = 265;
-                                if (NPC.downedAncientCultist)
-                                    dmg = 300;
+                                    dmg = 235;
                                 if (NPC.downedMoonlord)
-                                    dmg = 355;
+                                    dmg = 325;
                                 if (Downed.Contains(Bosses.ProjectNucleus))
-                                    dmg = 425;
+                                    dmg = 400;
                             }
 
                             int p = Projectile.NewProjectile(Player.GetSource_FromAI(),
-                                Player.Center + new Vector2(0f, Player.height / 3f), new Vector2(-5f * Player.direction, 2f),
+                                Player.Center, new Vector2(-5f * Player.direction, 2f),
                                 ModContent.ProjectileType<MothBaby>(), dmg, 2f, Player.whoAmI, ai);
                             if (ai != 1f)
                                 Main.projectile[p].scale += Luminosity;
@@ -1724,7 +1753,10 @@ namespace TranscendenceMod
                 EvasionStoneMaxTimer = 900;
 
             if (ApolloHelmet)
-                Player.GetDamage(DamageClass.Generic) += 0.175f;
+            {
+                Player.GetDamage(DamageClass.Generic) += 0.1f;
+                Player.buffImmune[ModContent.BuffType<SpaceDebuff>()] = true;
+            }
 
             if (SuckedIn)
             {
@@ -1742,6 +1774,7 @@ namespace TranscendenceMod
             if (FishronPerceptionAcc && Player.wet)
             {
                 Player.ignoreWater = true;
+                Player.shimmerImmune = true;
 
                 int b = ModContent.ProjectileType<FishronBubble>();
                 if (Player.ownedProjectileCounts[b] == 0)
@@ -1768,23 +1801,23 @@ namespace TranscendenceMod
                 if (GolemDustCD > 0)
                     GolemDustCD--;
 
-                if (GolemJumpCD > 58 && Collision.SolidCollision(Player.BottomLeft, Player.width, 2, true) && GolemDustCD == 0)
-                {
-                    SoundEngine.PlaySound(SoundID.Item14, Player.Bottom);
+                bool condy = GolemJumpCD > 58 && Collision.SolidCollision(Player.BottomLeft, Player.width, 2, true) && GolemDustCD == 0;
 
+                if (condy || SLAM)
+                {
                     for (int i = 0; i < Main.maxNPCs; i++)
                     {
                         NPC npc = Main.npc[i];
-                        if (npc != null && npc.active && !npc.townNPC && !npc.dontTakeDamage)
+                        if (npc != null && npc.active && npc.type != NPCID.DD2EterniaCrystal && !npc.townNPC && !npc.dontTakeDamage)
                         {
                             if (Player.dontHurtCritters && npc.CountsAsACritter)
                                 return;
 
                             for (int j = 0; j < 32; j++)
                             {
-                                for (int k = 0; k < 2; k++)
+                                for (int k = 0; k < 4; k++)
                                 {
-                                    Vector2 pos = Vector2.Lerp(Player.Bottom - new Vector2(200, k * 75), Player.Bottom - new Vector2(-200, k * 75), j / 32f);
+                                    Vector2 pos = Vector2.Lerp(Player.BottomRight - new Vector2(SLAM ? 300 : 75, 150 - k * 50f), Player.BottomLeft + new Vector2(SLAM ? 300 : 75, -(150 - k * 50f)), j / 32f);
 
                                     if (npc.Distance(pos) < 128 && npc.GetGlobalNPC<TranscendenceNPC>().HitCD == 0)
                                     {
@@ -1796,6 +1829,11 @@ namespace TranscendenceMod
                             }
                         }
                     }
+                }
+
+                if (condy)
+                {
+                    SoundEngine.PlaySound(SoundID.Item14, Player.Bottom);
 
                     Main.instance.CameraModifiers.Add(new PunchCameraModifier(new Vector2(Main.rand.Next(-10, 10)),
                         new Vector2(Main.rand.NextFloatDirection()), SLAM ? 250 : 15, 15, 15, -1, null));
@@ -1826,13 +1864,13 @@ namespace TranscendenceMod
 
                     if (Player.controlDown)
                     {
-                        GolemCrushTimer += 3;
+                        GolemCrushTimer += 5;
                         Player.velocity.Y += 25;
                         Player.maxFallSpeed *= 5;
                     }
                 }
 
-                Player.direction = 1;
+                Player.mount.Dismount(Player);
                 Player.channel = false;
                 Player.wingTime = 0;
                 Player.wingTimeMax = 0;
@@ -1863,12 +1901,10 @@ namespace TranscendenceMod
 
             if (SpaceSuffocation)
             {
-                Player.statDefense /= 2;
                 Player.GetDamage(DamageClass.Generic) *= 0.75f;
+                if (Player.lifeRegen > 0)
+                    Player.lifeRegen /= 2;
             }
-
-            if (MysticCards > 0)
-                Player.GetDamage(DamageClass.MagicSummonHybrid) += (0.1f * MysticCards);
 
             if (Jolly > 0)
             {
@@ -1950,7 +1986,7 @@ namespace TranscendenceMod
                 Player.GetAttackSpeed(DamageClass.SummonMeleeSpeed) += 0.25f;
             }
 
-            VampireHealAmount = (int)(Player.statLifeMax2 * 0.25f) - (Player.statDefense / 2);
+            VampireHealAmount = (int)(Player.statLifeMax2 * 0.2f) - (Player.statDefense / 2);
 
             if (InsideShell > 0 && (TurtleShield || BeetleShield))
             {
@@ -2045,23 +2081,6 @@ namespace TranscendenceMod
                 Player.GetDamage(DamageClass.Generic) += Player.GetTotalCritChance(DamageClass.Generic) / 25f;
             }
 
-            if (EverglowingCrownEquipped)
-            {
-                if (Collision.LavaCollision(Player.position, Player.width, 16))
-                {
-                    Player.velocity.Y -= 0.5f;
-                }
-                if (Player.lavaWet)
-                    Player.lifeRegen += 15;
-                Player.lavaImmune = true;
-            }
-
-            if (CorruptWanderingKit)
-            {
-                Player.waterWalk = true;
-                Player.lavaRose = true;
-                Player.lavaMax = 420;
-            }
             if (OcramBuff)
             {
                 if (++OcramTimer % 180 == 0)
@@ -2080,7 +2099,7 @@ namespace TranscendenceMod
             if (Possessing && PossessedNPC != null && !Player.dead)
             {
                 Player.buffImmune[BuffID.Shimmer] = true;
-                Player.Center = PossessedNPC.Center;
+                Player.Center = PossessedNPC.Top - new Vector2(0, 16);
                 Player.mount.Dismount(Player);
                 Player.ShimmerCollision(true, true, true);
                 Player.stairFall = true;
@@ -2103,7 +2122,7 @@ namespace TranscendenceMod
             if (Player.wet && ZoneLandSiteTimer > 0)
             {
                 Player.gills = true;
-                Player.lifeRegen *= 5;
+                Player.lifeRegen *= 3;
 
                 if (ZoneLandSiteWaterTimer < 100)
                     ZoneLandSiteWaterTimer++;
@@ -2120,7 +2139,7 @@ namespace TranscendenceMod
             }
             else ZoneLandSiteWaterTimer = 0;
 
-            int area = (410 * 16);
+            int area = (Main.maxTilesY >= 2000 ? 460 : 390) * 16;
             int sx = TranscendenceWorld.SpaceTempleX;
             bool StargazerArmor = (Player.head == EquipLoader.GetEquipSlot(Mod, nameof(CosmicHelm), EquipType.Head));
 
@@ -2138,19 +2157,10 @@ namespace TranscendenceMod
                     StarFade -= 0.0125f;
             }
 
-            if (!ZoneLimbo)
-            {
-                if (NullFade > 0f)
-                    NullFade = MathHelper.Lerp(NullFade, 0f, 0.05f);
-            }
-            else
-                NullFade = MathHelper.Lerp(NullFade, 1f, 0.05f);
-
-
             if (!NPC.AnyNPCs(ModContent.NPCType<CelestialSeraph>()))
                 SkyManager.Instance.Deactivate("TranscendenceMod:CelestialSeraph");
 
-            if (!AstronautHelmet && !ApolloHelmet && (StarFade > 0 || NullFade > 0) && ZoneStar && SeraphTileDrawingSystem.PhaseThroughTimer == 0)
+            if (!AstronautHelmet && !ApolloHelmet && StarFade > 0 && ZoneStar && SeraphTileDrawingSystem.PhaseThroughTimer == 0)
                 Player.AddBuff(ModContent.BuffType<CosmicSuffocation>(), 5);
 
             for (int i = 0; i < PortalBoxPositions.Length; i++)
@@ -2185,13 +2195,14 @@ namespace TranscendenceMod
                     ZoneLandSite = true;
                 }
             }
-            if (Player.position.Between(new Vector2(sx - (64 * 16), 50 * 16), new Vector2(sx + (64 * 16), 120 * 16)))
+            if (Player.position.Between(new Vector2(sx - (48 * 16), 0), new Vector2(sx + (48 * 16), 120 * 16)))
             {
-                if (Player.position.Between(new Vector2(sx - (28 * 16), 85 * 16), new Vector2(sx + (29 * 16), 110 * 16)))
+                if (Player.position.Between(new Vector2(sx - (32 * 16), 85 * 16), new Vector2(sx + (32 * 16), 110 * 16)))
                 {
                     ZoneSpaceTemple = true;
                     ZoneSpaceTempleTimer = 5;
                 }
+                Player.AddBuff(BuffID.NoBuilding, 5);
                 Player.noBuilding = true;
                 Player.wireOperationsCooldown = 1;
             }
@@ -2199,10 +2210,12 @@ namespace TranscendenceMod
             if (Vampire)
             {
                 CrimsonNecklaceMaxBlood = 125000;
+                VampireMinTimer++;
+
                 if (VampireBlood > CrimsonNecklaceMaxBlood)
                     VampireBlood = CrimsonNecklaceMaxBlood;
 
-                if (CrimsonNecklaceBloodCD < 15)
+                if (CrimsonNecklaceBloodCD < 5)
                     CrimsonNecklaceBloodCD++;
             }
             if (EolNightDeathBomb)
@@ -2268,13 +2281,13 @@ namespace TranscendenceMod
                     if (OrangeShell || PurpleShell) GiantShellCD = 60;
                 }
 
-                if (CanParry() && Focus >= ParryFocusCost && !BrokenShield)
+                if (CanParry() && Focus >= ParryFocusCost && !BrokenShield && Player.ownedProjectileCounts[ModContent.ProjectileType<ParryVisual>()] == 0)
                 {
                     ShieldGuard = true;
-                    ParryTimer = ParryAmount;
+                    ParryTimer = 15;
 
-                    if (DualBall)
-                        Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<ParryVisual>(), 0, 0, Player.whoAmI, ModContent.ItemType<BallOfDuality>());
+                    SoundEngine.PlaySound(SoundID.MaxMana, Player.Center);
+                    Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<ParryVisual>(), 0, 0, Player.whoAmI, ShieldID);
                 }
             }
             if (TranscendenceWorld.Guard.JustReleased)
@@ -2285,10 +2298,11 @@ namespace TranscendenceMod
             {
                 InfectionAbility = true;
 
-                if (VampireBlood >= CrimsonNecklaceMaxBlood && Vampire)
+                if (VampireBlood >= CrimsonNecklaceMaxBlood && Vampire && VampireMinTimer >= VampireMinTime)
                 {
-                    VampireBlood = 0;
                     Player.Heal(VampireHealAmount);
+                    VampireMinTimer = 0;
+                    VampireBlood = 0;
                 }
             }
             if (TranscendenceWorld.InfectionAccessoryKeyBind.JustReleased)
@@ -2375,6 +2389,7 @@ namespace TranscendenceMod
                     {
                         ItemID.Meteorite,
                         ModContent.ItemType<OrbitalFish>(),
+                        ModContent.ItemType<BlackholeFish>(),
                         ModContent.ItemType<CosmicJelly>()
                     };
 
@@ -2389,10 +2404,13 @@ namespace TranscendenceMod
                     List<int> rareItems = new List<int>()
                     {
                         ItemID.StarinaBottle,
-                        ModContent.ItemType<BlackholeFish>()
+                        ItemID.FragmentSolar,
+                        ItemID.FragmentVortex,
+                        ItemID.FragmentNebula,
+                        ItemID.FragmentStardust
                     };
 
-                    itemDrop = rareItems[Main.rand.Next(0, 2)];
+                    itemDrop = rareItems[Main.rand.Next(0, 5)];
                 }
 
                 if (attempt.crate && attempt.rare)
@@ -2402,10 +2420,6 @@ namespace TranscendenceMod
                         item = ModContent.ItemType<SeraphicCrate>();
                     itemDrop = item;
                 }
-            }
-            if (attempt.common && !attempt.inHoney && !attempt.inLava && Main.bloodMoon)
-            {
-                itemDrop = ModContent.ItemType<TomatoSeeds>();
             }
         }
         public override void OnHitByNPC(NPC npc, HurtInfo hurtInfo)
@@ -2427,15 +2441,10 @@ namespace TranscendenceMod
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            int mysticChance = damageDone < 2000 ? (int)MathHelper.Lerp(20, 2, damageDone / 2000f) : 2;
-            if (MysticCards > 0 && !target.friendly && Main.rand.NextBool(mysticChance))
-            {
-                Item.NewItem(Player.GetSource_FromAI(), target.getRect(), ModContent.ItemType<MysticTalismanPickup>());
-            }
-
-            if (target.CanBeChasedBy() && Vampire && VampireBlood < CrimsonNecklaceMaxBlood && Player.Distance(target.Center) < 1000)
+            if (target.CanBeChasedBy() && Vampire && VampireBlood < CrimsonNecklaceMaxBlood && Player.Distance(target.Center) < 1000 && CrimsonNecklaceBloodCD >= 5)
             {
                 VampireBlood += damageDone;
+
                 for (int i = 0; i < 2; i++)
                 {
                     Dust.NewDust(target.Center, 1, 1, ModContent.DustType<BetterBlood>(),
@@ -2448,10 +2457,10 @@ namespace TranscendenceMod
             /*Eol Transformation*/
             if (ShowEolTransform)
             {
-                Player.head = EquipLoader.GetEquipSlot(Mod, ModContent.GetInstance<eoltransform>().Name, EquipType.Head);
-                Player.body = EquipLoader.GetEquipSlot(Mod, ModContent.GetInstance<eoltransform>().Name, EquipType.Body);
-                Player.legs = EquipLoader.GetEquipSlot(Mod, ModContent.GetInstance<eoltransform>().Name, EquipType.Legs);
-                Player.back = EquipLoader.GetEquipSlot(Mod, ModContent.GetInstance<eoltransform>().Name, EquipType.Back);
+                Player.head = EquipLoader.GetEquipSlot(Mod, ModContent.GetInstance<EverglowingTiara>().Name, EquipType.Head);
+                Player.body = EquipLoader.GetEquipSlot(Mod, ModContent.GetInstance<EverglowingTiara>().Name, EquipType.Body);
+                Player.legs = EquipLoader.GetEquipSlot(Mod, ModContent.GetInstance<EverglowingTiara>().Name, EquipType.Legs);
+                Player.back = EquipLoader.GetEquipSlot(Mod, ModContent.GetInstance<EverglowingTiara>().Name, EquipType.Back);
 
                 if (Main.dayTime)
                 {

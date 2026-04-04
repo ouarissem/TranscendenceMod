@@ -69,7 +69,7 @@ namespace TranscendenceMod.Items.Tools.Compasses
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.IronBar, 16)
+            .AddRecipeGroup(RecipeGroupID.IronBar, 8)
             .AddIngredient(ItemID.CrimstoneBlock, 50)
             .AddIngredient(ItemID.CrimtaneBar, 12)
             .AddIngredient(ItemID.CrimsonSeeds, 6)

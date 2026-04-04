@@ -22,8 +22,8 @@ namespace TranscendenceMod.Items.Armor.Hats
             Item.width = 28;
             Item.height = 22;
 
-            Item.defense = 26;
-            Item.value = Item.sellPrice(gold: 20);
+            Item.defense = 22;
+            Item.value = Item.sellPrice(gold: 10);
             Item.rare = ModContent.RarityType<CosmicRarity>();
         }
         public override void UpdateEquip(Player player)
@@ -35,7 +35,7 @@ namespace TranscendenceMod.Items.Armor.Hats
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<AstronautHelmet>())
             .AddIngredient(ModContent.ItemType<ApolloPiece>(), 8)
-            .AddIngredient(ItemID.LunarBar, 12)
+            .AddIngredient(ModContent.ItemType<GalaxyAlloy>(), 2)
             .AddTile(TileID.LunarCraftingStation)
             .Register();
         }

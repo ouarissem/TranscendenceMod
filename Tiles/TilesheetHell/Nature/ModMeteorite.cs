@@ -21,7 +21,7 @@ namespace TranscendenceMod.Tiles.TilesheetHell.Nature
             RegisterItemDrop(ItemID.Meteorite);
             AddMapEntry(new Color(123, 76, 55));
             HitSound = SoundID.Tink;
-            MinPick = 65;
+            MinPick = 110;
             MineResist = 1f;
         }
         public override void NearbyEffects(int i, int j, bool closer)

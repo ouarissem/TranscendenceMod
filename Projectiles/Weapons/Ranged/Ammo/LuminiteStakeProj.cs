@@ -28,7 +28,7 @@ namespace TranscendenceMod.Projectiles.Weapons.Ranged.Ammo
 
             Projectile.penetrate = 15;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 9;
+            Projectile.localNPCHitCooldown = 5;
         }
         public override void OnSpawn(IEntitySource source) => Projectile.extraUpdates *= 3;
         public override Color? GetAlpha(Color lightColor) => Color.White;
@@ -51,7 +51,7 @@ namespace TranscendenceMod.Projectiles.Weapons.Ranged.Ammo
         public override void OnKill(int timeLeft) => SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<LuminiteStakeBolt>()] > 15)
+            if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<LuminiteStakeBolt>()] > 5)
                 return;
 
             Projectile.NewProjectile(Projectile.GetSource_OnHit(target), target.Center, new Vector2(Main.rand.Next(-4, 4)),
@@ -74,7 +74,7 @@ namespace TranscendenceMod.Projectiles.Weapons.Ranged.Ammo
             Projectile.DamageType = DamageClass.Ranged;
 
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 18;
+            Projectile.localNPCHitCooldown = 16;
             Projectile.penetrate = 10;
 
             Projectile.extraUpdates = 3;
@@ -88,8 +88,8 @@ namespace TranscendenceMod.Projectiles.Weapons.Ranged.Ammo
             Projectile.spriteDirection = -Projectile.direction;
             if (npc == null || ++Projectile.ai[1] < 15)
                 return;
-            Vector2 targetVelocity = Projectile.DirectionTo(npc.Center + Vector2.One.RotatedByRandom(360) * Main.rand.Next(20, 130)) * 18;
-            Projectile.velocity = Vector2.Lerp(Projectile.velocity, targetVelocity, 0.085f);
+            Vector2 targetVelocity = Projectile.DirectionTo(npc.Center + Vector2.One.RotatedByRandom(360) * Main.rand.Next(20, 130)) * 24f;
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, targetVelocity, 0.2f);
             //Projectile.velocity = Projectile.DirectionTo(npc.Center + new Vector2(Main.rand.Next(-60, 60))) * Main.rand.Next(4, 19);
             Projectile.ai[1] = 0;
         }

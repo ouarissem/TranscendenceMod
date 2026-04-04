@@ -56,7 +56,7 @@ namespace TranscendenceMod.Items.Cosmetics
 
             Item.useStyle = ItemUseStyleID.DrinkLiquid;
 
-            Item.value = Item.buyPrice(gold: 25);
+            Item.value = Item.sellPrice(gold: 25);
             Item.rare = ModContent.RarityType<CosmicRarity>();
         }
         public override Color? GetAlpha(Color lightColor) => Color.White;

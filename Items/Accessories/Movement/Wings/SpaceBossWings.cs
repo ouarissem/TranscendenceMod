@@ -24,7 +24,7 @@ namespace TranscendenceMod.Items.Accessories.Movement.Wings
             Item.width = 29;
             Item.height = 24;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 35);
+            Item.value = Item.sellPrice(gold: 35);
             ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(300, 13, 0.5f, true, 10);
         }
         public override void UpdateEquip(Player player)

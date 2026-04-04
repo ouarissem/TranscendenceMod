@@ -16,7 +16,7 @@ namespace TranscendenceMod.Items.Consumables
         {
             Item.CloneDefaults(ItemID.EnchantedNightcrawler);
             Item.bait = 30;
-            Item.value = Item.buyPrice(silver: 15);
+            Item.value = Item.sellPrice(silver: 15);
             Item.makeNPC = ModContent.NPCType<Nighthopper>();
         }
         public override void AddRecipes()

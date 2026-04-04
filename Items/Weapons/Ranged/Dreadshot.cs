@@ -157,11 +157,6 @@ namespace TranscendenceMod.Items.Weapons.Ranged
 
                             Projectile.NewProjectile(Projectile.GetSource_FromAI(), vec, vel * 12, bullet, damage, knockBack, player.whoAmI, 0, Charge);
 
-                            if (player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge > 0)
-                            {
-                                player.HeldItem.GetGlobalItem<ModifiersItem>().ChargerCharge -= Charge;
-                                player.HeldItem.GetGlobalItem<ModifiersItem>().ChargeCD = 60;
-                            }
                             Charge = 0;
                             CD = 30;
                             Projectile.ai[1] = 0;

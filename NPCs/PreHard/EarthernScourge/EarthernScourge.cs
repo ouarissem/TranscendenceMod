@@ -47,8 +47,8 @@ namespace TranscendenceMod.NPCs.PreHard.EarthernScourge
 
         public override void SetDefaults()
         {
-            NPC.lifeMax = Main.hardMode ? 500 : NPC.downedBoss3 ? 80 : 50;
-            NPC.damage = Main.hardMode ? 65 : NPC.downedBoss3 ? 45 : 35;
+            NPC.lifeMax = Main.hardMode ? 500 : 80;
+            NPC.damage = Main.hardMode ? 65 : 45;
             NPC.defense = 5;
             NPC.knockBackResist = 0;
 

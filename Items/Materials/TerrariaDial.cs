@@ -30,7 +30,7 @@ namespace TranscendenceMod.Items.Materials
             base.SetDefaults();
             Item.width = 16;
             Item.height = 22;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.sellPrice(gold: 5);
             Item.rare = ItemRarityID.Lime;
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)

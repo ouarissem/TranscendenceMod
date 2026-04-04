@@ -26,7 +26,7 @@ namespace TranscendenceMod.Items.Tools
             Item.width = 42;
 			Item.height = 56;
 
-			Item.value = Item.buyPrice(gold: 20);
+			Item.value = Item.sellPrice(gold: 20);
             Item.rare = ModContent.RarityType<CosmicRarity>();
             Item.fishingPole = 65;
 

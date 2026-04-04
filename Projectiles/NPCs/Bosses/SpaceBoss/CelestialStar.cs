@@ -93,7 +93,7 @@ namespace TranscendenceMod.Projectiles.NPCs.Bosses.SpaceBoss
         {
             SpriteBatch spriteBatch = Main.spriteBatch;
 
-            Asset<Texture2D> sprite2 = TextureAssets.Extra[194];
+            Asset<Texture2D> sprite2 = TextureAssets.Extra[ExtrasID.MagicMissileTrailShape];
 
             MiscShaderData miscShaderData = GameShaders.Misc["LightDisc"];
             miscShaderData.UseImage1(sprite2);

@@ -34,8 +34,8 @@ namespace TranscendenceMod.NPCs.SpaceBiome
 
         public override void SetDefaults()
         {
-            NPC.lifeMax = 2555;
-            NPC.defense = 0;
+            NPC.lifeMax = 1255;
+            NPC.defense = 25;
             NPC.damage = 85;
             NPC.knockBackResist = 0;
 
@@ -51,8 +51,7 @@ namespace TranscendenceMod.NPCs.SpaceBiome
 
             NPC.friendly = false;
             NPC.value = Item.buyPrice(silver: 75);
-            SpawnModBiomes = new int[2] { ModContent.GetInstance<CosmicDimensions>().Type,
-                ModContent.GetInstance<Heaven>().Type };
+            SpawnModBiomes = new int[1] { ModContent.GetInstance<Heaven>().Type };
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {

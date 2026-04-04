@@ -107,7 +107,7 @@ namespace TranscendenceMod.Projectiles.Equipment.Tools
                 if (!Attached)
                 {
                     Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-                    Projectile.velocity.Y += 0.85f;
+                    Projectile.velocity.Y += 1.5f;
                 }
             }
             if (Projectile.Distance(player.Center) > (Projectile.localAI[1] * 15) || Projectile.localAI[2] == 1)

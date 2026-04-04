@@ -30,9 +30,7 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
     {
         public override bool InstancePerEntity => true;
 
-        /*Parries*/
         public int ShieldParryCD;
-        public int ShieldParryLeniency;
 
         /* Cosmic Rarity */
         public bool SeraphDifficultyItem;
@@ -225,6 +223,9 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
         }
         public override bool CanUseItem(Item item, Player player)
         {
+            if (item.healMana > 0 && player.HasBuff(BuffID.ManaSickness))
+                return false;
+
             if (player.GetModPlayer<TranscendencePlayer>().ZoneSpaceTemple && (item.type == ItemID.Wrench || item.type == ItemID.BlueWrench
                 || item.type == ItemID.GreenWrench || item.type == ItemID.YellowWrench || item.type == ItemID.MulticolorWrench || item.type == ItemID.ActuationRod))
                 return false;
@@ -240,7 +241,7 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                 speed = 10;
 
             if ((item.type == ItemID.BetsyWings || item.type == ItemID.WingsNebula || item.type == ItemID.WingsVortex || item.type == ItemID.LongRainbowTrailWings)
-                && player.controlDownHold && player.controlJump)
+                && player.controlDownHold && player.controlJump && TranscendenceUtils.BossAlive())
                 speed = 9;
         }
         public override void VerticalWingSpeeds(Item item, Player player, ref float ascentWhenFalling, ref float ascentWhenRising, ref float maxCanAscendMultiplier, ref float maxAscentMultiplier, ref float constantAscend)
@@ -265,8 +266,8 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                 if (rocket != 0 && rocketcd == 0)
                 {
                     Projectile.NewProjectile(player.GetSource_ItemUse(item), player.Center, player.DirectionTo(Main.MouseWorld) * 16f,
-                        ModContent.ProjectileType<FireworkProjectile>(), (int)(item.damage * 0.375f), 3f, player.whoAmI);
-                    mp.RocketCD = 240;
+                        ModContent.ProjectileType<FireworkProjectile>(), 25, 2f, player.whoAmI);
+                    mp.RocketCD = 180;
                 }
 
                 if (mp.EmpoweringTabletEquipped)
@@ -297,6 +298,12 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             TooltipLine equip = tooltips.Find(y => y.Name == "Defense");
+
+            int plateTimer = Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().SturdyPlateTimer;
+            string plateTimer2 = plateTimer < 6000 ? (plateTimer / 60).ToString() + "s" : Math.Round(plateTimer / 60f / 60f).ToString() + "min";
+            if (equip != null && plateTimer > 0 && (item.headSlot > 0 || item.bodySlot > 0 || item.legSlot > 0))
+                equip.Text += $"[C/5c915d: (+4 / {plateTimer2})]";
+
             int parryIndex = equip is null ? 1 : tooltips.IndexOf(equip) + 1;
 
             if (ShieldParryCD != 0)
@@ -324,12 +331,6 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                 }
             }
 
-            if (ShieldParryLeniency != 0)
-            {
-                var len = new TooltipLine(Mod, "ShieldParryLeniency", Language.GetTextValue("Mods.TranscendenceMod.Messages.ParryLeniency", ShieldParryLeniency / 2));
-                tooltips.Insert(parryIndex + 1, len);
-            }
-
             if (item.type == ItemID.BeetleShell)
             {
                 var samenametooltip = new TooltipLine(Mod, "SameNameTooltip", Language.GetTextValue("Mods.TranscendenceMod.Messages.Tooltips.BeetleShellTooltip"));
@@ -352,24 +353,13 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
                 float golemTimer = (float)Math.Round(Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().GolemCD / 60f, 1);
                 if (item.type == ModContent.ItemType<LihzardianBulwark>() && modPlayer.GolemCD > 0)
                     ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.ItemStack.Value, golemTimer.ToString() + "s", position, Color.OrangeRed, 0f, Vector2.Zero, Vector2.One);
-
-                //Draw Beetleshell status
-                if (item.type == ModContent.ItemType<JungleShield2>())
-                {
-                    if (modPlayer.ShellCrumble > 0)
-                        ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.ItemStack.Value, Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().ShellCrumble.ToString(), position - new Vector2(-2, 12), Color.Lime, 0f, Vector2.Zero, Vector2.One * 0.85f);
-
-                    float num = (float)Math.Round((2700f - Main.LocalPlayer.GetModPlayer<TranscendencePlayer>().ShellCrumbleCD) / 60f, 1);
-                    if (modPlayer.ShellCrumbleCD > 0 && modPlayer.ShellCrumbleCD < 2700)
-                        ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.ItemStack.Value, num.ToString() + "s", position, Color.Gold, 0f, Vector2.Zero, Vector2.One);
-                }
             }
         }
         public override void UpdateEquip(Item item, Player player)
         {
-            if (item.defense > 0 && player.GetModPlayer<TranscendencePlayer>().SturdyPlateTimer > 0)
+            if ((item.headSlot > 0 || item.bodySlot > 0 || item.legSlot > 0) && player.GetModPlayer<TranscendencePlayer>().SturdyPlateTimer > 0)
             {
-                player.statDefense += 6;
+                player.statDefense += 4;
             }
         }
         public override void UpdateAccessory(Item Item, Player player, bool hideVisual)
@@ -377,10 +367,6 @@ namespace TranscendenceMod.Miscannellous.GlobalStuff
             if (ShieldParryCD != 0)
             {
                 player.GetModPlayer<TranscendencePlayer>().ParryCD = ShieldParryCD;
-            }
-            if (ShieldParryLeniency != 0)
-            {
-                player.GetModPlayer<TranscendencePlayer>().ParryAmount = ShieldParryLeniency;
             }
         }
     }

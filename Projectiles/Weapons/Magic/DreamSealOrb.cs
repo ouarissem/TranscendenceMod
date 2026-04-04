@@ -38,7 +38,7 @@ namespace TranscendenceMod.Projectiles.Weapons.Magic
             else
             {
                 if (player.statMana < player.statManaMax2)
-                    player.statMana += 5;
+                    player.statMana += 2;
                 player.statDefense += 20;
             }
 

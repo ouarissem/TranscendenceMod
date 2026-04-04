@@ -19,7 +19,7 @@ namespace TranscendenceMod.Items.Consumables
         {
             Item.height = 25;
             Item.width = 20;
-            Item.value = Item.buyPrice(gold: 50);
+            Item.value = Item.sellPrice(gold: 50);
             Item.rare = ItemRarityID.Quest;
         }
         public override void ModifyTooltips(List<TooltipLine> tooltips)

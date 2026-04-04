@@ -20,7 +20,7 @@ namespace TranscendenceMod.Items.Accessories.Defensive
             Item.width = 25;
             Item.height = 30;
             Item.accessory = true;
-            Item.value = Item.buyPrice(gold: 10);
+            Item.value = Item.sellPrice(gold: 10);
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

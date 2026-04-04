@@ -45,10 +45,11 @@ namespace TranscendenceMod.Projectiles.Weapons.Magic
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+
             Projectile.rotation -= 0.033f;
             Projectile.Center = Vector2.Lerp(Projectile.Center, Main.MouseWorld, 0.0125f);
 
-            if (player.channel)
+            if (player.channel && player.statMana > player.HeldItem.mana)
                 Projectile.timeLeft = 5;
         }
         public override bool PreDraw(ref Color lightColor)

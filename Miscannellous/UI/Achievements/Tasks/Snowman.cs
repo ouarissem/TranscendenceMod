@@ -7,9 +7,11 @@ using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using TranscendenceMod.Items.Accessories.Movement;
 using TranscendenceMod.Items.Accessories.Shields;
 using TranscendenceMod.Items.Materials;
 using TranscendenceMod.Items.Materials.MobDrops;
+using TranscendenceMod.Items.Tools;
 using TranscendenceMod.Items.Tools.Generic.Hardmetal;
 
 namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
@@ -27,6 +29,9 @@ namespace TranscendenceMod.Miscanellous.UI.Achievements.Tasks
         public override string col => "2764ba";
 
         public override CategoryIDs category => CategoryIDs.Misc;
+
+        public override int reward => ModContent.ItemType<FishPendant>();
+        public override int amount => 1;
     }
 }
 

@@ -26,12 +26,15 @@ namespace TranscendenceMod.Projectiles.Equipment
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Generic;
             Projectile.noEnchantmentVisuals = true;
+
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
         }
         public override void AI()
         {
             SoundEngine.PlaySound(SoundID.DD2_KoboldIgnite with { MaxInstances = 5 }, Projectile.Center);
 
-            Dust.NewDustPerfect(Projectile.Center, DustID.Torch, -Projectile.velocity);
+            Dust.NewDustPerfect(Projectile.Center, DustID.Torch, Vector2.Zero);
         }
         public override bool PreKill(int timeLeft)
         {
@@ -47,7 +50,7 @@ namespace TranscendenceMod.Projectiles.Equipment
             }
 
             Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero,
-                ModContent.ProjectileType<FireworkBlast>(), Projectile.damage, 7, Main.player[Projectile.owner].whoAmI);
+                ModContent.ProjectileType<FireworkBlast>(), Projectile.damage, 0f, Main.player[Projectile.owner].whoAmI);
 
             return base.PreKill(timeLeft);
         }

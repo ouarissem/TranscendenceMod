@@ -33,7 +33,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
         }
         public override void SetDefaults()
         {
-            Item.damage = 275;
+            Item.damage = 175;
             Item.crit = 15;
             Item.DamageType = DamageClass.Melee;
 
@@ -83,8 +83,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
                 player.GetModPlayer<TranscendencePlayer>().MuramasaTime = 45;
                 cycle = -cycle;
                 int p = Projectile.NewProjectile(source, position, velocity, projectile, damage, knockback, -1, sizeMult, cycle, 12);
-                float am = Item.GetGlobalItem<ModifiersItem>().Modifier == ModifierIDs.GiantHandle ? 1f : 3f;
-                Main.projectile[p].extraUpdates += (int)(player.GetAttackSpeed(DamageClass.Melee) * am);
+                Main.projectile[p].extraUpdates += (int)(player.GetAttackSpeed(DamageClass.Melee) * 3f);
                 DashTimer = 0;
             }
             return false;
@@ -139,7 +138,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
             Projectile.timeLeft = 38;
 
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 3;
+            Projectile.localNPCHitCooldown = -1;
             Projectile.ArmorPenetration = 25;
 
             Projectile.friendly = true;
@@ -152,12 +151,9 @@ namespace TranscendenceMod.Items.Weapons.Melee
 
             SoundEngine.PlaySound(SoundID.NPCHit18, target.Center);
 
-            for (int i = 0; i < 5; i++)
-            {
-                int p = Projectile.NewProjectile(Projectile.GetSource_OnHit(target), target.Center + Vector2.One.RotatedByRandom(360) * (150 + (i * 50)), Projectile.DirectionTo(target.Center) * 4,
-                projectile, Projectile.damage, 1, player.whoAmI, 0, target.whoAmI);
-                Main.projectile[p].velocity = Main.projectile[p].DirectionTo(target.Center) * 10;
-            }
+            int p = Projectile.NewProjectile(Projectile.GetSource_OnHit(target), target.Center + Vector2.One.RotatedByRandom(360) * 150, Projectile.DirectionTo(target.Center) * 4,
+            projectile, Projectile.damage, 1, player.whoAmI, 0, target.whoAmI);
+            Main.projectile[p].velocity = Main.projectile[p].DirectionTo(target.Center) * 10;
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -167,8 +163,8 @@ namespace TranscendenceMod.Items.Weapons.Melee
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
             float reference = float.NaN;
-            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center + Projectile.velocity * 2f,
-                Projectile.Center + Projectile.velocity * (Projectile.ai[2] * (Projectile.scale * 1.75f)) * 0.275f, 4, ref reference))
+            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center,
+                Projectile.Center + Projectile.velocity * (Projectile.ai[2] * (Projectile.scale * 1.75f)) * 0.425f, 128, ref reference))
             {
                 return true;
             }
@@ -179,13 +175,17 @@ namespace TranscendenceMod.Items.Weapons.Melee
             Player player = Main.player[Projectile.owner];
             player.heldProj = Projectile.whoAmI;
 
+            // Hitbox test
+            //Dust.QuickDustLine(Projectile.Center,
+                //Projectile.Center + Projectile.velocity * (Projectile.ai[2] * (Projectile.scale * 1.75f)) * 0.425f, 20f, Color.Red);
+
             if (player.HeldItem.type != ModContent.ItemType<UpgradedMuramasa>() || player.dead)
                 Projectile.Kill();
 
             Projectile.Center = player.Center + (Projectile.velocity * vel * 3f);
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
 
-            Projectile.velocity = Projectile.velocity.RotatedBy(Timer / 15);
+            Projectile.velocity = Projectile.velocity.RotatedBy(Timer / 15f);
             ScaleAmount = Projectile.ai[0] / 7f;
 
             if (Projectile.timeLeft > 36)

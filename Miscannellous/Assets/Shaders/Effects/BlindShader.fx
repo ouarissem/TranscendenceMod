@@ -23,17 +23,18 @@ float2 uZoom;
 
 float4 Sinewave(float2 coords : TEXCOORD0) : COLOR0
 {
+    float4 ogColor = tex2D(uImage0, coords);
     float4 color = tex2D(uImage0, coords);
-    
-    if (((color.r + color.g + color.b) / 3) > 0.75)
-    {
-        color.rbg = lerp(color.rbg, dot(float3(0.3, 0.59, 0.11), color.rgb), 0.875 * uOpacity);
-    }
-    else
-        color.rbg = lerp(color.rbg, dot(float3(0, 0, 0), color.rgb), uOpacity);
-    
-    if (color.r > 0.6 && color.g > 0.6 && color.b > 0.6)
-        color.rgb *= 0.125;
+
+    float2 pos = float2(0.5, 0.5);
+    float distance = length(coords.x - pos.x) * 16;
+    float distance2 = length(coords.y - pos.y) * 32;
+    float distance3 = (distance + distance2) / 4;
+
+    float4 col = lerp(ogColor, color * 0.125f, uOpacity);
+    if (distance3 < 0.5)
+        return col;
+    color = lerp(col, float4(0, 0, 0, 1), (distance3 - 0.5) * uOpacity);
     
     return color;
 }

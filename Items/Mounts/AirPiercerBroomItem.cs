@@ -22,7 +22,7 @@ namespace TranscendenceMod.Items.Mounts
             Item.useAnimation = 15;
 
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.value = Item.buyPrice(gold: 15);
+            Item.value = Item.sellPrice(gold: 4);
             Item.rare = ModContent.RarityType<Brown>();
             Item.UseSound = SoundID.Item3;
 

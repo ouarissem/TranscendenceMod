@@ -13,11 +13,13 @@ using TranscendenceMod.Items;
 using TranscendenceMod.Items.Consumables;
 using TranscendenceMod.Items.Consumables.FoodAndDrinks;
 using TranscendenceMod.Items.Consumables.LootBags;
+using TranscendenceMod.Items.Consumables.Placeables.Decorations;
 using TranscendenceMod.Items.Consumables.Placeables.SpaceBiome;
 using TranscendenceMod.Items.Consumables.SuperBomb;
 using TranscendenceMod.Items.Farming;
 using TranscendenceMod.Items.Farming.Seeds;
 using TranscendenceMod.Items.Materials;
+using TranscendenceMod.Items.Materials.Fish;
 using TranscendenceMod.Items.Materials.LargeRecipes;
 using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Items.Modifiers;
@@ -79,8 +81,7 @@ namespace TranscendenceMod.NPCs.Passive
             NPC.friendly = true;
             NPC.lavaImmune = true;
             TownNPCStayingHomeless = true;
-            SpawnModBiomes = new int[2] { ModContent.GetInstance<CosmicDimensions>().Type,
-                ModContent.GetInstance<Heaven>().Type };
+            SpawnModBiomes = new int[1] { ModContent.GetInstance<Heaven>().Type };
         }
         public override void SaveData(TagCompound tag)
         {
@@ -133,33 +134,31 @@ namespace TranscendenceMod.NPCs.Passive
             switch (Choice)
             {
                 case 0: CurrentItem = ModContent.ItemType<FlowerEssence>(); WantedStack = 1; break;
-                case 1: CurrentItem = ItemID.AntlionMandible; WantedStack = 8; break;
-                case 2: CurrentItem = ItemID.SharkFin; WantedStack = 3; break;
-                case 3: CurrentItem = ItemID.Feather; WantedStack = 16; break;
+                case 1: CurrentItem = ItemID.AntlionMandible; WantedStack = 6; break;
+                case 2: CurrentItem = ItemID.SharkFin; WantedStack = 2; break;
+                case 3: CurrentItem = ItemID.Feather; WantedStack = 12; break;
                 case 4: CurrentItem = ItemID.Geode; WantedStack = 1; break;
-                case 5: CurrentItem = ItemID.FlinxFur; WantedStack = 4; break;
-                case 6: CurrentItem = ItemID.JungleSpores; WantedStack = 8; break;
-                case 7: CurrentItem = ItemID.Vine; WantedStack = 5; break;
+                case 5: CurrentItem = ItemID.FlinxFur; WantedStack = 3; break;
+                case 6: CurrentItem = ItemID.JungleSpores; WantedStack = 6; break;
+                case 7: CurrentItem = ItemID.Vine; WantedStack = 4; break;
             }
             /*Hardmode*/
             if (Main.hardMode)
             {
                 switch (Choice)
                 {
-                    case 0: CurrentItem = ModContent.ItemType<SunburntAlloy>(); WantedStack = 8; break;
-                    case 1: CurrentItem = ModContent.ItemType<MosquitoLeg>(); WantedStack = 6; break;
+                    case 0: CurrentItem = ModContent.ItemType<SunburntAlloy>(); WantedStack = 5; break;
+                    case 1: CurrentItem = ItemID.HellstoneBar; WantedStack = 8; break;
                     case 2: CurrentItem = ModContent.ItemType<FlowerEssence>(); WantedStack = 2; break;
-                    case 3: CurrentItem = ItemID.LifeFruit; WantedStack = 3; break;
-                    case 4: CurrentItem = ItemID.AncientBattleArmorMaterial; WantedStack = 1; break;
-                    case 5: CurrentItem = ItemID.FrostCore; WantedStack = 1; break;
-                    case 6: CurrentItem = ItemID.DarkShard; WantedStack = 5; break;
-                    case 8: CurrentItem = ItemID.LightShard; WantedStack = 5; break;
-                    case 9: CurrentItem = ItemID.SoulofFlight; WantedStack = 30; break;
-                    case 10: CurrentItem = ItemID.SpiderFang; WantedStack = 18; break;
-                    case 11: CurrentItem = ItemID.UnicornHorn; WantedStack = 5; break;
-                    case 12: CurrentItem = ItemID.SharkFin; WantedStack = 5; break;
-                    case 13: CurrentItem = ModContent.ItemType<Flour>(); WantedStack = 8; break;
-                    case 14: CurrentItem = ModContent.ItemType<CocoaBean>(); WantedStack = 8; break;
+                    case 3: CurrentItem = ItemID.LifeFruit; WantedStack = 1; break;
+                    case 4: CurrentItem = ItemID.DarkShard; WantedStack = 2; break;
+                    case 5: CurrentItem = ItemID.LightShard; WantedStack = 2; break;
+                    case 6: CurrentItem = ItemID.SoulofFlight; WantedStack = 24; break;
+                    case 7: CurrentItem = ItemID.SpiderFang; WantedStack = 18; break;
+                    case 8: CurrentItem = ItemID.UnicornHorn; WantedStack = 3; break;
+                    case 9: CurrentItem = ItemID.PixieDust; WantedStack = 12; break;
+                    case 10: CurrentItem = ModContent.ItemType<Tomato>(); WantedStack = 12; break;
+                    case 11: CurrentItem = ModContent.ItemType<CocoaBean>(); WantedStack = 12; break;
                 }
             }
             /*Post Moonlord*/
@@ -167,17 +166,18 @@ namespace TranscendenceMod.NPCs.Passive
             {
                 switch (Choice)
                 {
-                    case 0: CurrentItem = ModContent.ItemType<SuperBomb>(); WantedStack = 1; break;
-                    case 1: CurrentItem = ModContent.ItemType<MothronLamp>(); WantedStack = 1; break;
+                    case 0: CurrentItem = ModContent.ItemType<StewThatMakesHerGoBlindFor1day>(); WantedStack = 1; break;
+                    case 1: CurrentItem = ModContent.ItemType<Lightning>(); WantedStack = 6; break;
                     case 2: CurrentItem = ModContent.ItemType<FlowerEssence>(); WantedStack = 3; break;
-                    case 3: CurrentItem = ModContent.ItemType<LivingOrganicMatter>(); WantedStack = 1; break;
-                    case 4: CurrentItem = ItemID.WarTableBanner; WantedStack = 1; break;
-                    case 6: CurrentItem = ItemID.WhitePearl; WantedStack = 1; break;
-                    case 7: CurrentItem = ModContent.ItemType<Starfruit>(); WantedStack = 2; break;
-                    case 8: CurrentItem = ModContent.ItemType<RedSpiderLilyItem>(); WantedStack = 8; break;
-                    case 9: CurrentItem = ItemID.Lens; WantedStack = 12; break;
-                    case 10: CurrentItem = ItemID.PixieDust; WantedStack = 20; break;
-                    case 11: CurrentItem = ItemID.CrystalShard; WantedStack = 15; break;
+                    case 3: CurrentItem = ModContent.ItemType<LivingOrganicMatter>(); WantedStack = 2; break;
+                    case 4: CurrentItem = ItemID.SolarTablet; WantedStack = 1; break;
+                    case 5: CurrentItem = ItemID.PumpkinMoonMedallion; WantedStack = 1; break;
+                    case 6: CurrentItem = ItemID.NaughtyPresent; WantedStack = 1; break;
+                    case 7: CurrentItem = ModContent.ItemType<Starfruit>(); WantedStack = 4; break;
+                    case 8: CurrentItem = ModContent.ItemType<RedSpiderLily>(); WantedStack = 32; break;
+                    case 9: CurrentItem = ModContent.ItemType<GalaxyAlloy>(); WantedStack = 2; break;
+                    case 10: CurrentItem = ItemID.PixieDust; WantedStack = 18; break;
+                    case 11: CurrentItem = ItemID.CrystalShard; WantedStack = 18; break;
                     case 12: CurrentItem = ItemID.DefenderMedal; WantedStack = 20; break;
                 }
             }
@@ -346,19 +346,15 @@ namespace TranscendenceMod.NPCs.Passive
 
                 //Angel-Horn Scythe
                 TranscendenceUtils.sell(npcshop, ModContent.ItemType<AngelHornScythe>(), Condition.Hardmode);
-                //Seraph's Bell
-                //TranscendenceUtils.sell(npcshop, ModContent.ItemType<SeraphCaller>(),
-                    //new Condition("Mods.TranscendenceMod.Messages.WoFEncounter", () => SeraphEncounters.SeraphQuestlineProgress.Contains(TalkingSeraph.TopicType.WoF))); 
-                //Void Seeds
-                //TranscendenceUtils.sell(npcshop, ModContent.ItemType<VoidSeeds>(), Item.buyPrice(silver: 75),
-                    //new Condition("Mods.TranscendenceMod.Messages.EoLEncounter", () => SeraphEncounters.SeraphQuestlineProgress.Contains(TalkingSeraph.TopicType.EoL)));
-                //Starfruit Seeds
-                TranscendenceUtils.sell(npcshop, ModContent.ItemType<StarfruitSeeds>(), Item.buyPrice(gold: 2), Condition.DownedMoonLord);
+
+                //Cultist Painting
+                TranscendenceUtils.sell(npcshop, ModContent.ItemType<AncientCultist>(), Condition.DownedCultist);
+
                 //Lunar Fragments
-                TranscendenceUtils.sell(npcshop, ItemID.FragmentSolar, Item.buyPrice(gold: 1), Condition.DownedMoonLord);
-                TranscendenceUtils.sell(npcshop, ItemID.FragmentVortex, Item.buyPrice(gold: 1), Condition.DownedMoonLord);
-                TranscendenceUtils.sell(npcshop, ItemID.FragmentNebula, Item.buyPrice(gold: 1), Condition.DownedMoonLord);
-                TranscendenceUtils.sell(npcshop, ItemID.FragmentStardust, Item.buyPrice(gold: 1), Condition.DownedMoonLord);
+                TranscendenceUtils.sell(npcshop, ItemID.FragmentSolar, Item.buyPrice(gold: 10), Condition.DownedMoonLord);
+                TranscendenceUtils.sell(npcshop, ItemID.FragmentVortex, Item.buyPrice(gold: 10), Condition.DownedMoonLord);
+                TranscendenceUtils.sell(npcshop, ItemID.FragmentNebula, Item.buyPrice(gold: 10), Condition.DownedMoonLord);
+                TranscendenceUtils.sell(npcshop, ItemID.FragmentStardust, Item.buyPrice(gold: 10), Condition.DownedMoonLord);
             }
             npcshop.Register();
         }

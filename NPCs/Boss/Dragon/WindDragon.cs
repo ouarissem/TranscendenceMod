@@ -15,6 +15,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
 using TranscendenceMod.Buffs;
+using TranscendenceMod.Buffs.Items.Potions;
 using TranscendenceMod.Dusts;
 using TranscendenceMod.Items.Accessories.Expert;
 using TranscendenceMod.Items.Accessories.Movement.Wings;
@@ -27,6 +28,7 @@ using TranscendenceMod.Items.Materials.MobDrops;
 using TranscendenceMod.Items.Weapons.Melee;
 using TranscendenceMod.Items.Weapons.Ranged;
 using TranscendenceMod.Items.Weapons.Summoner;
+using TranscendenceMod.Miscanellous.UI.Achievements.Tasks;
 using TranscendenceMod.Miscannellous;
 using TranscendenceMod.Miscannellous.UI;
 using TranscendenceMod.Projectiles.NPCs.Bosses.Dragon;
@@ -95,6 +97,8 @@ namespace TranscendenceMod.NPCs.Boss.Dragon
         public List<int> RecentAttacks = new List<int>();
         public int NextAttack = -1;
 
+        public bool ChallengeActive;
+
         public override void SetStaticDefaults()
         {
             //Main.npcFrameCount[Type] = 3;
@@ -142,8 +146,6 @@ namespace TranscendenceMod.NPCs.Boss.Dragon
         {
             LeadingConditionRule normalMode = new LeadingConditionRule(new Conditions.NotExpert());
 
-            /*Materials*/
-            normalMode.OnSuccess(ItemDropRule.Common(ModContent.ItemType<AtmospheragonScale>(), 1, 4, 10));
             /*Weapons*/
             normalMode.OnSuccess(ItemDropRule.FewFromOptions(2, 1, ModContent.ItemType<WindDragonsClaw>(),
             ModContent.ItemType<StormBow>(), ModContent.ItemType<CelestialSeraphStaff>(),
@@ -171,6 +173,8 @@ namespace TranscendenceMod.NPCs.Boss.Dragon
             NPC.TargetClosest(true);
             SkyManager.Instance.Activate("TranscendenceMod:DragonSky", player.Center);
 
+            if (player != null && player.active && (!player.HasBuff(ModContent.BuffType<Blind>()) || Main.dayTime) && NPC.ai[1] > 0)
+                ChallengeActive = false;
 
             //This thing switches attacks and adjusts some things
             if (Timer_AI == 2)
@@ -225,8 +229,6 @@ namespace TranscendenceMod.NPCs.Boss.Dragon
                     RecentAttacks.Add((int)NPC.ai[1]);
                 }
             }
-
-            local.AddBuff(ModContent.BuffType<InfiniteFlight>(), 1);
 
             //Projectile stuff
             ProjectileManagerer();
@@ -294,6 +296,8 @@ namespace TranscendenceMod.NPCs.Boss.Dragon
             if (Timer_AI < 45)
             {
                 TranscendenceUtils.DustRing(NPC.Center, 20, DustID.AmberBolt, 5f, Color.White, 2f);
+                NPC.velocity = NPC.DirectionTo(player.Center) * -3.75f;
+
                 return;
             }
 
@@ -305,7 +309,7 @@ namespace TranscendenceMod.NPCs.Boss.Dragon
 
             if (++ProjectileCD[0] < 5)
             {
-                dashVel = NPC.DirectionTo(player.Center) * 60f;
+                dashVel = NPC.DirectionTo(player.Center) * 50f;
                 NPC.rotation = dashVel.ToRotation() + (NPC.direction == -1 ? MathHelper.Pi : 0f);
 
                 NPC.velocity *= 0.8f;
@@ -379,11 +383,16 @@ namespace TranscendenceMod.NPCs.Boss.Dragon
 
             if (Timer_AI < 30)
             {
-                for (int i = 0; i < 64; i++)
+                for (int i = 0; i < 32; i++)
                 {
-                    Vector2 pos = NPC.Center + Vector2.One.RotatedBy(MathHelper.TwoPi * i / 64f) * 75f;
-                    Dust d = Dust.NewDustPerfect(pos, DustID.GemRuby, NPC.DirectionTo(pos) * 5f, 0, default, 1f);
+                    Vector2 pos = NPC.Center + Vector2.One.RotatedBy(MathHelper.TwoPi * i / 32f + MathHelper.ToRadians(Timer_AI)) * (Timer_AI * 25f);
+                    Dust d = Dust.NewDustPerfect(pos, Timer_AI < 10 ? DustID.GreenFairy : DustID.GemRuby, NPC.DirectionTo(pos) * 5f, 0, default, 1.5f);
                     d.noGravity = true;
+
+                    Vector2 pos2 = NPC.Center + Vector2.One.RotatedBy(MathHelper.TwoPi * i / 32f - MathHelper.ToRadians(Timer_AI)) * (Timer_AI * 25f);
+                    Dust d2 = Dust.NewDustPerfect(pos2, Timer_AI < 10 ? DustID.GreenFairy : DustID.GemRuby, NPC.DirectionTo(pos2) * 5f, 0, default, 1.5f);
+                    d2.noGravity = true;
+
                 }
                 return;
             }
@@ -421,6 +430,7 @@ namespace TranscendenceMod.NPCs.Boss.Dragon
             RotationSpeed = 0;
             AttackDuration = 90;
             Stamina = MaxStamina + 1;
+            ChallengeActive = true;
 
             if (!TranscendenceWorld.EncouteredAtmospheron)
                 TranscendenceWorld.EncouteredAtmospheron = true;
@@ -462,6 +472,9 @@ namespace TranscendenceMod.NPCs.Boss.Dragon
                 Main.NewText(Language.GetTextValue("Mods.TranscendenceMod.Messages.DragonDeath"), 50, 255, 130);
                 Downed.Add(Bosses.Atmospheron);
             }
+
+            if (ChallengeActive)
+                ModAchievementsHelper.CompleteChallenge(player, TaskIDs.DragonChallenge);
 
             /*if (Main.netMode != NetmodeID.Server)
             {

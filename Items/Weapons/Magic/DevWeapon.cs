@@ -29,7 +29,7 @@ namespace TranscendenceMod.Items.Weapons.Magic
             Item.autoReuse = true;
             Item.useTurn = true;
 
-            Item.value = Item.buyPrice(platinum: int.MaxValue);
+            Item.value = Item.sellPrice(platinum: int.MaxValue);
             Item.rare = -12;
             Item.shoot = ProjectileID.PhantasmalDeathray;
             Item.shootSpeed = 1;

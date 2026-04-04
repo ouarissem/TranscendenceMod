@@ -1,25 +1,45 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
+using TranscendenceMod.Items.Farming;
+using TranscendenceMod.Items.Farming.Seeds;
 
 namespace TranscendenceMod.Tiles.TilesheetHell.Nature.Farming
 {
     public class LifeCrop : BaseCrop
     {
-        public override int GrowthDivider => 4;
-        public override Color mapColor => new Color(219, 157, 64);
+        public override int drop => ItemID.LifeFruit;
 
-        public override void RandomUpdate(int i, int j)
+        public override void SetStaticDefaults()
         {
-            if (Main.tile[i, j].LiquidAmount >= 25 && Main.tile[i, j].LiquidType == LiquidID.Honey)
-                base.RandomUpdate(i, j);
-        }
+            base.SetStaticDefaults();
 
-        public override bool CanDrop(int i, int j) => GetAge(i, j) == CropAge.Grown;
-        public override IEnumerable<Item> GetItemDrops(int i, int j)
-        {
-            yield return new Item(ItemID.LifeFruit, 1);
+            AddMapEntry(commonCol, ModContent.GetInstance<LifeSeeds>().DisplayName);
+
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+            TileObjectData.newTile.StyleHorizontal = true;
+            TileObjectData.newTile.DrawYOffset = 2;
+
+            ModTileEntity te = ModContent.GetInstance<LifeTE>();
+            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(te.Hook_AfterPlacement, -1, 0, true);
+
+            TileObjectData.newTile.UsesCustomCanPlace = true;
+            TileObjectData.addTile(Type);
         }
+        public override void KillMultiTile(int i, int j, int frameX, int frameY)
+        {
+            base.KillMultiTile(i, j, frameX, frameY);
+            ModContent.GetInstance<LifeTE>().Kill(i, j);
+        }
+    }
+    public class LifeTE : BaseCropEntity
+    {
+        public override int TileID => ModContent.TileType<LifeCrop>();
+        public override int GrowDelay => 20 * 60 * 60;
+        public override bool GrowCondition => true;
     }
 }

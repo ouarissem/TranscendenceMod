@@ -13,7 +13,7 @@ namespace TranscendenceMod.Items.Farming.Seeds
         public override void SetDefaults()
         {
             base.SetDefaults();
-            Item.value = Item.buyPrice(silver: 75);
+            Item.value = Item.sellPrice(silver: 10);
             Item.rare = ItemRarityID.Green;
         }
     }

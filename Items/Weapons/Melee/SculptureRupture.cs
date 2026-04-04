@@ -17,7 +17,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
         public override void SetStaticDefaults() => CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         public override void SetDefaults()
         {
-            Item.damage = 47;
+            Item.damage = 35;
             Item.DamageType = DamageClass.Melee;
 
             Item.width = 32;
@@ -31,8 +31,8 @@ namespace TranscendenceMod.Items.Weapons.Melee
             Item.shoot = ProjectileID.PurificationPowder;
             Item.shootSpeed = 10;
 
-            Item.value = Item.buyPrice(gold: 1);
-            Item.rare = ItemRarityID.Orange;
+            Item.value = Item.sellPrice(gold: 1);
+            Item.rare = ItemRarityID.Green;
             Item.UseSound = SoundID.Tink;
             Item.useTurn = true;
         }
@@ -70,7 +70,7 @@ namespace TranscendenceMod.Items.Weapons.Melee
              .AddIngredient(ItemID.ClayBlock, 20)
              .AddIngredient(ItemID.RedBrick, 15)
              .AddIngredient(ItemID.MudBlock, 10)
-             .AddIngredient(ItemID.Bone, 15)
+             .AddIngredient(ItemID.HellstoneBar, 5)
              .AddTile(TileID.Hellforge)
              .Register();
         }

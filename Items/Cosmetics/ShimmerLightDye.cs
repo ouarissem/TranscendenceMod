@@ -23,7 +23,7 @@ namespace TranscendenceMod.Items.Cosmetics
         {
             Item.width = 19;
             Item.height = 24;
-            Item.value = Item.buyPrice(gold: 3, silver: 75);
+            Item.value = Item.sellPrice(gold: 3, silver: 75);
             Item.rare = ItemRarityID.Cyan;
         }
     }

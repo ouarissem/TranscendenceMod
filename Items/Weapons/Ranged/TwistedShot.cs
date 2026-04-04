@@ -47,8 +47,8 @@ namespace TranscendenceMod.Items.Weapons.Ranged
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectile(source, position, velocity * 2.25f, ModContent.ProjectileType<GodlessTendril>(), damage, knockback, player.whoAmI, 1f);
-            Projectile.NewProjectile(source, position, velocity * 2.25f, ModContent.ProjectileType<GodlessTendril>(), damage, knockback, player.whoAmI, -1f);
+            Projectile.NewProjectile(source, position, velocity * 2.25f, ModContent.ProjectileType<GodlessTendril>(), damage, knockback, player.whoAmI, 1f, 0f, Main.rand.NextFloat(1f, 2f));
+            Projectile.NewProjectile(source, position, velocity * 2.25f, ModContent.ProjectileType<GodlessTendril>(), damage, knockback, player.whoAmI, -1f, 0f, Main.rand.NextFloat(1f, 2f));
 
             return false;
         }

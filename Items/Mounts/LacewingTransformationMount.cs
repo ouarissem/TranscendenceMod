@@ -3,6 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using TranscendenceMod.Buffs.Items.InfectionAccessories;
+using TranscendenceMod.Dusts;
 
 namespace TranscendenceMod.Items.Mounts
 {
@@ -14,14 +15,16 @@ namespace TranscendenceMod.Items.Mounts
         }
         public override void UpdateEffects(Player player)
         {
-            MountData.spawnDustNoGravity = true;
+            MountData.spawnDust = ModContent.DustType<Rainbow>();
+            MountData.spawnDustNoGravity = false;
             MountData.buff = ModContent.BuffType<LacewingTransBuff>();
             MountData.heightBoost = 0;
 
-            MountData.runSpeed = 6f;
-            MountData.jumpHeight = 5;
-            MountData.jumpSpeed = 2.75f;
-            MountData.acceleration = 0.33f;
+            MountData.runSpeed = 8f;
+            MountData.dashSpeed = 8f;
+            MountData.jumpHeight = 3;
+            MountData.jumpSpeed = 3.15f;
+            MountData.acceleration = 0.5f;
 
             MountData.constantJump = true;
             MountData.usesHover = true;
@@ -29,7 +32,6 @@ namespace TranscendenceMod.Items.Mounts
             MountData.fatigueMax = int.MaxValue;
             MountData.fallDamage = 0f;
             MountData.blockExtraJumps = true;
-            MountData.dashSpeed = 8f;
 
             MountData.totalFrames = 1;
 

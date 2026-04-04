@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using Terraria;
 using Terraria.Audio;
@@ -23,6 +24,7 @@ using TranscendenceMod.Items.Weapons.Summoner;
 using TranscendenceMod.Miscannellous;
 using TranscendenceMod.Miscannellous.UI;
 using TranscendenceMod.Projectiles;
+using TranscendenceMod.Projectiles.Equipment;
 using TranscendenceMod.Projectiles.NPCs.Bosses.FrostSerpent;
 using TranscendenceMod.Projectiles.Weapons.Magic;
 using static TranscendenceMod.TranscendenceWorld;
@@ -33,7 +35,7 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
     public class FrostSerpent_Head : HeadSegment
     {
         public Player player;
-        public override int MaxSegments => 36;
+        public override int MaxSegments => 48;
         public int Segments2;
         public float rot;
         public float MawRot;
@@ -92,7 +94,7 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
         public override void SetDefaults()
         {
             NPC.boss = true;
-            NPC.lifeMax = 1112755;
+            NPC.lifeMax = 1012755;
             NPC.defense = 20;
             NPC.damage = 225;
             NPC.knockBackResist = 0;
@@ -124,11 +126,11 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
             LeadingConditionRule normalMode = new LeadingConditionRule(new Conditions.NotExpert());
 
             normalMode.OnSuccess(ItemDropRule.Common(ModContent.ItemType<FrostMonolithItem>(), 3));
-            normalMode.OnSuccess(ItemDropRule.Common(ItemID.LunarOre, 1, 15, 30));
+            normalMode.OnSuccess(ItemDropRule.Common(ItemID.LunarOre, 1, 55, 70));
 
             normalMode.OnSuccess(ItemDropRule.FewFromOptions(2, 1,
                 ModContent.ItemType<MountaintopGlacier>(),
-                ModContent.ItemType<Snowshot>(),
+                ModContent.ItemType<IceKunai>(),
                 ModContent.ItemType<FrozenMaws>()));
 
             /*Loot Bag, Relic and Pet*/
@@ -141,6 +143,7 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
             NPC.lifeMax = (int)(NPC.lifeMax * 0.6f);
             NPC.damage = (int)(NPC.damage * 0.525f);
         }
+        public List<int> curItems = new List<int>();
         public override void AI()
         {
             NPC.TargetClosest();
@@ -178,7 +181,7 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 }
             }
 
-            if (NPC.life < (NPC.lifeMax * 0.5f) && Phase != 2)
+            if (NPC.life < (NPC.lifeMax * 0.5f) && Phase != 2 && Timer < 5)
             {
                 SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
                 Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Shockwave>(), 4500, 120, -1, 0, 100, 255);
@@ -227,6 +230,31 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 Main.npc[n].ai[0] = npc.whoAmI;
                 Main.npc[n].ai[1] = Segments2;
                 Main.npc[n].ai[2] = MaxSegments;
+
+                if (Segments2 % 2 == 0 && Main.rand.NextBool(2) && curItems.Count < 7)
+                {
+                    int r = Main.rand.Next(1, 8);
+
+                    int tries = 0;
+                    while (curItems.Contains(r))
+                    {
+                        //Include failsafe to prevent any freezes
+                        if (++tries < 2500)
+                        {
+                            r = Main.rand.Next(1, 8);
+                            //Main.NewText(r);
+                        }
+                        else
+                        {
+                            //Main.NewText("FAIL");
+                            break;
+                        }
+                    }
+
+                    curItems.Add(r);
+                    Main.npc[n].localAI[1] = r;
+                }
+
                 Main.npc[n].realLife = npc.whoAmI;
 
                 if (Segments2 == MaxSegments - 1)
@@ -252,12 +280,12 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 NearEatable -= 1;
             }
 
-            if (Attack != SerpentAttacks.Laser && Attack != SerpentAttacks.MultiRays && Attack != SerpentAttacks.Slam && SizeResetCD < 75 && !player.dead)
+            if (Attack != SerpentAttacks.Laser && Attack != SerpentAttacks.MultiRays && Attack != SerpentAttacks.DeathAnim && Attack != SerpentAttacks.Slam && SizeResetCD < 75 && !player.dead)
             {
                 for (int i = 0; i < Main.maxProjectiles; i++)
                 {
                     Projectile p = Main.projectile[i];
-                    if (p != null && p.active && (p.type == ModContent.ProjectileType<MagicalSnowflake>() && p.ai[2] > 90 && p.ai[1] == NPC.whoAmI || p.friendly && (Main.getGoodWorld || Main.zenithWorld)) && p.Distance(NPC.Center) < (125 * NPC.scale) && Attack != SerpentAttacks.Laser)
+                    if (p != null && p.active && (p.type == ModContent.ProjectileType<MagicalSnowflake>() && p.scale < 2f && p.ai[2] > 90 && p.ai[1] == NPC.whoAmI || p.friendly && (Main.getGoodWorld || Main.zenithWorld)) && p.Distance(NPC.Center) < (125 * NPC.scale) && Attack != SerpentAttacks.Laser)
                     {
                         NearEatable = 5;
                         NPC.velocity = NPC.DirectionTo(p.Center) * 12f;
@@ -289,20 +317,18 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
 
             if (Attack != SerpentAttacks.Slam && Attack != SerpentAttacks.Charges && Attack != SerpentAttacks.MultiRays && Attack != SerpentAttacks.DeathAnim)
             {
-                float changeSpeed = 0.0125f;
+                float changeSpeed = 0.01f;
                 float dist = Phase == 2 ? 275f : 375f;
 
-                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center + Vector2.One.RotatedBy(rot * (float)Math.Tan(rot / 20f)) * dist) * ((NPC.Distance(player.Center) * 0.1f) + speed2 * speedMult) * NPC.scale, changeSpeed * speedMult);
-                if (NPC.Distance(player.Center) < 375)
-                    NPC.velocity *= 0.95f;
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center + Vector2.One.RotatedBy(rot * (float)Math.Tan(rot / 50f)) * dist) * ((NPC.Distance(player.Center) * 0.1f) + speed2 * speedMult) * NPC.scale, changeSpeed * speedMult);
 
                 if (NPC.Distance(player.Center) > 2500)
                 {
-                    NPC.velocity = NPC.DirectionTo(player.Center) * (NPC.Distance(player.Center) / 35f);
+                    NPC.velocity = NPC.DirectionTo(player.Center) * (NPC.Distance(player.Center) / 75f);
                     GoBackToPlayerState = 60;
                 }
                 if (GoBackToPlayerState < 55 && GoBackToPlayerState > 5)
-                    NPC.velocity *= 0.9f;
+                    NPC.velocity *= 0.8f;
             }
 
             if (Stamina != 0) Timer++;
@@ -350,24 +376,28 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 case 0: HomingFrost(); break;
                 case 1: ProjectileSpam(); break;
                 case 2: AimedProjs(); break;
-                case 3: CreepingSnowflakes(); break;
-                case 4: Slam(); break;
-                case 5: ProjectileSpam(); break;
+                case 3: AggressiveCharges(); break;
+                case 4: CreepingSnowflakes(); break;
+                case 5: Slam(); break;
                 case 6: AggressiveCharges(); break;
-                case 7: CreepingSnowflakes(); break;
-                case 8: NPC.ai[1] = 0; goto case 0;
+                case 7: ProjectileSpam(); break;
+                case 8: AggressiveCharges(); break;
+                case 9: CreepingSnowflakes(); break;
+                case 10: NPC.ai[1] = 0; goto case 0;
 
                 case 20: ProjectileSpam(); break;
                 case 21: AimedProjs(); break;
                 case 22: Icicles(); break;
-                case 23: Slam(); break;
-                case 24: SnowFountain(); break;
-                case 25: CreepingSnowflakes(); break;
-                case 26: DeathraysMultiple(); break;
-                case 27: AggressiveCharges(); break;
-                case 28: ProjectileSpam(); break;
-                case 29: HomingFrost(); break;
-                case 30: NPC.ai[1] = 20; goto case 20;
+                case 23: DeathraysMultiple(); break;
+                case 24: Slam(); break;
+                case 25: AggressiveCharges(); break;
+                case 26: SnowFountain(); break;
+                case 27: CreepingSnowflakes(); break;
+                case 28: Slam(); break;
+                case 29: AggressiveCharges(); break;
+                case 30: ProjectileSpam(); break;
+                case 31: HomingFrost(); break;
+                case 32: NPC.ai[1] = 20; goto case 20;
 
                 case 99: DeathAnim(); break;
                 case 100: DeathAnim(); break;
@@ -385,7 +415,7 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 {
                     NPC n = Main.npc[i];
                     
-                    if (n != null && n.active && n.type == BodySegmentType && n.ai[1] < (MaxSegments * 0.66f))
+                    if (n != null && n.active && n.type == BodySegmentType && n.ai[1] < (MaxSegments * 0.66f) && n.ai[1] % 3 == 0)
                     {
                         TranscendenceUtils.ProjectileRing(NPC, 4, NPC.GetSource_FromAI(), n.Center, FrostBlastHoming, 80, 1, 0.5f, 1, NPC.whoAmI, 1, -1, 0);
                     }
@@ -482,13 +512,15 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
         }
         public void AggressiveCharges()
         {
-            AttackDuration = Phase == 2 ? 280 : 190;
+            AttackDuration = Phase == 2 ? 505 : 325;
             Attack = SerpentAttacks.Charges;
 
-            if (Timer < 45)
+            if (Timer < 45 || Timer > (AttackDuration - 45))
             {
-                if (NPC.Distance(player.Center) > 750)
-                    NPC.velocity = NPC.DirectionTo(player.Center) * (NPC.Distance(player.Center) / 35f);
+                if (NPC.Distance(player.Center) > (Timer > 45 ? 500 : 750))
+                    NPC.velocity = NPC.DirectionTo(player.Center) * (NPC.Distance(player.Center) / 50f);
+                else NPC.velocity *= 0.7f;
+
                 return;
             }
 
@@ -496,16 +528,24 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
             {
                 if (++ProjectileTimer2 < 45)
                 {
-                    NPC.velocity = NPC.DirectionTo(player.Center) * -10f;
-                    dashPos = NPC.DirectionTo(player.Center + player.velocity * 30f);
+                    NPC.velocity = NPC.DirectionTo(player.Center) * (NPC.Distance(player.Center) > 750 && Timer > 120 ? 30f : -20f);
+                    dashPos = NPC.DirectionTo(player.Center + player.velocity * 45f);
                 }
                 else
                 {
-                    NPC.velocity = dashPos * 80f;
+                    NPC.velocity = dashPos * 90f;
                     for (int i = 0; i < 5; i++)
                         Dust.NewDust(NPC.Center, 1, 1, DustID.SnowSpray);
 
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * -0.25f, ModContent.ProjectileType<MagicalSnowflake>(), 85, 1, -1, 0, NPC.whoAmI);
+                    if (TranscendenceWorld.CountProjectiles(ModContent.ProjectileType<MagicalSnowflake>()) < 350 || ProjectileTimer % 2 == 0)
+                    {
+                        int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, NPC.velocity * -0.05f, ModContent.ProjectileType<MagicalSnowflake>(), 85, 1, -1, 0, NPC.whoAmI);
+                        Main.projectile[p].scale = 2f;
+                        Main.projectile[p].width = 104;
+                        Main.projectile[p].height = 104;
+                        Main.projectile[p].timeLeft = 1200;
+                    }
+
                 }
             }
             else
@@ -549,7 +589,7 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 for (int i = 0; i < Main.maxNPCs; i++)
                 {
                     NPC npc = Main.npc[i];
-                    if (npc != null && npc.active && npc.type == BodySegmentType && npc.ai[1] % 3 == 0)
+                    if (npc != null && npc.active && npc.type == BodySegmentType && npc.ai[1] % 8 == 0)
                     {
                         TranscendenceUtils.ProjectileRing(npc, 4, npc.GetSource_FromAI(), npc.Center, Icicle, 85, 1, 3f, 0, NPC.whoAmI, 2f, -1, npc.DirectionTo(player.Center).ToRotation() - MathHelper.PiOver2);
                     }
@@ -586,8 +626,8 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                     NPC npc = Main.npc[i];
                     if (npc != null && npc.active && npc.type == BodySegmentType && npc.ai[1] % 2 == 0)
                     {
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, npc.DirectionTo(player.Center).RotatedBy(MathHelper.PiOver4), ModContent.ProjectileType<FrostLaserStatic>(), 125, 0, -1, 0, npc.whoAmI);
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, npc.DirectionTo(player.Center).RotatedBy(-MathHelper.PiOver4), ModContent.ProjectileType<FrostLaserStatic>(), 125, 0, -1, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, npc.DirectionTo(player.Center).RotatedBy(MathHelper.PiOver4 * 1.25f), ModContent.ProjectileType<FrostLaserStatic>(), 125, 0, -1, 0, npc.whoAmI);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, npc.DirectionTo(player.Center).RotatedBy(-MathHelper.PiOver4 * 1.25f), ModContent.ProjectileType<FrostLaserStatic>(), 125, 0, -1, 0, npc.whoAmI);
                     }
                 }
             }
@@ -597,9 +637,9 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 ProjectileTimer = 0;
             }
 
-            if (ProjectileTimer < 240 && ProjectileTimer % 20 == 0)
+            if (ProjectileTimer < 240 && ProjectileTimer % 30 == 0)
             {
-                TranscendenceUtils.ProjectileRing(NPC, 2, NPC.GetSource_FromAI(), NPC.Center, Icicle, 70, 1, 2f, 1, NPC.whoAmI, 1, -1, 0);
+                TranscendenceUtils.ProjectileRing(NPC, 2, NPC.GetSource_FromAI(), NPC.Center, Icicle, 85, 1, 1f, 1, NPC.whoAmI, 1, -1, 0);
             }
         }
         public void DeathAnim()
@@ -611,9 +651,12 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 Timer = 430;
 
             speedMult = MathHelper.Lerp(speedMult, 0.125f, 0.075f);
-            NPC.velocity *= 0.975f;
             NPC.ai[3] = 0.975f;
             extraRot = 0;
+
+            if (NPC.Distance(player.Center) > 500)
+                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(player.Center) * 10f, 1f / 15f);
+            else NPC.velocity *= 0.975f;
 
             if (DeathFade < 0.75f)
                 DeathFade += 1f / 425f;
@@ -684,7 +727,14 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
             }
             return true;
         }
-        public override bool CanHitPlayer(Player target, ref int cooldownSlot) => NPC.ai[3] == 1f;
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            cooldownSlot = ImmunityCooldownID.Bosses;
+
+            if (NPC.ai[3] == 1f && !target.solarDashing)
+                return base.CanHitPlayer(target, ref cooldownSlot);
+            else return false;
+        }
         public override bool CanHitNPC(NPC target) => NPC.ai[3] == 1f;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
@@ -703,13 +753,13 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 spriteBatch.Draw(sprite, new Rectangle(
                     (int)(dashPos.X - Main.screenPosition.X), (int)(dashPos.Y - Main.screenPosition.Y), width,
                     3000), null,
-                    Color.DeepSkyBlue * 0.66f, 0, sprite.Size() * 0.5f, SpriteEffects.None, 0);
+                    Color.DeepSkyBlue * 0.66f * (Timer < 20 ? Timer / 20f : 1f), 0, sprite.Size() * 0.5f, SpriteEffects.None, 0);
 
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.TransformationMatrix);
             }
 
-            if (Attack == SerpentAttacks.Charges && Timer > 60 && ProjectileTimer2 < 45 && Timer < (AttackDuration - 45))
+            if (Attack == SerpentAttacks.Charges && Timer > 45 && ProjectileTimer2 < 45 && Timer < (AttackDuration - 60))
             {
                 Vector2 pos = player.Center + player.velocity * 30f;
                 spriteBatch.End();
@@ -741,15 +791,15 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, default, default, default, effect, Main.GameViewMatrix.TransformationMatrix);
 
-            TranscendenceUtils.DrawEntity(NPC, Color.White * 0.75f * a, NPC.scale, Texture, NPC.rotation, NPC.Center, null);
+            TranscendenceUtils.DrawEntity(NPC, Color.White * 0.66f * a, NPC.scale, Texture, NPC.rotation, NPC.Center, null);
 
             Texture2D maw = ModContent.Request<Texture2D>(Texture + "_Maws").Value;
             Vector2 mawDir = (NPC.rotation - MathHelper.PiOver2).ToRotationVector2();
             Vector2 mawPos = NPC.Center + (mawDir * 6f);
 
             //Maws
-            TranscendenceUtils.DrawEntity(NPC, Color.White * 0.75f * a, NPC.scale, maw, NPC.rotation - MawRot, mawPos - (NPC.rotation.ToRotationVector2() * (float)(Math.Sin(MawRot) * 30f * NPC.scale)), null, new Vector2(1f, 0.5f) * maw.Size(), SpriteEffects.None);
-            TranscendenceUtils.DrawEntity(NPC, Color.White * 0.75f * a, NPC.scale, maw, NPC.rotation + MawRot, mawPos + (NPC.rotation.ToRotationVector2() * (float)(Math.Sin(MawRot) * 30f * NPC.scale)), null, new Vector2(0f, 0.5f) * maw.Size(), SpriteEffects.FlipHorizontally);
+            TranscendenceUtils.DrawEntity(NPC, Color.White * 0.66f * a, NPC.scale, maw, NPC.rotation - MawRot, mawPos - (NPC.rotation.ToRotationVector2() * (float)(Math.Sin(MawRot) * 30f * NPC.scale)), null, new Vector2(1f, 0.5f) * maw.Size(), SpriteEffects.None);
+            TranscendenceUtils.DrawEntity(NPC, Color.White * 0.66f * a, NPC.scale, maw, NPC.rotation + MawRot, mawPos + (NPC.rotation.ToRotationVector2() * (float)(Math.Sin(MawRot) * 30f * NPC.scale)), null, new Vector2(0f, 0.5f) * maw.Size(), SpriteEffects.FlipHorizontally);
 
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.TransformationMatrix);
@@ -828,7 +878,7 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
 
             NPC.width = 44;
             NPC.height = 56;
-            NPC.takenDamageMultiplier = 0.75f;
+            NPC.takenDamageMultiplier = 0.5f;
 
             NPC.aiStyle = -1;
             NPC.noGravity = true;
@@ -850,14 +900,31 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
         }
         public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
+            if (projectile.type == ProjectileID.StardustDragon1 || projectile.type == ProjectileID.StardustDragon2 || projectile.type == ProjectileID.StardustDragon3 || projectile.type == ProjectileID.StardustDragon4)
+                modifiers.FinalDamage *= 0.375f;
             if (projectile.type == ProjectileID.LastPrismLaser)
                 modifiers.FinalDamage *= 0.575f;
+            if (projectile.type == ProjectileID.LunarFlare)
+                modifiers.FinalDamage *= 0.45f;
+            if (projectile.type == ProjectileID.MoonlordTurretLaser)
+                modifiers.FinalDamage *= 0.33f;
+            if (projectile.type == ProjectileID.RainbowCrystalExplosion)
+                modifiers.FinalDamage *= 0.33f;
             if (projectile.type == ModContent.ProjectileType<AngelicLaser_Friendly>())
                 modifiers.FinalDamage *= 0.25f;
             if (projectile.type == ModContent.ProjectileType<DreamSealProj>())
-                modifiers.FinalDamage *= 0.66f;
+                modifiers.FinalDamage *= 0.75f;
+            if (projectile.type == ModContent.ProjectileType<EmpressSun>())
+                modifiers.FinalDamage *= 0.33f;
         }
-        public override bool CanHitPlayer(Player target, ref int cooldownSlot) => NPC.ai[3] == 1f;
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            cooldownSlot = ImmunityCooldownID.Bosses;
+
+            if (NPC.ai[3] == 1f && !target.solarDashing)
+                return base.CanHitPlayer(target, ref cooldownSlot);
+            else return false;
+        }
         public override bool CanHitNPC(NPC target) => NPC.ai[3] == 1f;
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
@@ -880,7 +947,28 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, default, default, default, effect, Main.GameViewMatrix.TransformationMatrix);
 
-                TranscendenceUtils.DrawEntity(NPC, Color.White * 0.75f * a, NPC.scale, Texture, NPC.rotation, NPC.Center, null);
+                if (NPC.localAI[1] == 1)
+                    TranscendenceUtils.DrawEntity(NPC, Color.White * a * 2f, NPC.scale, "TranscendenceMod/Items/Weapons/Ranged/IceKunai", NPC.rotation + MathHelper.PiOver4 / 2f, NPC.Center + Vector2.One.RotatedBy(NPC.rotation - MathHelper.PiOver4) * -16f, null);
+
+                if (NPC.localAI[1] == 2)
+                    TranscendenceUtils.DrawEntity(NPC, Color.White * a * 2f, NPC.scale, "TranscendenceMod/Items/Weapons/Melee/MountaintopGlacier", NPC.rotation + MathHelper.Pi, NPC.Center, null);
+
+                if (NPC.localAI[1] == 3)
+                    TranscendenceUtils.DrawEntity(NPC, Color.White * a * 2f, NPC.scale, "TranscendenceMod/Items/Weapons/Magic/Lumimyrsky", NPC.rotation + MathHelper.PiOver2, NPC.Center, null);
+
+                if (NPC.localAI[1] == 4)
+                    TranscendenceUtils.DrawEntity(NPC, Color.White * a * 2f, NPC.scale, $"Terraria/Images/Item_725", NPC.rotation + MathHelper.PiOver4 * 0.75f, NPC.Center + Vector2.One.RotatedBy(NPC.rotation - MathHelper.PiOver4) * 16f, null);
+
+                if (NPC.localAI[1] == 5)
+                    TranscendenceUtils.DrawEntity(NPC, Color.White * a * 2f, NPC.scale, $"Terraria/Images/Item_3460", NPC.rotation + MathHelper.PiOver4 * 0.33f, NPC.Center + Vector2.One.RotatedBy(NPC.rotation - MathHelper.PiOver4) * -12f, null);
+
+                if (NPC.localAI[1] == 6)
+                    TranscendenceUtils.DrawEntity(NPC, Color.White * a * 2f, NPC.scale, $"Terraria/Images/Item_1274", NPC.rotation, NPC.Center, null);
+
+                if (NPC.localAI[1] == 7)
+                    TranscendenceUtils.DrawEntity(NPC, Color.White * a * 2f, NPC.scale, $"Terraria/Images/Item_3456", 0, NPC.Center, null);
+
+                TranscendenceUtils.DrawEntity(NPC, Color.White * 0.66f * a, NPC.scale, Texture, NPC.rotation, NPC.Center, null);
 
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.TransformationMatrix);
@@ -951,7 +1039,14 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
 
             return false;
         }
-        public override bool CanHitPlayer(Player target, ref int cooldownSlot) => NPC.ai[3] == 1f;
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            cooldownSlot = ImmunityCooldownID.Bosses;
+
+            if (NPC.ai[3] == 1f && !target.solarDashing)
+                return base.CanHitPlayer(target, ref cooldownSlot);
+            else return false;
+        }
         public override bool CanHitNPC(NPC target) => NPC.ai[3] == 1f;
         public override void SetDefaults()
         {
@@ -993,7 +1088,7 @@ namespace TranscendenceMod.NPCs.Boss.FrostSerpent
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, default, default, default, effect, Main.GameViewMatrix.TransformationMatrix);
 
-                TranscendenceUtils.DrawEntity(NPC, Color.White * 0.75f * a, NPC.scale, Texture, NPC.rotation, NPC.Center, null);
+                TranscendenceUtils.DrawEntity(NPC, Color.White * 0.66f * a, NPC.scale, Texture, NPC.rotation, NPC.Center, null);
 
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, default, default, default, null, Main.GameViewMatrix.TransformationMatrix);

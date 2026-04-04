@@ -28,7 +28,7 @@ namespace TranscendenceMod.Items.Farming
             Item.useAnimation = 14;
             Item.useTime = 14;
 
-            Item.value = Item.buyPrice(gold: 15);
+            Item.value = Item.sellPrice(gold: 15);
         }
 
         public override bool AltFunctionUse(Player player) => true;

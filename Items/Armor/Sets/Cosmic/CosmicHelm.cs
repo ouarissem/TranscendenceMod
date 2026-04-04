@@ -29,7 +29,7 @@ namespace TranscendenceMod.Items.Armor.Sets.Cosmic
             Item.height = 20;
             Item.rare = ModContent.RarityType<CosmicRarity>();
             Item.defense = 10;
-            Item.value = Item.sellPrice(gold: 20);
+            Item.value = Item.sellPrice(gold: 18);
         }
         public override bool IsArmorSet(Item head, Item body, Item legs)
         {

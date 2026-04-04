@@ -79,6 +79,9 @@ namespace TranscendenceMod.Miscannellous.UI.Processer
             PlatOre pla = new PlatOre();
             recipeBook.Append(pla);
 
+            CarbonOreRecipe car = new CarbonOreRecipe();
+            recipeBook.Append(car);
+
             SunburntAlloys sba = new SunburntAlloys();
             recipeBook.Append(sba);
 
@@ -239,6 +242,7 @@ namespace TranscendenceMod.Miscannellous.UI.Processer
             Recipe(ItemID.CopperOre, ProcessRecipes.CopperOre());
             Recipe(ItemID.TinOre, ProcessRecipes.TinOre());
             Recipe(ItemID.LunarBar, ProcessRecipes.Luminite());
+            Recipe(ModContent.ItemType<CarbonOre>(), ProcessRecipes.CarbonOre());
             Recipe(ModContent.ItemType<SunburntAlloy>(), ProcessRecipes.SunburntAlloy());
             Recipe(ModContent.ItemType<GalaxyAlloy>(), ProcessRecipes.GalaxyAlloy());
             Recipe(ModContent.ItemType<StarcraftedAlloy>(), ProcessRecipes.StarcraftedAlloy());
@@ -343,11 +347,11 @@ namespace TranscendenceMod.Miscannellous.UI.Processer
                     var eff = ModContent.Request<Effect>("TranscendenceMod/Miscannellous/Assets/Shaders/Effects/SeraphOutlineShader", AssetRequestMode.ImmediateLoad).Value;
 
                     eff.Parameters["uOpacity"].SetValue(0.75f);
-                    eff.Parameters["uSaturation"].SetValue(0.66f);
+                    eff.Parameters["uSaturation"].SetValue(0.75f);
 
                     eff.Parameters["uRotation"].SetValue(0f);
-                    eff.Parameters["uTime"].SetValue(0f);
-                    eff.Parameters["uDirection"].SetValue(0f);
+                    eff.Parameters["uTime"].SetValue(0.1f);
+                    eff.Parameters["uDirection"].SetValue(0.2f);
 
                     spriteBatch.End();
                     spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, eff, Main.UIScaleMatrix);
@@ -359,7 +363,7 @@ namespace TranscendenceMod.Miscannellous.UI.Processer
                     spriteBatch.End();
                     spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.UIScaleMatrix);
                 }
-                else spriteBatch.Draw(ModContent.Request<Texture2D>(icon).Value, recEmpty, null, Color.White * 0.25f);
+                else spriteBatch.Draw(ModContent.Request<Texture2D>(icon).Value, recEmpty, null, Color.White * 0.175f);
             }
 
             if (Hovering)
